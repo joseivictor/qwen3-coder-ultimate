@@ -1,0 +1,53 @@
+# ── QWEN3-CODER ULTIMATE — Dependencies ──────────────────────────────────────
+# Install all:  pip install -r requirements.txt
+#
+# PyTorch (for TTS, optional):
+#   pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu121
+
+# ── Core AI / API ─────────────────────────────────────────────────────────────
+openai>=1.30.0                  # OpenAI-compatible client (OpenRouter, Together.ai)
+huggingface_hub>=0.23.0         # HuggingFace model access
+
+# ── Web UI ────────────────────────────────────────────────────────────────────
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+websockets>=12.0
+
+# ── Terminal UI ───────────────────────────────────────────────────────────────
+rich>=13.7.0
+prompt_toolkit>=3.0.0
+
+# ── Data & ML ─────────────────────────────────────────────────────────────────
+datasets>=2.19.0                # HuggingFace datasets (for feed_model.py)
+numpy>=1.24.0
+
+# ── Search & Browser ─────────────────────────────────────────────────────────
+duckduckgo_search>=5.3.0
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+playwright>=1.44.0              # browser automation (optional, needs: playwright install)
+
+# ── Code Analysis ─────────────────────────────────────────────────────────────
+tiktoken>=0.7.0                 # token counting
+tree_sitter>=0.21.0             # AST parsing (optional)
+
+# ── Utilities ─────────────────────────────────────────────────────────────────
+python-dotenv>=1.0.0
+pyperclip>=1.8.0                # clipboard
+psutil>=5.9.0                   # system info
+watchdog>=4.0.0                 # file watching (VSCode bridge)
+
+# ── Audio (TTS — optional) ────────────────────────────────────────────────────
+soundfile>=0.12.1
+# torch / torchaudio: install separately with CUDA version
+
+# ── RAG ───────────────────────────────────────────────────────────────────────
+chromadb>=0.5.0                 # vector store
+sentence-transformers>=3.0.0   # embeddings
+
+# ── Git integration ───────────────────────────────────────────────────────────
+gitpython>=3.1.40
+
+# ── Testing ───────────────────────────────────────────────────────────────────
+pytest>=8.0.0
+pytest-asyncio>=0.23.0

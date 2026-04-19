@@ -1,0 +1,31 @@
+{
+  "provider": "cerebras",
+  "cerebras_token": "YOUR_CEREBRAS_TOKEN",
+  "puter_token": "",
+  "openrouter_token": "YOUR_OPENROUTER_TOKEN",
+  "together_token": "YOUR_TOGETHER_TOKEN",
+  "groq_token": "",
+  "hf_token": "",
+  "model": "qwen/qwen3-coder:free",
+  "temperature": 0.2,
+  "max_tokens": 8192,
+  "max_history": 60,
+  "safe_mode": false,
+  "parallel_tools": true,
+  "auto_compress": true,
+  "compress_threshold": 40,
+  "show_diff": true,
+  "auto_copy": false,
+  "auto_context": true,
+  "model_routing": true,
+  "thinking_mode": true,
+  "ollama_model": "qwen2.5-coder:7b",
+  "ollama_url": "http://localhost:11434",
+  "browser_headless": true,
+  "hooks": {
+    "pre_tool": "",
+    "post_tool": "",
+    "on_start": "",
+    "on_exit": ""
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "name": "qwen-ultimate",
+  "displayName": "QWEN3-CODER Ultimate",
+  "description": "Real-time bridge between QWEN3-CODER Ultimate and VSCode",
+  "version": "1.0.0",
+  "publisher": "qwen-ultimate",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other", "Programming Languages"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "qwen.connect",
+        "title": "QWEN: Connect to AI Bridge"
+      },
+      {
+        "command": "qwen.disconnect",
+        "title": "QWEN: Disconnect"
+      },
+      {
+        "command": "qwen.sendSelection",
+        "title": "QWEN: Send Selection to AI"
+      },
+      {
+        "command": "qwen.fixErrors",
+        "title": "QWEN: Fix All Errors with AI"
+      },
+      {
+        "command": "qwen.explainFile",
+        "title": "QWEN: Explain Current File"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "qwen.sendSelection",
+        "key": "ctrl+shift+q",
+        "when": "editorHasSelection"
+      },
+      {
+        "command": "qwen.fixErrors",
+        "key": "ctrl+shift+e"
+      }
+    ],
+    "configuration": {
+      "title": "QWEN Ultimate",
+      "properties": {
+        "qwen.bridgePort": {
+          "type": "number",
+          "default": 3579,
+          "description": "Port of the QWEN bridge WebSocket server"
+        },
+        "qwen.autoConnect": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto-connect on VSCode startup"
+        },
+        "qwen.sendDiagnostics": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically send errors/warnings to AI"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "@types/ws": "^8.5.10",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "ws": "^8.16.0"
+  }
+}
