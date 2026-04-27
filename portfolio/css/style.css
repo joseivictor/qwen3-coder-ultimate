@@ -2652,6 +2652,13 @@ body {
 }
 .portal-enter {
   min-width: min(78vw, 320px);
+  color: #f4fbff !important;
+  font-weight: 900 !important;
+  text-shadow: 0 0 18px rgba(125,211,252,.28);
+}
+.portal-enter.hot {
+  color: #f4fbff !important;
+  background: rgba(7,17,31,.72) !important;
 }
 .experts-carousel {
   overflow: visible !important;
