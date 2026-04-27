@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin · José Victor Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<div class="shader-bg" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- LOGIN -->
+<section id="adminLogin" class="login-screen">
+  <form class="login-card" id="loginForm">
+    <h1>🔒 Admin</h1>
+    <p>Acesso restrito ao José Victor.</p>
+    <label>Senha</label>
+    <input type="password" id="adminPw" autocomplete="current-password" required>
+    <button type="submit">Entrar</button>
+    <p id="loginErr" class="err" style="display:none;"></p>
+  </form>
+</section>
+
+<!-- ADMIN UI -->
+<main id="adminApp" class="admin-app hidden">
+  <header class="admin-header">
+    <div class="logo">JV. <small>admin</small></div>
+    <nav class="admin-tabs">
+      <button data-atab="videos" class="active">Vídeos</button>
+      <button data-atab="experts">Experts</button>
+      <button data-atab="courses">Cursos</button>
+      <button data-atab="motion">Motion</button>
+      <button data-atab="flyers">Flyers</button>
+      <button data-atab="config">Config Site</button>
+      <button data-atab="security">Segurança</button>
+    </nav>
+    <div style="display:flex; gap:.5rem;">
+      <a href="index.html" class="chip" target="_blank">↗ Ver site</a>
+      <button class="chip" id="logoutBtn">Sair</button>
+    </div>
+  </header>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- VIDEOS -->
+  <section id="atab-videos" class="atab active">
+    <div class="atab-head">
+      <h2>Vídeos do portfólio</h2>
+      <button class="btn-primary" id="addVideoBtn">+ Adicionar vídeo</button>
+    </div>
+    <div id="videosTable" class="admin-table"></div>
+  </section>
+
+  <!-- EXPERTS -->
+  <section id="atab-experts" class="atab">
+    <div class="atab-head">
+      <h2>Experts</h2>
+      <button class="btn-primary" id="addExpertBtn">+ Adicionar expert</button>
+    </div>
+    <div id="expertsTable" class="admin-table"></div>
+  </section>
+
+  <!-- COURSES -->
+  <section id="atab-courses" class="atab">
+    <div class="atab-head">
+      <h2>Cursos editados</h2>
+      <button class="btn-primary" data-add="courses">+ Adicionar curso</button>
+    </div>
+    <div id="coursesTable" class="admin-table"></div>
+  </section>
+
+  <!-- MOTION -->
+  <section id="atab-motion" class="atab">
+    <div class="atab-head">
+      <h2>Motion design</h2>
+      <button class="btn-primary" data-add="motion">+ Adicionar peça</button>
+    </div>
+    <div id="motionTable" class="admin-table"></div>
+  </section>
+
+  <!-- FLYERS -->
+  <section id="atab-flyers" class="atab">
+    <div class="atab-head">
+      <h2>Flyers</h2>
+      <button class="btn-primary" data-add="flyers">+ Adicionar flyer</button>
+    </div>
+    <div id="flyersTable" class="admin-table"></div>
+  </section>
+
+  <!-- CONFIG -->
+  <section id="atab-config" class="atab">
+    <h2>Configurações do site</h2>
+    <p class="sub">Altera dados de contato, planos, multiplicadores. Salva e atualiza o site automaticamente.</p>
+    <div id="configEditor" class="config-editor"></div>
+    <div style="display:flex; gap:.5rem; margin-top:1.5rem;">
+      <button class="btn-primary" id="saveConfigBtn">💾 Salvar configurações</button>
+      <button class="chip" id="reloadConfigBtn">↻ Descartar</button>
+    </div>
+  </section>
+
+  <!-- SECURITY -->
+  <section id="atab-security" class="atab">
+    <h2>Segurança e controle</h2>
+    <div class="card">
+      <h3>Trocar senha</h3>
+      <p class="sub">A senha atual é <strong>joseivictor2026</strong> se você nunca trocou.</p>
+      <label>Nova senha</label>
+      <input type="password" id="newPw" placeholder="mínimo 8 caracteres">
+      <label>Confirmar</label>
+      <input type="password" id="newPw2" placeholder="repita a nova senha">
+      <button class="btn-primary" id="changePwBtn" style="margin-top:1rem;">Trocar senha</button>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <h3>Status do site</h3>
+      <p class="sub">Pode "congelar" o site temporariamente — visitantes verão o portal mas a entrada fica bloqueada.</p>
+      <div style="display:flex; gap:.5rem;">
+        <button class="chip" id="statusActive">🟢 Ativo</button>
+        <button class="chip" id="statusFrozen">🔒 Congelado</button>
+      </div>
+      <p style="margin-top:.6rem; font-size:.82rem; color:var(--ink-2);">
+        Status atual: <strong id="currentStatus">—</strong>
+      </p>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <h3>Backups</h3>
+      <p class="sub">Toda escrita no admin gera backup automático em <code>data/*.json.bak.*</code>.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- MODAL FORM -->
+<div id="formModal" class="modal hidden" style="display:none;">
+  <div class="modal-box admin-modal-box">
+    <button class="modal-close" id="formClose">✕</button>
+    <div id="formContent" class="admin-form-content"></div>
+  </div>
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>

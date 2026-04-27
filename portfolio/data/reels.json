@@ -1,0 +1,113 @@
+{
+  "categories": [
+    {
+      "id": "unboxing",
+      "label": "Unboxing",
+      "intent": "Produto com desejo, ritmo e clareza.",
+      "links": [
+        "https://www.instagram.com/reel/DWZ4Hv5EWlr/",
+        "https://www.instagram.com/reel/DWjqpHwESpL/",
+        "https://www.instagram.com/reel/DUDatFYEdEa/",
+        "https://www.instagram.com/reel/DSf5uQIkVpJ/",
+        "https://www.instagram.com/reel/DR2z8G3EdkS/",
+        "https://www.instagram.com/reel/DRpvLJRkYWt/",
+        "https://www.instagram.com/reel/DOHJWnZkX1R/"
+      ]
+    },
+    {
+      "id": "disruptivo",
+      "label": "Disruptivo",
+      "intent": "Quebra de padrao, impacto e autoridade.",
+      "links": [
+        "https://www.instagram.com/reel/DQFh3JNkWua/",
+        "https://www.instagram.com/reel/DXcr_SXic3W/",
+        "https://www.instagram.com/p/DS-54HoEjtD/",
+        "https://www.instagram.com/p/DKIZmOdPP9w/"
+      ]
+    },
+    {
+      "id": "live",
+      "label": "Corte Live",
+      "intent": "Live transformada em video vertical assistivel.",
+      "links": [
+        "https://www.instagram.com/reel/DPHwXf9ET4E/",
+        "https://www.instagram.com/reel/DL8SHCvR1ca/",
+        "https://www.instagram.com/reel/DLlV8qqRHGE/",
+        "https://www.instagram.com/reel/DVCN-01EdzS/",
+        "https://www.instagram.com/p/DWZt7-MjyFt/",
+        "https://www.instagram.com/reel/DWCWB_QkUsa/",
+        "https://www.instagram.com/reel/DSzvH98EZfo/"
+      ]
+    },
+    {
+      "id": "podcast",
+      "label": "Corte Podcast",
+      "intent": "Fala boa, contexto e corte com narrativa.",
+      "links": [
+        "https://www.instagram.com/reel/DN1Wffu4k7I/",
+        "https://www.instagram.com/reel/DND73zJRzME/",
+        "https://www.instagram.com/reel/DMv458fRIzO/",
+        "https://www.instagram.com/reel/DMtC0lQxMxY/",
+        "https://www.instagram.com/reel/DKDaLXixxRy/",
+        "https://www.instagram.com/reel/DIHACq7RZ_o/",
+        "https://www.instagram.com/reel/DHBtar3xA75/",
+        "https://www.instagram.com/reel/DE2nsMvRbRa/",
+        "https://www.instagram.com/reel/DWCkPJWhXJV/",
+        "https://www.instagram.com/reel/DNTxLyuvEqg/",
+        "https://www.instagram.com/reel/DVZhYDJkX2v/",
+        "https://www.instagram.com/reel/DNPNk-eslJS/",
+        "https://www.instagram.com/reel/DNJ6ezps7Fv/",
+        "https://www.instagram.com/reel/DMgj6kgs1X8/",
+        "https://www.instagram.com/reel/DMY5gXcsVC4/",
+        "https://www.instagram.com/reel/DTi7eUukeRS/"
+      ]
+    },
+    {
+      "id": "vlog",
+      "label": "Vlog",
+      "intent": "Movimento, ambiente e historia rapida.",
+      "links": [
+        "https://www.instagram.com/reel/DPhmkYYESFR/",
+        "https://www.instagram.com/reel/DN3jWwiYnWr/"
+      ]
+    },
+    {
+      "id": "entretenimento",
+      "label": "Entretenimento",
+      "intent": "Conteudo leve com energia de feed.",
+      "links": [
+        "https://www.instagram.com/reel/DN6eHujkvGe/",
+        "https://www.instagram.com/p/DPUf5g_D5mh/"
+      ]
+    },
+    {
+      "id": "criativos",
+      "label": "Criativos",
+      "intent": "Peca com intencao comercial e visual de campanha.",
+      "links": [
+        "https://www.instagram.com/reel/DIPMy09xUfP/",
+        "https://www.instagram.com/reel/DUfuQ3YEal-/",
+        "https://www.instagram.com/reel/DT04OQ2kcaC/"
+      ]
+    },
+    {
+      "id": "fitness",
+      "label": "Fitness",
+      "intent": "Objetivo, visual e facil de consumir.",
+      "links": [
+        "https://www.instagram.com/reel/DOg_JLDj_ou/"
+      ]
+    },
+    {
+      "id": "youtube",
+      "label": "YouTube",
+      "intent": "Conteudo longo com narrativa.",
+      "links": [
+        "https://youtu.be/oLTKgktFYSU?si=kkCdGhHH8DGXqxrR",
+        "https://youtu.be/9hmLUHZPeIc?si=r9QeOtrH5UY-E6WY",
+        "https://youtu.be/gH57e_QFXh0?si=xJkXJvfnwP6S3k9a",
+        "https://youtu.be/udiNddjb5Q4?si=zP0vbvso4GFadanK"
+      ]
+    }
+  ]
+}

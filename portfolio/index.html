@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Jose Victor — Editor de video 9:16 e 16:9</title>
+  <meta name="description" content="Editor de video do Jose Victor (@joseivictorr). Videos 9:16, YouTube, VSL, cursos e conteudos comerciais.">
+  <meta property="og:title" content="Jose Victor — Editor de video 9:16 e 16:9">
+  <meta property="og:description" content="Videos 9:16, YouTube, VSL, cursos e conteudos comerciais.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://jose-victor-portfolio.vercel.app/assets/brand/jv-logo.svg">
+  <meta name="theme-color" content="#07111f">
+  <link rel="icon" href="assets/brand/jv-logo.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/brand/jv-logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Animated background + grain -->
+<div class="shader-bg" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============== PORTAL DE ENTRADA ============== -->
+<section id="portal" class="portal-screen">
+  <div class="portal-rings" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="portal-content">
+    <h1 class="portal-name">JOSÉ<br>VICTOR</h1>
+    <p class="portal-tag">Edição que transforma views em vendas</p>
+    <button id="enterBtn" class="portal-enter">Entrar no portfólio</button>
+  </div>
+</section>
+
+<!-- ============== APP PRINCIPAL ============== -->
+<main id="app" class="app hidden">
+  <header class="app-header">
+    <div class="logo">JV.</div>
+    <nav class="tabs">
+      <button data-tab="portfolio" class="active">9:16</button>
+      <button data-tab="youtube">16:9</button>
+      <button data-tab="orcamento">Orçamento</button>
+      <button data-tab="sobre">Sobre</button>
+    </nav>
+    <div class="contact-pill">
+      <a id="headerIG" href="https://instagram.com/joseivictorr" target="_blank" rel="noopener">@joseivictorr</a>
+    </div>
+  </header>
+
+  <!-- TAB: Portfolio -->
+  <section id="tab-portfolio" class="tab active">
+    <h2 class="hero-headline">Vídeos<br>9:16.</h2>
+    <p class="hero-sub">Editor de video com 3 anos de experiencia, +1.000 videos editados e +10 milhoes de visualizacoes geradas. Adobe Premiere, After Effects e fluxo profissional para conteudo de alta retencao.</p>
+
+    <div class="profile-proof">
+      <div><strong>3 anos</strong><span>de experiencia</span></div>
+      <div><strong>+1.000</strong><span>videos editados</span></div>
+      <div><strong>+10M</strong><span>visualizacoes geradas</span></div>
+      <div><strong>Premiere + AE</strong><span>fluxo profissional</span></div>
+    </div>
+
+    <div id="filterChips" class="filter-chips"></div>
+    <div id="videoGrid" class="video-grid"></div>
+
+    <h3 class="section-title">Outros trabalhos</h3>
+    <div style="display:grid; gap:2rem;">
+      <div id="courses-section">
+        <h4 style="font-size:1.1rem; color:var(--ink-1); margin-bottom:.8rem; letter-spacing:.05em;">📚 Cursos editados</h4>
+        <div class="video-grid" id="courses-grid"></div>
+      </div>
+      <div id="motion-section">
+        <h4 style="font-size:1.1rem; color:var(--ink-1); margin-bottom:.8rem; letter-spacing:.05em;">🎨 Motion design</h4>
+        <div class="video-grid" id="motion-grid"></div>
+      </div>
+      <div id="flyers-section">
+        <h4 style="font-size:1.1rem; color:var(--ink-1); margin-bottom:.8rem; letter-spacing:.05em;">📢 Flyers</h4>
+        <div class="video-grid" id="flyers-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB: YouTube / longform -->
+  <section id="tab-youtube" class="tab">
+    <h2 class="hero-headline">Vídeos<br>16:9.</h2>
+    <p class="hero-sub">YouTube, VSLs, aulas, cursos e conteudos horizontais com narrativa, ritmo e acabamento profissional.</p>
+    <div id="youtubeGrid" class="video-grid"></div>
+  </section>
+
+  <!-- TAB: Orcamento (renderizada via JS) -->
+  <section id="tab-orcamento" class="tab"></section>
+
+  <!-- TAB: Sobre -->
+  <section id="tab-sobre" class="tab"></section>
+
+  <!-- ============== BEAR ============== -->
+  <div id="bear" class="bear-companion hidden" title="Click pra falar comigo!">
+    <div class="bear-bubble"></div>
+    <svg viewBox="0 0 20 20">
+      <g class="bear-body">
+        <!-- ORELHAS (outer escuras) -->
+        <rect x="3" y="1" width="3" height="2" fill="#5c3a1a"/>
+        <rect x="14" y="1" width="3" height="2" fill="#5c3a1a"/>
+        <!-- Orelhas internas (rosa) -->
+        <rect x="4" y="2" width="1" height="1" fill="#f4a4a4"/>
+        <rect x="15" y="2" width="1" height="1" fill="#f4a4a4"/>
+
+        <!-- CABEÇA REDONDA (com cantos chanfrados) -->
+        <rect x="4" y="3" width="12" height="1" fill="#8b5a2b"/>
+        <rect x="3" y="4" width="14" height="1" fill="#8b5a2b"/>
+        <rect x="2" y="5" width="16" height="6" fill="#8b5a2b"/>
+        <rect x="3" y="11" width="14" height="1" fill="#8b5a2b"/>
+
+        <!-- ORELHAS CONECTAM com cabeça -->
+        <rect x="3" y="3" width="3" height="1" fill="#5c3a1a"/>
+        <rect x="14" y="3" width="3" height="1" fill="#5c3a1a"/>
+
+        <!-- BRAÇOS (pra fora, com patinha escura na ponta) -->
+        <rect x="1" y="12" width="1" height="3" fill="#8b5a2b"/>
+        <rect x="18" y="12" width="1" height="3" fill="#8b5a2b"/>
+        <rect x="0" y="13" width="2" height="2" fill="#5c3a1a"/>
+        <rect x="18" y="13" width="2" height="2" fill="#5c3a1a"/>
+
+        <!-- OLHOS (kawaii grandes) -->
+        <g class="bear-eye">
+          <rect x="5"  y="6" width="2" height="3" fill="#1a0d05"/>
+          <rect x="13" y="6" width="2" height="3" fill="#1a0d05"/>
+          <!-- Brilho -->
+          <rect x="5"  y="6" width="1" height="1" fill="#fff"/>
+          <rect x="13" y="6" width="1" height="1" fill="#fff"/>
+          <rect x="6"  y="8" width="1" height="1" fill="#fff" opacity=".55"/>
+          <rect x="14" y="8" width="1" height="1" fill="#fff" opacity=".55"/>
+        </g>
+
+        <!-- BOCHECHAS rosadas -->
+        <rect x="2"  y="8" width="1" height="1" fill="#f4a4a4" opacity=".75"/>
+        <rect x="17" y="8" width="1" height="1" fill="#f4a4a4" opacity=".75"/>
+
+        <!-- FOCINHO (mais claro) -->
+        <rect x="6" y="9" width="8" height="3" fill="#c89968"/>
+        <!-- Sombrinha do focinho em cima -->
+        <rect x="6" y="9" width="8" height="1" fill="#a87a4a"/>
+
+        <!-- NARIZ -->
+        <rect x="9" y="9" width="2" height="1" fill="#1a0d05"/>
+        <!-- BOCA (sorriso) -->
+        <rect x="8"  y="10" width="1" height="1" fill="#1a0d05"/>
+        <rect x="11" y="10" width="1" height="1" fill="#1a0d05"/>
+        <rect x="9"  y="11" width="2" height="1" fill="#1a0d05"/>
+
+        <!-- CORPO (torso peludo) -->
+        <rect x="4"  y="12" width="12" height="4" fill="#8b5a2b"/>
+        <rect x="3"  y="13" width="1"  height="3" fill="#8b5a2b"/>
+        <rect x="16" y="13" width="1"  height="3" fill="#8b5a2b"/>
+
+        <!-- BARRIGUINHA (mais clara) -->
+        <rect x="6" y="13" width="8" height="3" fill="#c89968"/>
+        <!-- linhas de pelo na barriga -->
+        <rect x="9" y="13" width="1" height="3" fill="#a87a4a" opacity=".4"/>
+
+        <!-- PERNAS (visíveis e separadas) -->
+        <rect x="4"  y="16" width="4" height="2" fill="#8b5a2b"/>
+        <rect x="12" y="16" width="4" height="2" fill="#8b5a2b"/>
+        <!-- Pés (escuros, almofadinha) -->
+        <rect x="3"  y="18" width="5" height="1" fill="#5c3a1a"/>
+        <rect x="12" y="18" width="5" height="1" fill="#5c3a1a"/>
+        <!-- almofadinhas rosa nos pés -->
+        <rect x="5"  y="18" width="1" height="1" fill="#f4a4a4" opacity=".6"/>
+        <rect x="14" y="18" width="1" height="1" fill="#f4a4a4" opacity=".6"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- ============== WhatsApp FAB ============== -->
+  <a id="waFAB" class="wa-fab" href="#" target="_blank" rel="noopener" title="Falar no WhatsApp" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11.5 11.5 0 0 0 3.6 19l-1.6 5.5 5.6-1.5a11.5 11.5 0 0 0 17.4-9.7 11.4 11.4 0 0 0-4.5-9.8zm-8.5 18a9.5 9.5 0 0 1-4.8-1.3l-.3-.2-3.3.9.9-3.2-.2-.3a9.5 9.5 0 1 1 7.7 4.1zm5.4-7.1c-.3-.2-1.7-.8-2-.9-.3-.1-.5-.2-.7.2-.2.3-.8.9-1 1.1-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.6.3-.5c0-.2 0-.4-.1-.5L9 6.7c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5 0-.7.3-.2.3-1 .9-1 2.3s1 2.7 1.2 2.9c.2.3 2 3 4.8 4.2 2.8 1.2 2.8.8 3.3.7.5 0 1.7-.7 2-1.4.3-.7.3-1.2.2-1.4-.1-.1-.3-.2-.6-.4z"/></svg>
+  </a>
+
+  <!-- ============== FOOTER ============== -->
+  <footer>
+    <div class="foot-grid">
+      <div>
+        <h5>JOSÉ VICTOR</h5>
+        <p>Edição que transforma views em vendas. Reels, VSL, motion, cursos e mentoria.</p>
+      </div>
+      <div>
+        <h5>Fala comigo</h5>
+        <div class="foot-links">
+          <a id="footerWA" href="#" target="_blank" title="WhatsApp">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11.5 11.5 0 0 0 3.6 19l-1.6 5.5 5.6-1.5a11.5 11.5 0 0 0 17.4-9.7 11.4 11.4 0 0 0-4.5-9.8z"/></svg>
+          </a>
+          <a id="footerIG" href="#" target="_blank" title="Instagram">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="18" cy="6" r="1" fill="currentColor"/></svg>
+          </a>
+        </div>
+        <p style="margin-top:.5rem; font-size:.82rem;"><span id="footerWANum">+55 22 98148-1742</span></p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      © <span id="footerYear"></span> José Victor — Todos os direitos reservados · Feito com 🐻 e muito café
+    </div>
+  </footer>
+
+</main>
+
+<script>document.getElementById('footerYear')?.appendChild(document.createTextNode(new Date().getFullYear()));</script>
+<script src="js/app.js"></script>
+<script src="js/effects.js"></script>
+</body>
+</html>

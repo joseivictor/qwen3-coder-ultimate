@@ -1,0 +1,12 @@
+server.py
+data/admin.json
+data/*.bak.*
+INICIAR_PORTFOLIO.bat
+INICIAR_CELULAR.bat
+COMPARTILHAR_PUBLICO.bat
+show_qr.py
+refs/_my_*.png
+refs/scraped.json
+__pycache__
+.qwen
+*.log

@@ -1,0 +1,31 @@
+{
+  "experts": [
+    {
+      "id": "jose-victor",
+      "name": "Jose Victor",
+      "instagram": "@joseivictorr",
+      "instagram_url": "https://instagram.com/joseivictorr",
+      "photo": "assets/experts/jose-victor-hd.jpeg",
+      "role": "Editor e mentor",
+      "is_owner": true
+    },
+    { "id": "amena-confeitaria", "name": "Amena Confeitaria", "instagram": "@amena.confeitaria", "instagram_url": "https://instagram.com/amena.confeitaria", "photo": "assets/experts/amena-confeitaria.jpg", "role": "Confeitaria artesanal" },
+    { "id": "arisex-global", "name": "Arisex Global", "instagram": "@arisexglobal", "instagram_url": "https://instagram.com/arisexglobal", "photo": "assets/experts/arisex-global.jpg", "role": "Marca global" },
+    { "id": "athos-aramis", "name": "Athos & Aramis", "instagram": "@athosearamis", "instagram_url": "https://instagram.com/athosearamis", "photo": "assets/experts/athos-aramis.jpg", "role": "Conteudo de marca" },
+    { "id": "bibi-bruno", "name": "Bibi & Bruno", "instagram": "@experienciapelaestrada", "instagram_url": "https://instagram.com/experienciapelaestrada", "photo": "assets/experts/bibi-bruno.jpg", "role": "Viagem e lifestyle" },
+    { "id": "carla-aquino", "name": "Carla Aquino", "instagram": "@carlaaquino.eng", "instagram_url": "https://instagram.com/carlaaquino.eng", "photo": "assets/experts/carla-aquino.jpg", "role": "Engenharia" },
+    { "id": "feira-do-forte", "name": "Feira do Forte", "instagram": "@feiramaisforte", "instagram_url": "https://instagram.com/feiramaisforte", "photo": "assets/experts/feira-do-forte.jpg", "role": "Evento e feira" },
+    { "id": "mariana-torres", "name": "Mariana Torres", "instagram": "@marianatorre.s", "instagram_url": "https://instagram.com/marianatorre.s", "photo": "assets/experts/mariana-torres.jpg", "role": "Criadora de conteudo" },
+    { "id": "nexa", "name": "Nexa Fitness", "instagram": "@nexafitnes", "instagram_url": "https://instagram.com/nexafitnes", "photo": "assets/experts/nexa.jpg", "role": "Fitness e wellness" },
+    { "id": "nickson-rezende", "name": "Nickson Rezende", "instagram": "@nicksonrezende", "instagram_url": "https://instagram.com/nicksonrezende", "photo": "assets/experts/nickson-rezende.jpg", "role": "Criador de conteudo" },
+    { "id": "regina-teixeira", "name": "Regina Teixeira", "instagram": "@nacozinhacomregina", "instagram_url": "https://instagram.com/nacozinhacomregina", "photo": "assets/experts/regina-teixeira.jpg", "role": "Culinaria" },
+    { "id": "rodrigo-curvelo", "name": "Rodrigo Curvelo", "instagram": "@rodrigocurvelooficial", "instagram_url": "https://instagram.com/rodrigocurvelooficial", "photo": "assets/experts/rodrigo-curvelo.jpg", "role": "Conteudo profissional" },
+    { "id": "trendix", "name": "Trendix", "instagram": "@trendix.ia", "instagram_url": "https://instagram.com/trendix.ia", "photo": "assets/experts/trendix.jpg", "role": "IA e tecnologia" },
+    { "id": "aguinaldo-ramos", "name": "Aguinaldo Ramos", "instagram": null, "instagram_url": null, "photo": "assets/push/aguinaldo-ramos.webp", "role": "Conteudo de autoridade" },
+    { "id": "diogo-teixeira", "name": "Diogo Teixeira", "instagram": null, "instagram_url": null, "photo": "assets/push/diogo-teixeira.webp", "role": "Criador de conteudo" },
+    { "id": "jean-pierre", "name": "Jean Pierre", "instagram": null, "instagram_url": null, "photo": "assets/push/jean-pierre.webp", "role": "Criador de conteudo" },
+    { "id": "camara-municipal-spa", "name": "Camara Municipal SPA", "instagram": null, "instagram_url": null, "photo": "assets/push/camara-municipal-spa.webp", "role": "Instituicao publica" },
+    { "id": "ives-church", "name": "Ives Church", "instagram": null, "instagram_url": null, "photo": "assets/push/ives-church.webp", "role": "Conteudo religioso" },
+    { "id": "marcelo-teixeira", "name": "Marcelo Teixeira", "instagram": null, "instagram_url": null, "photo": "assets/push/marcelo-teixeira.webp", "role": "Conteudo profissional" }
+  ]
+}

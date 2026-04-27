@@ -1,0 +1,4 @@
+.vercel
+data/admin.json
+data/*.bak.*
+refs/

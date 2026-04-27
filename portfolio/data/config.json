@@ -1,0 +1,279 @@
+{
+  "site": {
+    "owner_name": "Jose Victor",
+    "owner_instagram": "@joseivictorr",
+    "owner_instagram_url": "https://instagram.com/joseivictorr",
+    "whatsapp": "+55 22 98148-1742",
+    "whatsapp_digits": "5522981481742",
+    "tagline": "Editor de video para conteudo de alta retencao",
+    "subtitle": "3 anos de experiencia com Reels, YouTube, VSLs e conteudos comerciais.",
+    "hero_serif_word": "viral"
+  },
+  "stats": [
+    {
+      "icon": "1000+",
+      "value": 1000,
+      "suffix": "+",
+      "label": "Videos editados",
+      "note": "volume real de producao"
+    },
+    {
+      "icon": "10M+",
+      "value": 10,
+      "suffix": "M+",
+      "label": "Views geradas",
+      "note": "conteudo feito para reter"
+    },
+    {
+      "icon": "20+",
+      "value": 20,
+      "suffix": "+",
+      "label": "Experts confiam",
+      "note": "marcas e criadores"
+    }
+  ],
+  "budget": {
+    "currency": "R$",
+    "formats": [
+      {
+        "id": "reel",
+        "label": "9:16",
+        "subtitle": "Reels, Shorts, TikTok e videos verticais",
+        "icon": "9:16",
+        "max": 120,
+        "tiers": [
+          {
+            "min": 1,
+            "max": 120,
+            "price": 120,
+            "label": "A partir de"
+          }
+        ]
+      },
+      {
+        "id": "longform",
+        "label": "16:9",
+        "subtitle": "YouTube, VSL, cursos e videos horizontais",
+        "icon": "16:9",
+        "max": 40,
+        "tiers": [
+          {
+            "min": 1,
+            "max": 2,
+            "price": 780,
+            "label": "Avulso"
+          },
+          {
+            "min": 3,
+            "max": 5,
+            "price": 660,
+            "label": "Pacote"
+          },
+          {
+            "min": 6,
+            "max": 12,
+            "price": 520,
+            "label": "Volume"
+          },
+          {
+            "min": 13,
+            "max": 25,
+            "price": 430,
+            "label": "Mensal sugerido"
+          },
+          {
+            "min": 26,
+            "max": 40,
+            "price": 360,
+            "label": "Alto volume"
+          }
+        ]
+      },
+      {
+        "id": "motion",
+        "label": "Motion",
+        "subtitle": "Vinhetas, aberturas, animações e peças em After Effects",
+        "icon": "AE",
+        "max": 20,
+        "tiers": [
+          {
+            "min": 1,
+            "max": 20,
+            "price": 0,
+            "label": "Sob briefing"
+          }
+        ]
+      }
+    ],
+    "monthly_suggestion_threshold": 15,
+    "style_multipliers": {
+      "simples": 1,
+      "medio": 1.25,
+      "avancado": 1.55
+    },
+    "monthly_plans": [
+      {
+        "id": "starter",
+        "name": "Starter 9:16",
+        "videos_per_month": 12,
+        "format_label": "12 reels/mes",
+        "price": 1290,
+        "highlight": false,
+        "features": [
+          "12 reels editados",
+          "Capinha simples para cada video",
+          "Revisao inclusa",
+          "Organizacao por drive",
+          "WhatsApp direto comigo"
+        ]
+      },
+      {
+        "id": "growth",
+        "name": "Growth 9:16",
+        "videos_per_month": 24,
+        "format_label": "24 reels/mes",
+        "price": 2490,
+        "highlight": true,
+        "features": [
+          "24 reels editados",
+          "Capinha para cada video",
+          "Fila mensal priorizada",
+          "Revisoes inclusas",
+          "Sugestao de cortes e ganchos"
+        ]
+      },
+      {
+        "id": "youtube",
+        "name": "YouTube Pro",
+        "videos_per_month": 8,
+        "format_label": "8 videos longos/mes",
+        "price": 3790,
+        "highlight": false,
+        "features": [
+          "8 videos longos",
+          "Capinha simples inclusa",
+          "Tratamento de audio",
+          "Narrativa estruturada",
+          "Cortes para Reels quando fizer sentido"
+        ]
+      },
+      {
+        "id": "motion",
+        "name": "Motion Pack",
+        "videos_per_month": 0,
+        "format_label": "motion sob demanda",
+        "price": 0,
+        "highlight": false,
+        "features": [
+          "Vinhetas e aberturas",
+          "Animações em After Effects",
+          "Peças para Reels e YouTube",
+          "Orçamento por briefing"
+        ]
+      },
+      {
+        "id": "studio",
+        "name": "Studio Combo",
+        "videos_per_month": 60,
+        "format_label": "mix 9:16 + 16:9",
+        "price": 5990,
+        "highlight": false,
+        "features": [
+          "Mix vertical + horizontal",
+          "Capinhas inclusas",
+          "Editor dedicado",
+          "Revisoes inclusas",
+          "Prioridade na agenda"
+        ]
+      },
+      {
+        "id": "custom",
+        "name": "Personalizado",
+        "videos_per_month": 0,
+        "format_label": "sob medida",
+        "price": 0,
+        "highlight": false,
+        "features": [
+          "Volume sob demanda",
+          "Mix 9:16 + 16:9",
+          "VSL e curso por briefing",
+          "Negociacao pelo WhatsApp"
+        ]
+      }
+    ]
+  },
+  "edit_levels": [
+    {
+      "id": "simples",
+      "label": "Simples",
+      "description": "Cortes secos, legenda, ritmo",
+      "color": "#7dd3fc"
+    },
+    {
+      "id": "medio",
+      "label": "Medio",
+      "description": "Cortes dinamicos, efeitos sonoros, transicoes",
+      "color": "#a78bfa"
+    },
+    {
+      "id": "avancado",
+      "label": "Avancado",
+      "description": "Motion graphics, color grading, audio tratado",
+      "color": "#7dd3fc"
+    }
+  ],
+  "categories": [
+    {
+      "id": "unboxing",
+      "label": "Unboxing"
+    },
+    {
+      "id": "disruptivo",
+      "label": "Disruptivo"
+    },
+    {
+      "id": "live",
+      "label": "Corte Live"
+    },
+    {
+      "id": "podcast",
+      "label": "Corte Podcast"
+    },
+    {
+      "id": "vlog",
+      "label": "Vlog"
+    },
+    {
+      "id": "entretenimento",
+      "label": "Entretenimento"
+    },
+    {
+      "id": "criativos",
+      "label": "Criativos"
+    },
+    {
+      "id": "fitness",
+      "label": "Fitness"
+    },
+    {
+      "id": "youtube",
+      "label": "YouTube"
+    },
+    {
+      "id": "reel",
+      "label": "Reels"
+    },
+    {
+      "id": "motion",
+      "label": "Motion design"
+    },
+    {
+      "id": "course",
+      "label": "Cursos editados"
+    },
+    {
+      "id": "flyer",
+      "label": "Flyers"
+    }
+  ]
+}
