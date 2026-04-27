@@ -490,49 +490,114 @@ function unitPrice(formatId, qty, styleId = STATE.budget.style) {
   return Math.round((tier.price || 0) * (cfg.style_multipliers[styleId] ?? 1));
 }
 
-function monthlyPlanMeta(plan) {
+function monthlyRecommendationsHTML() {
+  const cfg = STATE.config?.budget;
+  const fmt = cfg?.formats?.find(f => f.id === STATE.budget.format) || cfg?.formats?.[0];
+  const qty = STATE.budget.qty;
   const styleLabel = STATE.config.edit_levels.find(l => l.id === STATE.budget.style)?.label || 'Medio';
-  const fmt = STATE.budget.format;
-  const style = STATE.budget.style;
-  const calc = (qty, formatId, discount) => {
-    const full = unitPrice(formatId, qty, style) * qty;
-    const price = roundMoney(full * discount);
-    return {
-      price,
-      full,
-      saving: full > 0 ? Math.max(0, Math.round((1 - price / full) * 100)) : 0
-    };
-  };
+  const styleId = STATE.budget.style;
+  const cards = [];
 
-  if (plan.id === 'starter') {
-    const m = calc(12, 'reel', .88);
-    return { ...m, label: `12 reels/mes - ${styleLabel}`, badge: 'Mensal' };
+  const consultation = `
+    <div class="plan-card consultation-card">
+      <span class="plan-badge">Sempre</span>
+      <div class="nm">Sob consulta</div>
+      <div class="pr">
+        <span class="num">Sob consulta</span>
+        <span class="per">projeto fora do padrao</span>
+      </div>
+      <div class="plan-saving">Cursos, VSL, motion pesado, prazos urgentes ou pacote com varios formatos.</div>
+      <ul>
+        <li>Analiso escopo, referencia e material bruto</li>
+        <li>Serve para empresa que precisa de tudo junto</li>
+        <li>Negociacao direta pelo WhatsApp</li>
+      </ul>
+      <a class="plan-cta" href="${waLink('Ola Jose! Quero montar um plano sob consulta com varios tipos de video. Pode me ajudar?')}" target="_blank">Montar sob consulta</a>
+    </div>`;
+
+  if (STATE.budget.format === 'reel' && qty >= 8) {
+    const perVideo = unitPrice('reel', qty, styleId);
+    const avulso = perVideo * qty;
+    const mensal = roundMoney(avulso * .8);
+    cards.push(`
+      <div class="plan-card highlight">
+        <span class="plan-badge">Recomendado</span>
+        <div class="nm">Mensal ${qty} reels ${styleLabel}</div>
+        <div class="pr">
+          <span class="num">R$${formatNum(mensal)}</span>
+          <span class="per">/mes - mesmo estilo escolhido</span>
+        </div>
+        <div class="plan-saving">Avulso daria R$${formatNum(avulso)}. Mensal economiza 20% e inclui extras.</div>
+        <ul>
+          <li>${qty} reels no estilo ${styleLabel}</li>
+          <li>Capinha simples para cada video</li>
+          <li>Organizacao mensal e prioridade na fila</li>
+          <li>Revisoes inclusas dentro do escopo</li>
+        </ul>
+        <a class="plan-cta" href="${waLink(`Ola Jose! Quero fechar mensal de ${qty} reels no estilo ${styleLabel}. Avulso ficaria R$${formatNum(avulso)} e o mensal estimado ficou R$${formatNum(mensal)}. Vamos conversar?`)}" target="_blank">Quero esse mensal</a>
+      </div>`);
   }
-  if (plan.id === 'growth') {
-    const m = calc(24, 'reel', .82);
-    return { ...m, label: `24 reels/mes - ${styleLabel}`, badge: 'Popular' };
+
+  if (STATE.budget.format === 'longform' && STATE.budget.longType === 'youtube' && qty >= 4) {
+    const perVideo = unitPrice('longform', qty, styleId);
+    const avulso = perVideo * qty;
+    const mensal = roundMoney(avulso * .82);
+    cards.push(`
+      <div class="plan-card highlight">
+        <span class="plan-badge">YouTube</span>
+        <div class="nm">Mensal ${qty} videos 16:9 ${styleLabel}</div>
+        <div class="pr">
+          <span class="num">R$${formatNum(mensal)}</span>
+          <span class="per">/mes - YouTube recorrente</span>
+        </div>
+        <div class="plan-saving">Avulso daria R$${formatNum(avulso)}. Mensal economiza 18% e organiza a entrega.</div>
+        <ul>
+          <li>${qty} videos 16:9 no estilo ${styleLabel}</li>
+          <li>Capinha simples inclusa</li>
+          <li>Tratamento de audio e ritmo</li>
+          <li>Agenda mensal de entregas</li>
+        </ul>
+        <a class="plan-cta" href="${waLink(`Ola Jose! Quero fechar mensal de ${qty} videos 16:9 no estilo ${styleLabel}. Avulso ficaria R$${formatNum(avulso)} e mensal estimado R$${formatNum(mensal)}.`)}" target="_blank">Quero esse mensal</a>
+      </div>`);
   }
-  if (plan.id === 'youtube') {
-    const m = calc(8, 'longform', .86);
-    return { ...m, label: `8 videos 16:9/mes - ${styleLabel}`, badge: 'Popular' };
+
+  if (STATE.budget.format === 'reel' && qty >= 24) {
+    const simpleQty = Math.ceil(qty * .5);
+    const mediumQty = Math.floor(qty * .34);
+    const advancedQty = Math.max(1, qty - simpleQty - mediumQty);
+    const avulso =
+      unitPrice('reel', simpleQty, 'simples') * simpleQty +
+      unitPrice('reel', mediumQty, 'medio') * mediumQty +
+      unitPrice('reel', advancedQty, 'avancado') * advancedQty;
+    const mensal = roundMoney(avulso * .78);
+    cards.push(`
+      <div class="plan-card highlight mix-card">
+        <span class="plan-badge">Mix</span>
+        <div class="nm">Mensal Mix de estilos</div>
+        <div class="pr">
+          <span class="num">R$${formatNum(mensal)}</span>
+          <span class="per">/mes - simples + medio + avancado</span>
+        </div>
+        <div class="plan-saving">Para empresa/criador com videos de dificuldades diferentes. Desconto sobre o valor real de cada estilo.</div>
+        <ul>
+          <li>${simpleQty} simples + ${mediumQty} medios + ${advancedQty} avancados</li>
+          <li>Capinhas inclusas para os videos principais</li>
+          <li>Prioridade e organizacao mensal</li>
+          <li>Possibilidade de incluir 16:9 sob ajuste</li>
+        </ul>
+        <a class="plan-cta" href="${waLink(`Ola Jose! Quero montar um mensal mix com ${simpleQty} simples, ${mediumQty} medios e ${advancedQty} avancados. Estimativa mensal: R$${formatNum(mensal)}.`)}" target="_blank">Quero o mix</a>
+      </div>`);
   }
-  if (plan.id === 'studio') {
-    const simple = unitPrice('reel', 24, 'simples') * 24;
-    const medium = unitPrice('reel', 16, 'medio') * 16;
-    const advanced = unitPrice('reel', 8, 'avancado') * 8;
-    const youtube = unitPrice('longform', 4, 'medio') * 4;
-    const full = simple + medium + advanced + youtube;
-    const price = roundMoney(full * .76);
-    return {
-      price,
-      full,
-      saving: Math.round((1 - price / full) * 100),
-      label: '48 reels mistos + 4 videos 16:9',
-      badge: fmt === 'motion' ? 'Combo' : 'Mix recomendado'
-    };
-  }
-  if (plan.id === 'motion') return { price: 0, full: 0, saving: 0, label: 'motion sob demanda', badge: 'Briefing' };
-  return { price: 0, full: 0, saving: 0, label: plan.format_label || 'sob medida', badge: 'Sob medida' };
+
+  return (cards.length ? cards.join('') : `
+    <div class="plan-card plan-waiting">
+      <div class="nm">Plano mensal aparece por volume</div>
+      <div class="plan-saving">Selecione pelo menos 8 reels ou 4 videos 16:9 para eu sugerir um mensal com desconto real.</div>
+      <ul>
+        <li>O valor acompanha o estilo escolhido</li>
+        <li>Nada de plano unico para todos os niveis</li>
+      </ul>
+    </div>`) + consultation;
 }
 
 function setupBudget() {
@@ -572,27 +637,7 @@ function setupBudget() {
       </button>
     </div>`;
 
-  const visiblePlanIds = STATE.budget.format === 'reel'
-    ? ['starter', 'growth', 'studio', 'custom']
-    : STATE.budget.format === 'longform'
-      ? ['youtube', 'studio', 'custom']
-      : ['motion', 'studio', 'custom'];
-  const plansHTML = cfg.monthly_plans.filter(p => visiblePlanIds.includes(p.id)).map(p => {
-    const meta = monthlyPlanMeta(p);
-    const featured = p.highlight || p.id === 'studio' || (STATE.budget.format === 'longform' && p.id === 'youtube');
-    const waText = `Ola Jose, quero conversar sobre o plano ${p.name} (${meta.label}). Valor estimado: ${meta.price ? 'R$' + formatNum(meta.price) + '/mes' : 'sob consulta'}. Bora conversar?`;
-    return `
-    <div class="plan-card ${featured?'highlight':''}">
-      <span class="plan-badge">${meta.badge}</span>
-      <div class="nm">${p.name}</div>
-      <div class="pr">
-        <span class="num">${meta.price ? `R$${formatNum(meta.price)}` : `Sob consulta`}</span>
-        <span class="per">${meta.price ? `/mes - ` : ``}${meta.label}</span>
-      </div>
-      ${meta.saving ? `<div class="plan-saving">${meta.saving}% abaixo do avulso no mesmo escopo</div>` : ''}
-      <ul>${p.features.map(f=>`<li>${f}</li>`).join('')}</ul>
-      <a class="plan-cta" href="${waLink(waText)}" target="_blank">Quero esse plano</a>
-    </div>`;}).join('');
+  const plansHTML = monthlyRecommendationsHTML();
 
   root.innerHTML = `
     <h2 class="hero-headline">Orcamento<br>de edicao.</h2>
@@ -650,8 +695,8 @@ function setupBudget() {
       </div>
 
       <div>
-        <h3 class="section-title" style="margin-top:0;">Planos mensais</h3>
-        <p style="font-size:.88rem; color:var(--ink-2); margin-bottom:1.2rem;">Recorrência sai melhor — preço por vídeo cai e você fecha o pipeline mensal de uma vez.</p>
+        <h3 class="section-title" style="margin-top:0;">Recomendacao mensal</h3>
+        <p style="font-size:.88rem; color:var(--ink-2); margin-bottom:1.2rem;">So aparece plano quando o volume faz sentido. O desconto usa o valor real do formato e do estilo escolhido.</p>
         <div class="plans">${plansHTML}</div>
       </div>
     </div>

@@ -951,6 +951,17 @@ a { color: inherit; text-decoration: none; }
   color: var(--bg-0);
 }
 .plan-card .plan-cta:hover { background: var(--gold-bright); color: var(--bg-0); }
+.consultation-card {
+  border-style: dashed;
+  background: rgba(8,21,34,.48);
+}
+.plan-waiting {
+  background: rgba(8,21,34,.42);
+  border-color: rgba(197,230,255,.12);
+}
+.mix-card {
+  border-color: rgba(255,255,255,.28) !important;
+}
 
 /* ============================================================
    FILTROS PAGE
