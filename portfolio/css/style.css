@@ -834,6 +834,61 @@ a { color: inherit; text-decoration: none; }
 .style-option .nm { font-weight: 700; font-size: .92rem; }
 .style-option .ds { font-size: .74rem; color: var(--ink-2); margin-top: .15rem; }
 
+.style-mix-box {
+  margin: -.65rem 0 1.5rem;
+  padding: .9rem;
+  border: 1px solid rgba(197,230,255,.14);
+  border-radius: 14px;
+  background: rgba(6,17,31,.42);
+}
+.mix-head {
+  display: flex;
+  justify-content: space-between;
+  gap: .8rem;
+  align-items: center;
+  margin-bottom: .7rem;
+  color: #eaf7ff;
+  font-size: .86rem;
+}
+.mix-head span {
+  color: #bfe4ff;
+  font-weight: 850;
+  font-size: .76rem;
+}
+.mix-grid { display: grid; gap: .55rem; }
+.mix-row {
+  display: grid;
+  grid-template-columns: 1fr 76px;
+  gap: .75rem;
+  align-items: center;
+  padding: .65rem;
+  border-radius: 12px;
+  background: rgba(255,255,255,.035);
+}
+.mix-row strong {
+  display: block;
+  color: #f4fbff;
+  font-size: .86rem;
+}
+.mix-row small {
+  display: block;
+  color: var(--ink-2);
+  font-size: .72rem;
+  margin-top: .1rem;
+}
+.mix-row input {
+  width: 76px;
+  padding: .55rem .45rem;
+  border: 1px solid rgba(197,230,255,.16);
+  border-radius: 10px;
+  background: rgba(6,17,31,.72);
+  color: #f4fbff;
+  font-weight: 900;
+  text-align: center;
+  outline: none;
+}
+.mix-row input:focus { border-color: #8fd0ff; }
+
 .price-out {
   padding: 1.5rem;
   background: linear-gradient(135deg, rgba(124,58,237,.15), rgba(6,182,212,.10));

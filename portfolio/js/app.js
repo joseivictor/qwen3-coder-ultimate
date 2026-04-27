@@ -419,7 +419,7 @@ function renderYoutubeVideos() {
 }
 
 /* ---------- BUDGET CALCULATOR (refatorado: 2 formatos + refs + briefing) ---------- */
-STATE.budget = { format: 'reel', longType: 'youtube', qty: 8, style: 'medio', refs: [], recorded: null, deadline: '' };
+STATE.budget = { format: 'reel', longType: 'youtube', qty: 8, style: 'medio', styleMix: null, refs: [], recorded: null, deadline: '' };
 
 function budgetMode() {
   if (STATE.budget.format === 'longform') return STATE.budget.longType || 'youtube';
@@ -490,13 +490,51 @@ function unitPrice(formatId, qty, styleId = STATE.budget.style) {
   return Math.round((tier.price || 0) * (cfg.style_multipliers[styleId] ?? 1));
 }
 
+function normalizeStyleMix() {
+  const qty = Math.max(1, STATE.budget.qty || 1);
+  const styles = STATE.config?.edit_levels?.map(l => l.id) || ['simples', 'medio', 'avancado'];
+  if (!STATE.budget.styleMix) {
+    STATE.budget.styleMix = Object.fromEntries(styles.map(id => [id, id === STATE.budget.style ? qty : 0]));
+    return STATE.budget.styleMix;
+  }
+  styles.forEach(id => { if (!Number.isFinite(STATE.budget.styleMix[id])) STATE.budget.styleMix[id] = 0; });
+  const total = styles.reduce((sum, id) => sum + (parseInt(STATE.budget.styleMix[id], 10) || 0), 0);
+  if (total !== qty) {
+    STATE.budget.styleMix = Object.fromEntries(styles.map(id => [id, id === STATE.budget.style ? qty : 0]));
+  }
+  return STATE.budget.styleMix;
+}
+
+function styleMixSummary() {
+  const mix = normalizeStyleMix();
+  return (STATE.config?.edit_levels || [])
+    .map(l => ({ label: l.label, id: l.id, qty: parseInt(mix[l.id], 10) || 0 }))
+    .filter(x => x.qty > 0)
+    .map(x => `${x.qty} ${x.label.toLowerCase()}`)
+    .join(' + ');
+}
+
+function currentBudgetTotals() {
+  const formatId = STATE.budget.format === 'longform' ? 'longform' : 'reel';
+  const mix = normalizeStyleMix();
+  const lines = (STATE.config?.edit_levels || []).map(level => {
+    const qty = parseInt(mix[level.id], 10) || 0;
+    const unit = unitPrice(formatId, STATE.budget.qty, level.id);
+    return { id: level.id, label: level.label, qty, unit, total: qty * unit };
+  }).filter(x => x.qty > 0);
+  return {
+    lines,
+    total: lines.reduce((sum, x) => sum + x.total, 0)
+  };
+}
+
 function monthlyRecommendationsHTML() {
-  const cfg = STATE.config?.budget;
-  const fmt = cfg?.formats?.find(f => f.id === STATE.budget.format) || cfg?.formats?.[0];
   const qty = STATE.budget.qty;
-  const styleLabel = STATE.config.edit_levels.find(l => l.id === STATE.budget.style)?.label || 'Medio';
-  const styleId = STATE.budget.style;
-  const cards = [];
+  const canAutoMonthly = (STATE.budget.format === 'reel') || (STATE.budget.format === 'longform' && STATE.budget.longType === 'youtube');
+  const totals = currentBudgetTotals();
+  const avulso = totals.total;
+  const mensal = roundMoney(avulso * .8);
+  const summary = styleMixSummary();
 
   const consultation = `
     <div class="plan-card consultation-card">
@@ -515,89 +553,36 @@ function monthlyRecommendationsHTML() {
       <a class="plan-cta" href="${waLink('Ola Jose! Quero montar um plano sob consulta com varios tipos de video. Pode me ajudar?')}" target="_blank">Montar sob consulta</a>
     </div>`;
 
-  if (STATE.budget.format === 'reel' && qty >= 8) {
-    const perVideo = unitPrice('reel', qty, styleId);
-    const avulso = perVideo * qty;
-    const mensal = roundMoney(avulso * .8);
-    cards.push(`
+  if (canAutoMonthly && qty >= 8 && avulso > 0) {
+    const unitLabel = STATE.budget.format === 'reel' ? 'reels' : 'videos 16:9';
+    return `
       <div class="plan-card highlight">
         <span class="plan-badge">Recomendado</span>
-        <div class="nm">Mensal ${qty} reels ${styleLabel}</div>
+        <div class="nm">Mensal recorrente</div>
         <div class="pr">
           <span class="num">R$${formatNum(mensal)}</span>
-          <span class="per">/mes - mesmo estilo escolhido</span>
+          <span class="per">/mes - ${qty} ${unitLabel}</span>
         </div>
-        <div class="plan-saving">Avulso daria R$${formatNum(avulso)}. Mensal economiza 20% e inclui extras.</div>
+        <div class="plan-saving">Avulso daria R$${formatNum(avulso)}. Mensal aplica 20% de desconto em cima do total atual.</div>
         <ul>
-          <li>${qty} reels no estilo ${styleLabel}</li>
+          <li>${summary}</li>
           <li>Capinha simples para cada video</li>
           <li>Organizacao mensal e prioridade na fila</li>
           <li>Revisoes inclusas dentro do escopo</li>
         </ul>
-        <a class="plan-cta" href="${waLink(`Ola Jose! Quero fechar mensal de ${qty} reels no estilo ${styleLabel}. Avulso ficaria R$${formatNum(avulso)} e o mensal estimado ficou R$${formatNum(mensal)}. Vamos conversar?`)}" target="_blank">Quero esse mensal</a>
-      </div>`);
+        <a class="plan-cta" href="${waLink(`Ola Jose! Quero fechar mensal recorrente com ${qty} ${unitLabel}: ${summary}. Avulso R$${formatNum(avulso)}, mensal com 20% off R$${formatNum(mensal)}.`)}" target="_blank">Quero esse mensal</a>
+      </div>${consultation}`;
   }
 
-  if (STATE.budget.format === 'longform' && STATE.budget.longType === 'youtube' && qty >= 4) {
-    const perVideo = unitPrice('longform', qty, styleId);
-    const avulso = perVideo * qty;
-    const mensal = roundMoney(avulso * .82);
-    cards.push(`
-      <div class="plan-card highlight">
-        <span class="plan-badge">YouTube</span>
-        <div class="nm">Mensal ${qty} videos 16:9 ${styleLabel}</div>
-        <div class="pr">
-          <span class="num">R$${formatNum(mensal)}</span>
-          <span class="per">/mes - YouTube recorrente</span>
-        </div>
-        <div class="plan-saving">Avulso daria R$${formatNum(avulso)}. Mensal economiza 18% e organiza a entrega.</div>
-        <ul>
-          <li>${qty} videos 16:9 no estilo ${styleLabel}</li>
-          <li>Capinha simples inclusa</li>
-          <li>Tratamento de audio e ritmo</li>
-          <li>Agenda mensal de entregas</li>
-        </ul>
-        <a class="plan-cta" href="${waLink(`Ola Jose! Quero fechar mensal de ${qty} videos 16:9 no estilo ${styleLabel}. Avulso ficaria R$${formatNum(avulso)} e mensal estimado R$${formatNum(mensal)}.`)}" target="_blank">Quero esse mensal</a>
-      </div>`);
-  }
-
-  if (STATE.budget.format === 'reel' && qty >= 24) {
-    const simpleQty = Math.ceil(qty * .5);
-    const mediumQty = Math.floor(qty * .34);
-    const advancedQty = Math.max(1, qty - simpleQty - mediumQty);
-    const avulso =
-      unitPrice('reel', simpleQty, 'simples') * simpleQty +
-      unitPrice('reel', mediumQty, 'medio') * mediumQty +
-      unitPrice('reel', advancedQty, 'avancado') * advancedQty;
-    const mensal = roundMoney(avulso * .78);
-    cards.push(`
-      <div class="plan-card highlight mix-card">
-        <span class="plan-badge">Mix</span>
-        <div class="nm">Mensal Mix de estilos</div>
-        <div class="pr">
-          <span class="num">R$${formatNum(mensal)}</span>
-          <span class="per">/mes - simples + medio + avancado</span>
-        </div>
-        <div class="plan-saving">Para empresa/criador com videos de dificuldades diferentes. Desconto sobre o valor real de cada estilo.</div>
-        <ul>
-          <li>${simpleQty} simples + ${mediumQty} medios + ${advancedQty} avancados</li>
-          <li>Capinhas inclusas para os videos principais</li>
-          <li>Prioridade e organizacao mensal</li>
-          <li>Possibilidade de incluir 16:9 sob ajuste</li>
-        </ul>
-        <a class="plan-cta" href="${waLink(`Ola Jose! Quero montar um mensal mix com ${simpleQty} simples, ${mediumQty} medios e ${advancedQty} avancados. Estimativa mensal: R$${formatNum(mensal)}.`)}" target="_blank">Quero o mix</a>
-      </div>`);
-  }
-
-  return (cards.length ? cards.join('') : `
+  return `
     <div class="plan-card plan-waiting">
-      <div class="nm">Plano mensal aparece por volume</div>
-      <div class="plan-saving">Selecione pelo menos 8 reels ou 4 videos 16:9 para eu sugerir um mensal com desconto real.</div>
+      <div class="nm">Mensal a partir de 8 videos</div>
+      <div class="plan-saving">Quando chegar em 8 videos, aparece automaticamente 20% de desconto sobre o total atual.</div>
       <ul>
-        <li>O valor acompanha o estilo escolhido</li>
-        <li>Nada de plano unico para todos os niveis</li>
+        <li>Voce pode misturar estilos de edicao</li>
+        <li>O valor acompanha a quantidade e dificuldade selecionadas</li>
       </ul>
-    </div>`) + consultation;
+    </div>${consultation}`;
 }
 
 function setupBudget() {
@@ -623,6 +608,16 @@ function setupBudget() {
       <div class="nm" style="color:${l.color}">${l.label}</div>
       <div class="ds">${l.description}</div>
     </button>`).join('');
+
+  normalizeStyleMix();
+  const mixHTML = (STATE.config.edit_levels || []).map(l => `
+    <label class="mix-row">
+      <span>
+        <strong>${l.label}</strong>
+        <small>${l.description}</small>
+      </span>
+      <input class="mix-input" data-mix-style="${l.id}" type="number" min="0" max="${STATE.budget.qty}" value="${STATE.budget.styleMix[l.id] || 0}">
+    </label>`).join('');
 
   const longTypesHTML = `
     <div class="long-type-picker" id="longTypePicker">
@@ -666,6 +661,13 @@ function setupBudget() {
 
         <h4 class="mini-label">Estilo de edição</h4>
         <div class="style-picker">${stylesHTML}</div>
+        <div class="style-mix-box">
+          <div class="mix-head">
+            <strong>Distribuicao por estilo</strong>
+            <span id="mixTotalStatus"></span>
+          </div>
+          <div class="mix-grid">${mixHTML}</div>
+        </div>
 
         <h4 class="mini-label">Referências <span class="opt">(opcional, mas ajuda)</span></h4>
         <div id="refList" class="ref-list"></div>
@@ -727,18 +729,51 @@ function setupBudget() {
     const max = fmt.max || 60;
     slider.max = max;
     if (STATE.budget.qty > max) STATE.budget.qty = max;
+    normalizeStyleMix();
     slider.value = STATE.budget.qty;
     num.textContent = STATE.budget.qty;
     small.textContent = STATE.budget.qty === 1 ? (fmt.id==='reel'?'reel':'vídeo') : (fmt.id==='reel'?'reels':'vídeos');
     slider.style.setProperty('--fill', (STATE.budget.qty / max * 100) + '%');
+    updateMixStatus();
     refreshPrice();
   }
 
-  slider.addEventListener('input', () => { STATE.budget.qty = parseInt(slider.value,10); update(); });
-  $('#qtyMinus').addEventListener('click', () => { STATE.budget.qty = Math.max(1, STATE.budget.qty - 1); update(); });
+  function updateMixStatus() {
+    const status = $('#mixTotalStatus');
+    if (!status) return;
+    const mix = normalizeStyleMix();
+    const total = Object.values(mix).reduce((sum, n) => sum + (parseInt(n, 10) || 0), 0);
+    status.textContent = `${total}/${STATE.budget.qty} videos`;
+    status.classList.toggle('bad', total !== STATE.budget.qty);
+  }
+
+  function readMixInputs(changedInput = null) {
+    const mix = {};
+    $$('.mix-input', root).forEach(input => {
+      mix[input.dataset.mixStyle] = Math.max(0, parseInt(input.value, 10) || 0);
+    });
+    const total = Object.values(mix).reduce((sum, n) => sum + n, 0);
+    if (total !== STATE.budget.qty && changedInput) {
+      const others = $$('.mix-input', root).filter(input => input !== changedInput);
+      const rest = others.reduce((sum, input) => sum + (parseInt(input.value, 10) || 0), 0);
+      changedInput.value = Math.max(0, STATE.budget.qty - rest);
+      mix[changedInput.dataset.mixStyle] = parseInt(changedInput.value, 10) || 0;
+    }
+    STATE.budget.styleMix = mix;
+    const main = Object.entries(mix).sort((a,b) => b[1] - a[1])[0];
+    if (main?.[0]) STATE.budget.style = main[0];
+    $$('.style-option', root).forEach(x => x.classList.toggle('active', x.dataset.style === STATE.budget.style));
+    updateMixStatus();
+    refreshPrice();
+    const planWrap = $('.plans', root);
+    if (planWrap) planWrap.innerHTML = monthlyRecommendationsHTML();
+  }
+
+  slider.addEventListener('input', () => { STATE.budget.qty = parseInt(slider.value,10); STATE.budget.styleMix = null; setupBudget(); });
+  $('#qtyMinus').addEventListener('click', () => { STATE.budget.qty = Math.max(1, STATE.budget.qty - 1); STATE.budget.styleMix = null; setupBudget(); });
   $('#qtyPlus').addEventListener('click',  () => {
     const max = currentFormat().max || 60;
-    STATE.budget.qty = Math.min(max, STATE.budget.qty + 1); update();
+    STATE.budget.qty = Math.min(max, STATE.budget.qty + 1); STATE.budget.styleMix = null; setupBudget();
   });
 
   $$('.fmt-tab', root).forEach(b => {
@@ -764,9 +799,13 @@ function setupBudget() {
   $$('.style-option', root).forEach(b => {
     b.addEventListener('click', () => {
       STATE.budget.style = b.dataset.style;
-      $$('.style-option', root).forEach(x => x.classList.toggle('active', x === b));
-      refreshPrice();
+      STATE.budget.styleMix = null;
+      setupBudget();
     });
+  });
+
+  $$('.mix-input', root).forEach(input => {
+    input.addEventListener('input', () => readMixInputs(input));
   });
 
   // References
@@ -872,11 +911,8 @@ function refreshPrice() {
     return;
   }
   const tier = fmt.tiers.find(t => qty >= t.min && qty <= t.max) || fmt.tiers[fmt.tiers.length-1];
-  const mult = cfg.style_multipliers[STATE.budget.style] ?? 1;
-  const perVideo = Math.round(tier.price * mult);
-  const total    = perVideo * qty;
-  const monthlySuggest = qty >= cfg.monthly_suggestion_threshold;
-  const styleLabel = STATE.config.edit_levels.find(l=>l.id===STATE.budget.style)?.label;
+  const totals = currentBudgetTotals();
+  const total = totals.total;
 
   if (fmt.id === 'longform' && STATE.budget.longType === 'curso') {
     $('#priceOut').innerHTML = `
@@ -900,8 +936,8 @@ function refreshPrice() {
     ``,
     `📐 *Formato:* ${fmt.label}`,
     `🎬 *Quantidade:* ${qty} ${fmt.id==='reel'?'reels':'vídeos'}`,
-    `🎨 *Estilo:* ${styleLabel}`,
-    `💰 *Investimento estimado:* R$${formatNum(total)} (R$${perVideo} × ${qty})`,
+    `🎨 *Distribuicao:* ${styleMixSummary()}`,
+    `💰 *Investimento estimado:* R$${formatNum(total)}`,
   ];
   const recMap = { yes: '✅ Sim, vídeo já gravado', partial: '🟡 Algumas cenas prontas', no: '⏳ Ainda não gravei' };
   if (STATE.budget.recorded) lines.push(`📹 *Status do material:* ${recMap[STATE.budget.recorded]}`);
@@ -915,12 +951,11 @@ function refreshPrice() {
 
   $('#priceOut').innerHTML = `
     <span class="price-tier-badge">${tier.label}</span>
-    <div class="row"><span>${qty} ${fmt.id==='reel'?'reels':'vídeos'} × R$${perVideo}</span><span class="v">R$${formatNum(total)}</span></div>
-    <div class="row"><span>Estilo: <strong>${styleLabel}</strong></span><span>×${mult.toFixed(2)}</span></div>
+    ${totals.lines.map(line => `<div class="row"><span>${line.qty} ${line.label} x R$${line.unit}</span><span class="v">R$${formatNum(line.total)}</span></div>`).join('')}
     <div class="row total"><span>Total estimado</span><span class="v">R$${formatNum(total)}</span></div>
-    ${monthlySuggest ? `
+    ${qty >= 8 ? `
       <div class="monthly-cta">
-        💡 Com <strong>${qty} ${fmt.id==='reel'?'reels':'vídeos'}/mês</strong> compensa fechar plano mensal — preço cai e a entrega fica garantida.
+        Mensal recorrente com <strong>20% de desconto</strong>: R$${formatNum(roundMoney(total * .8))}/mes.
       </div>` : ''}
     <a class="btn-cta btn-wa" id="bookCTA" style="display:flex;width:100%;margin-top:1rem;" href="${waLink(waMsg)}" target="_blank" rel="noopener">
       Mandar briefing pro WhatsApp
