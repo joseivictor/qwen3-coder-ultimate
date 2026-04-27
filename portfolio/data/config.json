@@ -173,15 +173,15 @@
       },
       {
         "id": "studio",
-        "name": "Studio Combo",
+        "name": "Studio Mix",
         "videos_per_month": 60,
-        "format_label": "mix 9:16 + 16:9",
-        "price": 5990,
-        "highlight": false,
+        "format_label": "48 reels mistos + 4 videos 16:9",
+        "price": 0,
+        "highlight": true,
         "features": [
-          "Mix vertical + horizontal",
+          "24 simples + 16 medios + 8 avancados",
+          "4 videos 16:9 medio",
           "Capinhas inclusas",
-          "Editor dedicado",
           "Revisoes inclusas",
           "Prioridade na agenda"
         ]

@@ -478,6 +478,63 @@ function wireQuoteForm(mode) {
   });
 }
 
+function roundMoney(n) {
+  return Math.round(n / 10) * 10;
+}
+
+function unitPrice(formatId, qty, styleId = STATE.budget.style) {
+  const cfg = STATE.config?.budget;
+  const fmt = cfg?.formats?.find(f => f.id === formatId);
+  if (!cfg || !fmt || !fmt.tiers?.length) return 0;
+  const tier = fmt.tiers.find(t => qty >= t.min && qty <= t.max) || fmt.tiers[fmt.tiers.length - 1];
+  return Math.round((tier.price || 0) * (cfg.style_multipliers[styleId] ?? 1));
+}
+
+function monthlyPlanMeta(plan) {
+  const styleLabel = STATE.config.edit_levels.find(l => l.id === STATE.budget.style)?.label || 'Medio';
+  const fmt = STATE.budget.format;
+  const style = STATE.budget.style;
+  const calc = (qty, formatId, discount) => {
+    const full = unitPrice(formatId, qty, style) * qty;
+    const price = roundMoney(full * discount);
+    return {
+      price,
+      full,
+      saving: full > 0 ? Math.max(0, Math.round((1 - price / full) * 100)) : 0
+    };
+  };
+
+  if (plan.id === 'starter') {
+    const m = calc(12, 'reel', .88);
+    return { ...m, label: `12 reels/mes - ${styleLabel}`, badge: 'Mensal' };
+  }
+  if (plan.id === 'growth') {
+    const m = calc(24, 'reel', .82);
+    return { ...m, label: `24 reels/mes - ${styleLabel}`, badge: 'Popular' };
+  }
+  if (plan.id === 'youtube') {
+    const m = calc(8, 'longform', .86);
+    return { ...m, label: `8 videos 16:9/mes - ${styleLabel}`, badge: 'Popular' };
+  }
+  if (plan.id === 'studio') {
+    const simple = unitPrice('reel', 24, 'simples') * 24;
+    const medium = unitPrice('reel', 16, 'medio') * 16;
+    const advanced = unitPrice('reel', 8, 'avancado') * 8;
+    const youtube = unitPrice('longform', 4, 'medio') * 4;
+    const full = simple + medium + advanced + youtube;
+    const price = roundMoney(full * .76);
+    return {
+      price,
+      full,
+      saving: Math.round((1 - price / full) * 100),
+      label: '48 reels mistos + 4 videos 16:9',
+      badge: fmt === 'motion' ? 'Combo' : 'Mix recomendado'
+    };
+  }
+  if (plan.id === 'motion') return { price: 0, full: 0, saving: 0, label: 'motion sob demanda', badge: 'Briefing' };
+  return { price: 0, full: 0, saving: 0, label: plan.format_label || 'sob medida', badge: 'Sob medida' };
+}
+
 function setupBudget() {
   const root = $('#tab-orcamento');
   if (!root) return;
@@ -520,16 +577,22 @@ function setupBudget() {
     : STATE.budget.format === 'longform'
       ? ['youtube', 'studio', 'custom']
       : ['motion', 'studio', 'custom'];
-  const plansHTML = cfg.monthly_plans.filter(p => visiblePlanIds.includes(p.id)).map(p => `
-    <div class="plan-card ${p.highlight?'highlight':''}">
+  const plansHTML = cfg.monthly_plans.filter(p => visiblePlanIds.includes(p.id)).map(p => {
+    const meta = monthlyPlanMeta(p);
+    const featured = p.highlight || p.id === 'studio' || (STATE.budget.format === 'longform' && p.id === 'youtube');
+    const waText = `Ola Jose, quero conversar sobre o plano ${p.name} (${meta.label}). Valor estimado: ${meta.price ? 'R$' + formatNum(meta.price) + '/mes' : 'sob consulta'}. Bora conversar?`;
+    return `
+    <div class="plan-card ${featured?'highlight':''}">
+      <span class="plan-badge">${meta.badge}</span>
       <div class="nm">${p.name}</div>
       <div class="pr">
-        <span class="num">${p.price ? `R$${formatNum(p.price)}` : `Sob consulta`}</span>
-        <span class="per">${p.price ? `/mes - ` : ``}${p.format_label || (p.videos_per_month + ` videos`)}</span>
+        <span class="num">${meta.price ? `R$${formatNum(meta.price)}` : `Sob consulta`}</span>
+        <span class="per">${meta.price ? `/mes - ` : ``}${meta.label}</span>
       </div>
+      ${meta.saving ? `<div class="plan-saving">${meta.saving}% abaixo do avulso no mesmo escopo</div>` : ''}
       <ul>${p.features.map(f=>`<li>${f}</li>`).join('')}</ul>
-      <a class="plan-cta" href="${waLink(`Ola Jose, quero conversar sobre o plano ${p.name} (${p.format_label || p.videos_per_month + ` videos`}). Bora conversar?`)}" target="_blank">Quero esse plano</a>
-    </div>`).join('');
+      <a class="plan-cta" href="${waLink(waText)}" target="_blank">Quero esse plano</a>
+    </div>`;}).join('');
 
   root.innerHTML = `
     <h2 class="hero-headline">Orcamento<br>de edicao.</h2>

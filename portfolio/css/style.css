@@ -893,7 +893,11 @@ a { color: inherit; text-decoration: none; }
   background: linear-gradient(180deg, rgba(212,165,116,.12), rgba(124,58,237,.06));
 }
 .plan-card.highlight::before {
-  content: "MAIS POPULAR";
+  content: "";
+  position: absolute; top: -10px; right: 1rem;
+  display: none;
+}
+.plan-badge {
   position: absolute; top: -10px; right: 1rem;
   padding: .25rem .8rem;
   font-size: .68rem; font-weight: 800; letter-spacing: .12em;
@@ -912,6 +916,17 @@ a { color: inherit; text-decoration: none; }
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 .plan-card .pr .per { font-size: .85rem; color: var(--ink-2); }
+.plan-saving {
+  width: fit-content;
+  margin: -.45rem 0 .85rem;
+  padding: .34rem .58rem;
+  border: 1px solid rgba(197,230,255,.16);
+  border-radius: 999px;
+  color: #bfe4ff;
+  background: rgba(125,211,252,.08);
+  font-size: .72rem;
+  font-weight: 850;
+}
 .plan-card ul { list-style: none; }
 .plan-card ul li {
   padding: .4rem 0;
