@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Legendas Viral Pro</title>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div>
+        <span class="eyebrow">Novo produto</span>
+        <h1>Legendas Viral Pro</h1>
+        <p>Destaque Automático Viral para Premiere Pro e After Effects.</p>
+      </div>
+      <div class="host-pill" id="hostStatus">CEP offline</div>
+    </header>
+
+    <section class="panel import-panel">
+      <div class="panel-title">
+        <h2>1. SRT / transcrição</h2>
+        <span id="srtStatus">Nenhum SRT</span>
+      </div>
+      <div class="row">
+        <label class="file-button">
+          Importar SRT/TXT
+          <input id="srtFileInput" type="file" accept=".srt,.txt">
+        </label>
+        <button id="loadCacheBtn" type="button">Cache</button>
+        <button id="clearCacheBtn" type="button">Limpar</button>
+      </div>
+      <textarea id="srtRawInput" rows="5" placeholder="Ou cole o SRT/transcrição aqui..."></textarea>
+      <button id="parsePastedBtn" type="button" class="secondary full">Processar texto colado</button>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title">
+        <h2>2. Estilo global</h2>
+        <span>fonte/cor</span>
+      </div>
+      <div class="grid two">
+        <label>Fonte destaque<input id="fontHighlight" value="Montserrat ExtraBold"></label>
+        <label>Fonte apoio<input id="fontSupport" value="Montserrat Medium"></label>
+        <label>Cor destaque<input id="colorHighlight" type="color" value="#ffcc00"></label>
+        <label>Cor apoio<input id="colorSupport" type="color" value="#ffffff"></label>
+      </div>
+      <label class="switch"><input id="sfxEnabled" type="checkbox" checked> Ativar SFX por modelo</label>
+    </section>
+
+    <section class="panel viral-panel">
+      <div class="panel-title">
+        <h2>3. Destaque Automático Viral</h2>
+        <span id="viralSummary">aguardando SRT</span>
+      </div>
+      <div class="grid two">
+        <label>Intensidade
+          <select id="viralIntensity">
+            <option value="media">Média</option>
+            <option value="baixa">Baixa</option>
+            <option value="alta">Alta</option>
+          </select>
+        </label>
+        <label>Tipo
+          <select id="viralType">
+            <option value="frase">Frase curta</option>
+            <option value="palavra">Palavra</option>
+            <option value="agressivo">Agressivo/Viral</option>
+          </select>
+        </label>
+        <label>Aplicar em
+          <select id="applyScope">
+            <option value="all">SRT inteiro</option>
+            <option value="selected">Legendas marcadas</option>
+          </select>
+        </label>
+        <label>Máx. destaques
+          <input id="maxHighlights" type="number" min="1" max="200" value="24">
+        </label>
+      </div>
+      <div class="preferred">
+        <span>Modelo preferido</span>
+        <select id="preferred1"></select>
+        <select id="preferred2"></select>
+        <select id="preferred3"></select>
+        <select id="preferred4"></select>
+        <select id="preferred5"></select>
+      </div>
+      <div class="row">
+        <button id="analyzeBtn" type="button" class="primary">Analisar</button>
+        <button id="applyViralBtn" type="button" class="danger">Destaque Automático Viral</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title">
+        <h2>4. Modelos</h2>
+        <span id="templateStatus">carregando</span>
+      </div>
+      <div class="template-tabs" id="templateTabs"></div>
+      <div class="template-grid" id="templateGrid"></div>
+      <div class="row">
+        <button id="applyManualBtn" type="button" class="secondary">Aplicar selecionadas</button>
+        <button id="applyBatchBtn" type="button" class="secondary">Aplicar lote</button>
+      </div>
+    </section>
+
+    <section class="panel individual-panel">
+      <div class="panel-title">
+        <h2>5. Modo individual</h2>
+        <span>texto livre</span>
+      </div>
+      <textarea id="individualText" rows="3" placeholder="Digite uma linha por texto do modelo..."></textarea>
+      <button id="applyIndividualBtn" type="button" class="secondary full">Aplicar no CTI</button>
+    </section>
+
+    <section class="panel captions-panel">
+      <div class="panel-title">
+        <h2>Legendas</h2>
+        <span id="captionCount">0 itens</span>
+      </div>
+      <div id="captionList" class="caption-list"></div>
+    </section>
+
+    <section class="panel log-panel">
+      <div class="panel-title">
+        <h2>Logs</h2>
+        <button id="copyLogsBtn" type="button">Copiar</button>
+      </div>
+      <pre id="logOutput"></pre>
+    </section>
+  </main>
+
+  <script src="js/lib/CSInterface.js"></script>
+  <script src="js/core/logger.js"></script>
+  <script src="js/core/srt.js"></script>
+  <script src="js/core/lineBreaker.js"></script>
+  <script src="js/core/viralAnalyzer.js"></script>
+  <script src="js/core/cache.js"></script>
+  <script src="js/core/templates.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
