@@ -3244,3 +3244,88 @@ footer,
   height: 140%;
   pointer-events: none;
 }
+
+/* Budget service identities: cada plano precisa parecer outro produto. */
+#tab-orcamento {
+  --service-accent: #7dd3fc;
+  --service-accent-2: #2f86ff;
+  --service-bg: rgba(7, 21, 36, .92);
+  --service-soft: rgba(125, 211, 252, .12);
+}
+#tab-orcamento[data-budget-mode="reel"] {
+  --service-accent: #7dd3fc;
+  --service-accent-2: #2f86ff;
+  --service-bg: rgba(6, 20, 34, .94);
+  --service-soft: rgba(125, 211, 252, .13);
+}
+#tab-orcamento[data-budget-mode="youtube"] {
+  --service-accent: #60a5fa;
+  --service-accent-2: #2563eb;
+  --service-bg: rgba(5, 18, 42, .94);
+  --service-soft: rgba(96, 165, 250, .14);
+}
+#tab-orcamento[data-budget-mode="vsl"] {
+  --service-accent: #f59e0b;
+  --service-accent-2: #ef4444;
+  --service-bg: rgba(38, 20, 7, .94);
+  --service-soft: rgba(245, 158, 11, .14);
+}
+#tab-orcamento[data-budget-mode="curso"] {
+  --service-accent: #34d399;
+  --service-accent-2: #0ea5e9;
+  --service-bg: rgba(5, 32, 28, .94);
+  --service-soft: rgba(52, 211, 153, .13);
+}
+#tab-orcamento[data-budget-mode="motion"] {
+  --service-accent: #c084fc;
+  --service-accent-2: #ec4899;
+  --service-bg: rgba(26, 15, 45, .94);
+  --service-soft: rgba(192, 132, 252, .14);
+}
+#tab-orcamento .budget-redesign .budget-calc,
+#tab-orcamento .budget-summary-panel,
+#tab-orcamento .quote-note,
+#tab-orcamento .price-out,
+#tab-orcamento .style-mix-box {
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--service-accent) 18%, transparent), transparent 34%),
+    var(--service-bg) !important;
+  border-color: color-mix(in srgb, var(--service-accent) 42%, transparent) !important;
+}
+#tab-orcamento .budget-step-label,
+#tab-orcamento .quote-kicker,
+#tab-orcamento .long-type.active strong {
+  color: var(--service-accent) !important;
+}
+#tab-orcamento .budget-step-label::before,
+#tab-orcamento .quote-plan-list li::before {
+  background: var(--service-accent) !important;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--service-accent) 70%, transparent) !important;
+}
+#tab-orcamento .fmt-tab.active,
+#tab-orcamento .long-type.active,
+#tab-orcamento .style-option.active,
+#tab-orcamento .mix-preset.active {
+  background: var(--service-soft) !important;
+  border-color: color-mix(in srgb, var(--service-accent) 70%, transparent) !important;
+}
+#tab-orcamento .qty-display,
+#tab-orcamento .plan-card .pr .num,
+#tab-orcamento .price-out .row.total .v {
+  background: linear-gradient(135deg, var(--service-accent), var(--service-accent-2)) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+#tab-orcamento .plan-cta,
+#tab-orcamento .btn-wa,
+#tab-orcamento .ref-btn,
+#tab-orcamento .mix-step,
+#tab-orcamento .plan-badge {
+  background: linear-gradient(135deg, var(--service-accent), var(--service-accent-2)) !important;
+  color: #03101f !important;
+}
+#tab-orcamento .quote-plan-list {
+  border-color: color-mix(in srgb, var(--service-accent) 28%, transparent) !important;
+  background: var(--service-soft) !important;
+}
