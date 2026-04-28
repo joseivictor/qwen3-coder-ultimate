@@ -3823,3 +3823,103 @@ footer {
     scroll-behavior: auto !important;
   }
 }
+
+/* Budget money/style identity: a negociacao precisa refletir o nivel escolhido. */
+#tab-orcamento {
+  --money-accent: #8edcff;
+  --money-accent-2: #4d9cff;
+  --money-panel: rgba(7, 23, 41, .92);
+  --money-soft: rgba(142, 220, 255, .12);
+}
+#tab-orcamento[data-budget-style="simples"] {
+  --money-accent: #8edcff;
+  --money-accent-2: #43b8ff;
+  --money-panel: rgba(5, 24, 42, .94);
+  --money-soft: rgba(142, 220, 255, .13);
+}
+#tab-orcamento[data-budget-style="medio"] {
+  --money-accent: #9fb8ff;
+  --money-accent-2: #5f86ff;
+  --money-panel: rgba(9, 18, 48, .94);
+  --money-soft: rgba(159, 184, 255, .13);
+}
+#tab-orcamento[data-budget-style="avancado"] {
+  --money-accent: #d7c7ff;
+  --money-accent-2: #8e6dff;
+  --money-panel: rgba(19, 15, 52, .94);
+  --money-soft: rgba(215, 199, 255, .14);
+}
+#tab-orcamento .budget-calc,
+#tab-orcamento .budget-summary-panel,
+#tab-orcamento .price-out,
+#tab-orcamento .plan-card,
+#tab-orcamento .quote-note,
+#tab-orcamento .style-mix-box {
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--money-accent) 17%, transparent), transparent 34%),
+    linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.014)),
+    var(--money-panel) !important;
+  border-color: color-mix(in srgb, var(--money-accent) 34%, transparent) !important;
+}
+#tab-orcamento .price-out,
+#tab-orcamento .plan-card.highlight {
+  box-shadow:
+    0 24px 80px color-mix(in srgb, var(--money-accent) 18%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--money-accent) 12%, transparent) !important;
+}
+#tab-orcamento .budget-step-label,
+#tab-orcamento .quote-kicker,
+#tab-orcamento .plan-saving,
+#tab-orcamento .long-type.active strong {
+  color: var(--money-accent) !important;
+}
+#tab-orcamento .budget-step-label::before,
+#tab-orcamento .quote-plan-list li::before,
+#tab-orcamento .plan-card ul li::before {
+  background: var(--money-accent) !important;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--money-accent) 70%, transparent) !important;
+}
+#tab-orcamento .style-option.active,
+#tab-orcamento .mix-preset.active,
+#tab-orcamento .long-type.active,
+#tab-orcamento .fmt-tab.active {
+  background: var(--money-soft) !important;
+  border-color: color-mix(in srgb, var(--money-accent) 70%, transparent) !important;
+}
+#tab-orcamento .qty-display,
+#tab-orcamento .price-out .row.total .v,
+#tab-orcamento .plan-card .pr .num {
+  background: linear-gradient(135deg, var(--money-accent), var(--money-accent-2)) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+#tab-orcamento .plan-cta,
+#tab-orcamento .btn-wa,
+#tab-orcamento .ref-btn,
+#tab-orcamento .mix-step,
+#tab-orcamento .plan-badge {
+  background: linear-gradient(135deg, var(--money-accent), var(--money-accent-2)) !important;
+  color: #04111f !important;
+}
+
+/* Portfolio thumbnails: every cover fills the entire card, like a real poster. */
+.video-card > img.video-poster,
+.video-card > .video-poster,
+.video-card > video {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  background-size: cover !important;
+  background-position: center center !important;
+}
+.video-card.horizontal-card > img.video-poster,
+.video-card.horizontal-card > .video-poster,
+.video-card.horizontal-card > video {
+  object-fit: cover !important;
+}

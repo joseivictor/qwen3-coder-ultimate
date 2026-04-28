@@ -698,6 +698,7 @@ function setupBudget() {
   const mode = budgetMode();
   const mood = budgetMoodCopy(mode);
   root.dataset.budgetMode = mode;
+  root.dataset.budgetStyle = STATE.budget.style || 'medio';
 
   const formatTabs = cfg.formats.map(f => `
     <button class="fmt-tab ${f.id===STATE.budget.format?'active':''}" data-fmt="${f.id}">
