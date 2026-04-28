@@ -435,7 +435,7 @@ function renderYoutubeVideos() {
 }
 
 /* ---------- BUDGET CALCULATOR (refatorado: 2 formatos + refs + briefing) ---------- */
-STATE.budget = { format: 'reel', longType: 'youtube', qty: 8, style: 'medio', styleMix: null, refs: [], recorded: null, deadline: '' };
+STATE.budget = { format: 'reel', longType: 'youtube', qty: 8, style: 'medio', stylePreset: 'best-seller', styleMix: null, refs: [], recorded: null, deadline: '' };
 
 function budgetMode() {
   if (STATE.budget.format === 'longform') return STATE.budget.longType || 'youtube';
@@ -544,6 +544,63 @@ function currentBudgetTotals() {
   };
 }
 
+const STYLE_PRESETS = [
+  {
+    id: 'best-seller',
+    label: 'Mais vendido',
+    desc: 'Equilibrio para vender todo mes',
+    ratios: { simples: .25, medio: .55, avancado: .20 }
+  },
+  {
+    id: 'viral',
+    label: 'Viral / Disruptivo',
+    desc: 'Mais energia, ganchos e acabamento',
+    ratios: { simples: .10, medio: .35, avancado: .55 }
+  },
+  {
+    id: 'volume',
+    label: 'Volume limpo',
+    desc: 'Constancia com custo controlado',
+    ratios: { simples: .65, medio: .30, avancado: .05 }
+  },
+  {
+    id: 'premium',
+    label: 'Premium',
+    desc: 'Poucos videos, maior impacto',
+    ratios: { simples: 0, medio: .25, avancado: .75 }
+  }
+];
+
+function mixFromPreset(preset, qty = STATE.budget.qty) {
+  const styles = STATE.config?.edit_levels?.map(l => l.id) || ['simples', 'medio', 'avancado'];
+  const mix = Object.fromEntries(styles.map(id => [id, 0]));
+  let used = 0;
+  styles.forEach((id, index) => {
+    const value = index === styles.length - 1 ? qty - used : Math.floor(qty * (preset.ratios[id] || 0));
+    mix[id] = Math.max(0, value);
+    used += mix[id];
+  });
+  let diff = qty - Object.values(mix).reduce((sum, n) => sum + n, 0);
+  const priority = ['avancado', 'medio', 'simples'].filter(id => id in mix);
+  while (diff !== 0 && priority.length) {
+    const id = diff > 0
+      ? priority[0]
+      : priority.find(key => mix[key] > 0);
+    if (!id) break;
+    mix[id] += diff > 0 ? 1 : -1;
+    diff += diff > 0 ? -1 : 1;
+  }
+  return mix;
+}
+
+function applyStylePreset(presetId) {
+  const preset = STYLE_PRESETS.find(p => p.id === presetId) || STYLE_PRESETS[0];
+  STATE.budget.stylePreset = preset.id;
+  STATE.budget.styleMix = mixFromPreset(preset);
+  const main = Object.entries(STATE.budget.styleMix).sort((a, b) => b[1] - a[1])[0];
+  if (main?.[0]) STATE.budget.style = main[0];
+}
+
 function monthlyRecommendationsHTML() {
   const qty = STATE.budget.qty;
   const budgetCfg = STATE.config?.budget || {};
@@ -634,14 +691,26 @@ function setupBudget() {
       <div class="ds">${l.description}</div>
     </button>`).join('');
 
+  if (!STATE.budget.styleMix && STATE.budget.stylePreset && STATE.budget.stylePreset !== 'custom') {
+    applyStylePreset(STATE.budget.stylePreset);
+  }
   normalizeStyleMix();
+  const presetHTML = STYLE_PRESETS.map(p => `
+    <button class="mix-preset ${STATE.budget.stylePreset === p.id ? 'active' : ''}" data-preset="${p.id}" type="button">
+      <strong>${p.label}</strong>
+      <span>${p.desc}</span>
+    </button>`).join('');
   const mixHTML = (STATE.config.edit_levels || []).map(l => `
     <label class="mix-row">
       <span>
         <strong>${l.label}</strong>
         <small>${l.description}</small>
       </span>
-      <input class="mix-input" data-mix-style="${l.id}" type="number" min="0" max="${STATE.budget.qty}" value="${STATE.budget.styleMix[l.id] || 0}">
+      <div class="mix-control">
+        <button class="mix-step" data-mix-style="${l.id}" data-dir="-1" type="button">-</button>
+        <input class="mix-input" data-mix-style="${l.id}" type="number" min="0" max="${STATE.budget.qty}" value="${STATE.budget.styleMix[l.id] || 0}">
+        <button class="mix-step" data-mix-style="${l.id}" data-dir="1" type="button">+</button>
+      </div>
     </label>`).join('');
 
   const longTypesHTML = `
@@ -689,9 +758,10 @@ function setupBudget() {
         <div class="style-picker">${stylesHTML}</div>
         <div class="style-mix-box">
           <div class="mix-head">
-            <strong>Distribuicao por estilo</strong>
+            <strong>Distribuicao inteligente</strong>
             <span id="mixTotalStatus"></span>
           </div>
+          <div class="mix-presets">${presetHTML}</div>
           <div class="mix-grid">${mixHTML}</div>
         </div>
 
@@ -775,6 +845,7 @@ function setupBudget() {
   }
 
   function readMixInputs(changedInput = null) {
+    STATE.budget.stylePreset = 'custom';
     const inputs = $$('.mix-input', root);
     const mix = {};
     inputs.forEach(input => {
@@ -798,9 +869,13 @@ function setupBudget() {
         changedInput.value = mix[id];
       }
     } else if (changedInput && total < STATE.budget.qty) {
-      const id = changedInput.dataset.mixStyle;
-      mix[id] += STATE.budget.qty - total;
-      changedInput.value = mix[id];
+      const missing = STATE.budget.qty - total;
+      const target = inputs.find(input => input !== changedInput && input.dataset.mixStyle === STATE.budget.style)
+        || inputs.find(input => input !== changedInput)
+        || changedInput;
+      const id = target.dataset.mixStyle;
+      mix[id] += missing;
+      target.value = mix[id];
     }
     STATE.budget.styleMix = mix;
     const main = Object.entries(mix).sort((a,b) => b[1] - a[1])[0];
@@ -810,13 +885,14 @@ function setupBudget() {
     refreshPrice();
     const planWrap = $('.plans', root);
     if (planWrap) planWrap.innerHTML = monthlyRecommendationsHTML();
+    $$('.mix-preset', root).forEach(x => x.classList.toggle('active', x.dataset.preset === STATE.budget.stylePreset));
   }
 
-  slider.addEventListener('input', () => { STATE.budget.qty = parseInt(slider.value,10); STATE.budget.styleMix = null; setupBudget(); });
-  $('#qtyMinus').addEventListener('click', () => { STATE.budget.qty = Math.max(1, STATE.budget.qty - 1); STATE.budget.styleMix = null; setupBudget(); });
+  slider.addEventListener('input', () => { STATE.budget.qty = parseInt(slider.value,10); if (STATE.budget.stylePreset && STATE.budget.stylePreset !== 'custom') applyStylePreset(STATE.budget.stylePreset); else STATE.budget.styleMix = null; setupBudget(); });
+  $('#qtyMinus').addEventListener('click', () => { STATE.budget.qty = Math.max(1, STATE.budget.qty - 1); if (STATE.budget.stylePreset && STATE.budget.stylePreset !== 'custom') applyStylePreset(STATE.budget.stylePreset); else STATE.budget.styleMix = null; setupBudget(); });
   $('#qtyPlus').addEventListener('click',  () => {
     const max = currentFormat().max || 60;
-    STATE.budget.qty = Math.min(max, STATE.budget.qty + 1); STATE.budget.styleMix = null; setupBudget();
+    STATE.budget.qty = Math.min(max, STATE.budget.qty + 1); if (STATE.budget.stylePreset && STATE.budget.stylePreset !== 'custom') applyStylePreset(STATE.budget.stylePreset); else STATE.budget.styleMix = null; setupBudget();
   });
 
   $$('.fmt-tab', root).forEach(b => {
@@ -842,8 +918,25 @@ function setupBudget() {
   $$('.style-option', root).forEach(b => {
     b.addEventListener('click', () => {
       STATE.budget.style = b.dataset.style;
+      STATE.budget.stylePreset = 'custom';
       STATE.budget.styleMix = null;
       setupBudget();
+    });
+  });
+
+  $$('.mix-preset', root).forEach(b => {
+    b.addEventListener('click', () => {
+      applyStylePreset(b.dataset.preset);
+      setupBudget();
+    });
+  });
+
+  $$('.mix-step', root).forEach(btn => {
+    btn.addEventListener('click', () => {
+      const input = $(`.mix-input[data-mix-style="${btn.dataset.mixStyle}"]`, root);
+      if (!input) return;
+      input.value = Math.max(0, Math.min(STATE.budget.qty, (parseInt(input.value, 10) || 0) + parseInt(btn.dataset.dir, 10)));
+      readMixInputs(input);
     });
   });
 
@@ -895,17 +988,23 @@ function setupBudget() {
 
   // Pick from portfolio
   const portModal = $('#portRefModal');
+  const closePortRef = () => {
+    portModal.classList.add('hidden');
+    document.body.classList.remove('modal-open');
+  };
   $('#pickFromPort').addEventListener('click', () => {
     const grid = $('#portRefGrid');
     grid.innerHTML = STATE.videos
       .filter(v => v.category === 'youtube' || v.thumb || v.src || v.instagram_url)
       .map(v => `
-      <div class="port-ref-card" data-id="${v.id}">
+      <button class="port-ref-card" data-id="${v.id}" type="button">
         ${v.thumb ? `<img src="${v.thumb}" alt="${v.title}">` : '<div class="ref-thumb">🎬</div>'}
         <div class="port-ref-title">${escapeHtml(v.title)}</div>
-      </div>`).join('') || '<div class="empty-state">Sem vídeos pra escolher ainda.</div>';
+      </button>`).join('') || '<div class="empty-state">Sem videos pra escolher ainda.</div>';
     portModal.classList.remove('hidden');
-    $$('.port-ref-card', grid).forEach(c => c.addEventListener('click', () => {
+    document.body.classList.add('modal-open');
+    $$('.port-ref-card', grid).forEach(c => c.addEventListener('click', (event) => {
+      event.preventDefault();
       const v = STATE.videos.find(x => x.id === c.dataset.id);
       if (!v) return;
       const already = STATE.budget.refs.some(r => r.url === v.instagram_url);
@@ -916,12 +1015,12 @@ function setupBudget() {
       });
       renderRefs();
       refreshPrice();
-      portModal.classList.add('hidden');
+      closePortRef();
       if (window.bearMood) window.bearMood('happy');
     }));
   });
-  $('#portRefClose').addEventListener('click', () => portModal.classList.add('hidden'));
-  portModal.addEventListener('click', e => { if (e.target === portModal) portModal.classList.add('hidden'); });
+  $('#portRefClose').addEventListener('click', closePortRef);
+  portModal.addEventListener('click', e => { if (e.target === portModal) closePortRef(); });
 
   // Briefing pills
   $$('.bf-pill', root).forEach(p => {
@@ -938,6 +1037,32 @@ function setupBudget() {
   });
 
   update();
+}
+
+function renderFeaturedPromos() {
+  const wrap = $('#featuredPromos');
+  if (!wrap) return;
+  const promos = (STATE.config?.site?.featured_promos || []).filter(p => p.active);
+  if (!promos.length) {
+    wrap.classList.add('hidden');
+    wrap.innerHTML = '';
+    return;
+  }
+  wrap.classList.remove('hidden');
+  wrap.innerHTML = `
+    <div class="promo-rail-head">
+      <span>Em destaque</span>
+      <strong>Area para anuncios</strong>
+    </div>
+    <div class="promo-rail">
+      ${promos.map(p => `
+        <a class="promo-card" href="${escapeHtml(p.url || '#')}" target="_blank" rel="noopener">
+          <span>${escapeHtml(p.label || 'Destaque')}</span>
+          <strong>${escapeHtml(p.title || 'Anuncio')}</strong>
+          <small>${escapeHtml(p.description || '')}</small>
+          <em>${escapeHtml(p.cta || 'Ver agora')}</em>
+        </a>`).join('')}
+    </div>`;
 }
 
 function refreshPrice() {
@@ -1217,6 +1342,7 @@ async function boot() {
   setupPortal();
   setupTabs();
   renderHeaderContact();
+  renderFeaturedPromos();
   renderFilterChips();
   renderVideos();
   renderYoutubeVideos();

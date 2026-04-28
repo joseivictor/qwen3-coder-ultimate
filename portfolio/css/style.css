@@ -505,6 +505,65 @@ a { color: inherit; text-decoration: none; }
 }
 .empty-state strong { color: var(--ink-0); }
 
+.featured-promos {
+  margin: 1rem 0 1.4rem;
+  padding: .85rem;
+  border: 1px solid rgba(197,230,255,.12);
+  border-radius: 22px;
+  background: rgba(3,12,24,.62);
+}
+.promo-rail-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: .75rem;
+  color: var(--ink-2);
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-weight: 900;
+}
+.promo-rail-head strong { color: #dff4ff; }
+.promo-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(260px, 38%);
+  gap: .85rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  padding-bottom: .25rem;
+}
+.promo-card {
+  min-height: 150px;
+  display: grid;
+  align-content: end;
+  gap: .25rem;
+  padding: 1rem;
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(125,211,252,.18), transparent 48%),
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  border: 1px solid rgba(197,230,255,.16);
+  scroll-snap-align: start;
+}
+.promo-card span {
+  color: #9edcff;
+  font-size: .68rem;
+  font-weight: 900;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.promo-card strong { font-size: 1.1rem; }
+.promo-card small { color: var(--ink-2); line-height: 1.35; }
+.promo-card em {
+  margin-top: .35rem;
+  color: #dff4ff;
+  font-size: .8rem;
+  font-style: normal;
+  font-weight: 900;
+}
+
 /* ============================================================
    VIDEO MODAL — VIRAL BURST FEEL
    ============================================================ */
@@ -856,9 +915,55 @@ a { color: inherit; text-decoration: none; }
   font-size: .76rem;
 }
 .mix-grid { display: grid; gap: .55rem; }
+.mix-presets {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .5rem;
+  margin-bottom: .85rem;
+}
+.mix-preset {
+  min-height: 88px;
+  padding: .75rem;
+  border-radius: 14px;
+  border: 1px solid rgba(197,230,255,.12);
+  background: rgba(255,255,255,.035);
+  text-align: left;
+  transition: border-color .2s, background .2s, transform .2s;
+}
+.mix-preset strong {
+  display: block;
+  color: #f4fbff;
+  font-size: .82rem;
+  margin-bottom: .25rem;
+}
+.mix-preset span {
+  display: block;
+  color: var(--ink-2);
+  font-size: .7rem;
+  line-height: 1.3;
+}
+.mix-preset.active {
+  border-color: rgba(125,211,252,.7);
+  background: rgba(125,211,252,.13);
+}
+.mix-control {
+  display: grid;
+  grid-template-columns: 34px 58px 34px;
+  gap: .3rem;
+  align-items: center;
+}
+.mix-step {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid rgba(197,230,255,.12);
+  background: rgba(125,211,252,.08);
+  color: #eaf7ff;
+  font-weight: 900;
+}
 .mix-row {
   display: grid;
-  grid-template-columns: 1fr 76px;
+  grid-template-columns: 1fr auto;
   gap: .75rem;
   align-items: center;
   padding: .65rem;
@@ -877,7 +982,7 @@ a { color: inherit; text-decoration: none; }
   margin-top: .1rem;
 }
 .mix-row input {
-  width: 76px;
+  width: 58px;
   padding: .55rem .45rem;
   border: 1px solid rgba(197,230,255,.16);
   border-radius: 10px;
@@ -1722,6 +1827,10 @@ html { scroll-behavior: smooth; }
   cursor: pointer;
   background: var(--bg-2);
   transition: transform .25s, box-shadow .25s;
+  border: 0;
+  color: inherit;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
 }
 .port-ref-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.5), 0 0 0 1px var(--gold); }
 .port-ref-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -1730,6 +1839,9 @@ html { scroll-behavior: smooth; }
   padding: .8rem .6rem;
   font-size: .78rem; font-weight: 600;
   background: linear-gradient(180deg, transparent, rgba(0,0,0,.85));
+}
+body.modal-open {
+  overflow: hidden;
 }
 
 /* ============================================================
@@ -2662,12 +2774,14 @@ body {
   .port-ref-modal.hidden { display: none; }
   .port-ref-box {
     width: 100%;
-    max-height: 86dvh;
+    height: 88dvh;
+    max-height: 88dvh;
     padding: 1rem;
     border-radius: 22px 22px 0 0;
     border: 1px solid rgba(197,230,255,.14);
     overflow-y: auto;
     overscroll-behavior: contain;
+    align-self: end;
   }
   .port-ref-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2676,6 +2790,7 @@ body {
   .port-ref-card {
     border-radius: 14px;
     min-height: 190px;
+    touch-action: manipulation;
   }
   .port-ref-card:hover { transform: none; }
   .port-ref-card .port-ref-title {
@@ -3044,6 +3159,26 @@ footer,
   }
 }
 @media (max-width: 720px) {
+  .mix-presets {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .mix-preset {
+    min-height: 78px;
+  }
+  .mix-row {
+    grid-template-columns: 1fr;
+  }
+  .mix-control {
+    grid-template-columns: 44px 1fr 44px;
+  }
+  .mix-step {
+    width: 44px;
+    height: 40px;
+  }
+  .mix-row input {
+    width: 100%;
+    height: 40px;
+  }
   #tab-orcamento .fmt-toggle,
   #tab-orcamento .style-picker,
   #tab-orcamento .mix-grid,

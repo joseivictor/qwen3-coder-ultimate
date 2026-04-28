@@ -12,6 +12,16 @@
     "portal_tag": "Edicao que transforma views em vendas",
     "rive_file": "",
     "rive_state_machine": "State Machine 1",
+    "featured_promos": [
+      {
+        "active": false,
+        "label": "Em breve",
+        "title": "Espaco para anuncio",
+        "description": "Aqui entra um lancamento, oferta, curso ou aviso importante.",
+        "cta": "Falar no WhatsApp",
+        "url": "https://wa.me/5522981481742"
+      }
+    ],
     "theme": {
       "background": "#06101d",
       "surface": "#081b2e",

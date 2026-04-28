@@ -749,6 +749,12 @@ function renderConfigEditor() {
     </div>
 
     <div class="group">
+      <h4>Area tipo Netflix / anuncios</h4>
+      <p class="sub" style="margin-top:0;">Edite em JSON. Use active true quando quiser mostrar no topo do portfolio.</p>
+      <textarea id="promosJson" rows="8">${escapeHtml(JSON.stringify(c.site.featured_promos || [], null, 2))}</textarea>
+    </div>
+
+    <div class="group">
       <h4>Multiplicadores por estilo</h4>
       <div class="row">
         ${Object.entries(c.budget.style_multipliers).map(([k,v]) =>
@@ -809,6 +815,14 @@ $('#saveConfigBtn').addEventListener('click', async () => {
       c.categories = JSON.parse(cats.value);
     } catch {
       return toast('JSON de categorias invalido', 'error');
+    }
+  }
+  const promos = $('#promosJson');
+  if (promos) {
+    try {
+      c.site.featured_promos = JSON.parse(promos.value);
+    } catch {
+      return toast('JSON de anuncios invalido', 'error');
     }
   }
   STATE.config = c;
