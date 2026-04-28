@@ -2322,6 +2322,33 @@ body {
   color: var(--ink-1);
   line-height: 1.5;
 }
+.quote-plan-list {
+  display: grid;
+  gap: .45rem;
+  margin: .95rem 0 1rem;
+  padding: .8rem;
+  border: 1px solid rgba(197,230,255,.12);
+  border-radius: 16px;
+  background: rgba(255,255,255,.035);
+  list-style: none;
+}
+.quote-plan-list li {
+  position: relative;
+  padding-left: 1rem;
+  color: #dff4ff;
+  font-size: .84rem;
+  line-height: 1.35;
+}
+.quote-plan-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .5em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #7dd3fc;
+}
 .budget-atmosphere {
   position: relative;
   overflow: hidden;

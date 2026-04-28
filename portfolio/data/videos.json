@@ -204,6 +204,35 @@
       "comments": 43
     },
     {
+      "id": "disruptivo_dxpr",
+      "title": "Disruptivo 00",
+      "expert_id": "rodrigo-curvelo",
+      "instagram_url": "https://www.instagram.com/reel/DXprqa9EYc1/",
+      "level": "avancado",
+      "category": "disruptivo",
+      "src": "assets/videos/ig/DXprqa9EYc1.mp4",
+      "thumb": "assets/thumbs/ig/DXprqa9EYc1.jpg",
+      "views": 0,
+      "likes": 59,
+      "shares": 0,
+      "description": "Reel disruptivo com narrativa de nova fase e posicionamento comercial.",
+      "process": [
+        "Hook de posicionamento",
+        "Ritmo de storytelling",
+        "Legendas e impacto emocional"
+      ],
+      "team": [
+        "Referencia do portfolio"
+      ],
+      "post_author": "Rodrigo Curvelo | Vendas, Representacao e Mentalidade",
+      "post_handle": "rodrigocurvelooficial",
+      "caption": "Hoje eu inicio uma nova fase na representacao comercial; depois de anos batendo de porta em porta eu hoje definitivamente vou fazer algo que me custa muito. Em breve mais novidades.",
+      "duration": 95,
+      "duration_string": "1:35",
+      "published_at": "27/04/2026",
+      "comments": 35
+    },
+    {
       "id": "disruptivo_dqfh",
       "title": "Disruptivo 01",
       "expert_id": "diogo-teixeira",

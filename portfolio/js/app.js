@@ -445,10 +445,10 @@ function budgetMode() {
 function budgetMoodCopy(mode) {
   const map = {
     reel: ['9:16', 'Reels em volume.', 'Escolha quantidade, estilo e referencias. Aqui o orcamento sai na hora.', 'Pipeline rapido para Reels, Shorts e TikTok.'],
-    youtube: ['16:9', 'YouTube 16:9.', 'Videos longos com narrativa, tratamento de audio e ritmo de retencao.', 'Ideal para canal, aulas abertas e conteudo horizontal recorrente.'],
-    vsl: ['VSL', 'Briefing de VSL.', 'VSL muda por oferta, referencia e nivel de motion. Me envie o contexto antes do preco.', 'Preciso entender oferta, referencia e material bruto.'],
-    curso: ['Curso', 'Curso sob medida.', 'Curso depende de horas gravadas, modulos, padrao visual e revisoes.', 'Melhor resolver pelo WhatsApp com escopo completo.'],
-    motion: ['AE', 'Motion design.', 'Vinhetas, letterings, aberturas e pecas em After Effects precisam de briefing.', 'O preco varia por duracao, complexidade e prazo.']
+    youtube: ['YT', 'YouTube de retencao.', 'Edicao para canal: abertura forte, estrutura narrativa, ritmo, audio, cortes e acabamento para manter audiencia.', 'Bom para videos longos recorrentes, aulas abertas, cortes de canal e conteudo evergreen.'],
+    vsl: ['VSL', 'VSL / Direct response.', 'Video de vendas depende de oferta, promessa, mecanismo, prova, objecoes, CTA e referencia. Nao e so editar bonito.', 'Serve para lancamento, perpétuo, funil pago, advertorial e paginas de venda. Precisa briefing antes do valor.'],
+    curso: ['Curso', 'Curso / Aulas.', 'Curso exige conversa maior: horas brutas, modulos, padrao visual, slides, tela, audio, revisoes e organizacao das aulas.', 'Projeto educacional e operacional. Melhor fechar escopo antes de falar preco.'],
+    motion: ['AE', 'Motion design.', 'Motion pode ser arte animada, identidade visual em movimento, UI estilo Apple, explainer, vinheta, lettering ou animacao para produto.', 'O valor varia por duracao, nivel de design, assets, storyboard e complexidade de animacao.']
   };
   const v = map[mode] || map.reel;
   return { badge: v[0], title: v[1], sub: v[2], note: v[3] };
@@ -456,15 +456,21 @@ function budgetMoodCopy(mode) {
 
 function quoteFormHTML(mode, title, description) {
   const fields = {
-    vsl: [['Objetivo da oferta', 'Ex: vender mentoria, produto, evento...'], ['Referencia principal', 'Cole link ou descreva o estilo'], ['Material bruto', 'Ex: video gravado, roteiro, criativos...']],
-    curso: [['Horas gravadas', 'Ex: 8 aulas de 30 minutos'], ['Formato de entrega', 'Ex: modulos, plataforma, cortes extras'], ['Padrao visual', 'Ex: simples, identidade pronta, motion...']],
-    motion: [['Tipo de peca', 'Ex: abertura, lettering, vinheta, VFX'], ['Duracao estimada', 'Ex: 8s, 30s, pacote mensal'], ['Referencia visual', 'Cole link ou descreva o estilo']]
+    vsl: [['Tipo de VSL', 'Direct response, perpétuo, lancamento, criativo pago...'], ['Oferta e promessa', 'O que vende, para quem, qual transformacao?'], ['Referencia principal', 'Cole link ou descreva o estilo'], ['Material bruto', 'Roteiro, gravacao, provas, prints, criativos...']],
+    curso: [['Horas gravadas', 'Ex: 8 aulas de 30 minutos'], ['Formato das aulas', 'Camera, tela, slides, multicam, audio separado...'], ['Entrega final', 'Modulos, aulas separadas, thumbnails, cortes extras...'], ['Padrao visual', 'Identidade pronta, slides, lower thirds, motion...']],
+    motion: [['Tipo de motion', 'Arte animada, UI Apple style, explainer, lettering, vinheta...'], ['Duracao estimada', 'Ex: 8s, 30s, pacote mensal'], ['Assets disponiveis', 'Logo, mockup, identidade, imagens, roteiro...'], ['Referencia visual', 'Cole links de motion/design que voce gosta']]
+  }[mode] || [];
+  const plans = {
+    vsl: ['Diagnostico da oferta e promessa', 'Edicao orientada a conversao e retencao', 'Ritmo, cortes, provas visuais, objecoes e CTA', 'Valor fechado so depois de referencia e material'],
+    curso: ['Organizacao por modulos e aulas', 'Limpeza de cortes, audio, tela/slides e padrao visual', 'Exportacao padronizada para plataforma', 'Escopo fechado por horas brutas e numero de aulas'],
+    motion: ['Briefing visual e direcao de estilo', 'Storyboard simples quando necessario', 'Animacao em After Effects/motion graphics', 'Pode ser arte, UI, produto, lettering ou identidade animada']
   }[mode] || [];
   return `
     <div class="quote-note quote-note-${mode}">
       <span class="quote-kicker">${budgetMoodCopy(mode).badge}</span>
       <strong>${title}</strong>
       <p>${description}</p>
+      ${plans.length ? `<ul class="quote-plan-list">${plans.map(item => `<li>${item}</li>`).join('')}</ul>` : ''}
       <div class="quote-mini-form" data-quote-mode="${mode}">
         ${fields.map(([label, placeholder]) => `
           <label>
@@ -716,13 +722,13 @@ function setupBudget() {
   const longTypesHTML = `
     <div class="long-type-picker" id="longTypePicker">
       <button class="long-type ${STATE.budget.longType === 'youtube' ? 'active' : ''}" data-long-type="youtube" type="button">
-        <strong>YouTube</strong><span>Orcamento automatico</span>
+        <strong>YouTube</strong><span>Retencao, narrativa e canal</span>
       </button>
       <button class="long-type ${STATE.budget.longType === 'vsl' ? 'active' : ''}" data-long-type="vsl" type="button">
-        <strong>VSL</strong><span>Precisa referencia</span>
+        <strong>VSL</strong><span>Oferta, prova e conversao</span>
       </button>
       <button class="long-type ${STATE.budget.longType === 'curso' ? 'active' : ''}" data-long-type="curso" type="button">
-        <strong>Curso</strong><span>Negociacao direta</span>
+        <strong>Curso</strong><span>Aulas, modulos e plataforma</span>
       </button>
     </div>`;
 
@@ -1079,7 +1085,7 @@ function refreshPrice() {
 
   if (fmt.id === 'motion') {
     $('#priceOut').innerHTML = `
-      ${quoteFormHTML('motion', 'Motion design precisa de briefing.', 'Vinheta, abertura, lettering animado, VFX e animacoes variam por duracao e complexidade. Preencha o basico e me chama com uma referencia.')}
+      ${quoteFormHTML('motion', 'Motion design precisa de briefing visual.', 'Arte animada, UI style, vinheta, lettering, explainer e animacao de produto mudam completamente o escopo. Me mande estilo, assets e duracao.')}
     `;
     wireQuoteForm('motion');
     return;
@@ -1091,7 +1097,7 @@ function refreshPrice() {
 
   if (fmt.id === 'longform' && STATE.budget.longType === 'curso') {
     $('#priceOut').innerHTML = `
-      ${quoteFormHTML('curso', 'Curso precisa de negociacao personalizada.', 'Aulas, modulos, duracao total, captacao, padrao visual e revisoes mudam muito o escopo. Preencha o basico e eu avalio certinho.')}
+      ${quoteFormHTML('curso', 'Curso precisa de conversa de escopo.', 'Aqui o preco depende de horas gravadas, quantidade de aulas, modulos, audio, slides, tela, identidade, revisoes e formato de entrega.')}
     `;
     wireQuoteForm('curso');
     return;
@@ -1099,7 +1105,7 @@ function refreshPrice() {
 
   if (fmt.id === 'longform' && STATE.budget.longType === 'vsl') {
     $('#priceOut').innerHTML = `
-      ${quoteFormHTML('vsl', 'VSL depende da referencia antes do preco.', 'Preciso ver objetivo da oferta, material bruto, referencia e nivel de motion/copy visual. Depois disso te retorno com o valor correto.')}
+      ${quoteFormHTML('vsl', 'VSL depende da oferta antes do preco.', 'VSL/direct response pode ser para lancamento, perpétuo, trafego pago ou venda direta. Preciso entender promessa, prova, roteiro, referencia e material bruto antes de precificar.')}
     `;
     wireQuoteForm('vsl');
     return;
