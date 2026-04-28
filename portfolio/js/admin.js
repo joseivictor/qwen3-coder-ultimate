@@ -284,7 +284,7 @@ function uid(prefix='id') { return prefix + '_' + Math.random().toString(36).sli
 async function saveAndReload(key, payload) {
   if (STATE.staticMode) {
     localStorage.setItem('jv_admin_' + key, JSON.stringify(payload));
-    toast('Salvo neste celular. Abra o site neste mesmo navegador para pre-visualizar.', 'success');
+    toast('Rascunho salvo neste navegador. Use Preview rascunho; para aparecer para todos precisa publicar pelo Git/Supabase.', 'success');
     return;
   }
   await api('POST', '/api/save/'+key, payload);
@@ -697,6 +697,20 @@ function renderConfigEditor() {
       <div class="row">
         <div><label>Instagram handle</label><input data-cfg="site.owner_instagram" value="${escapeHtml(c.site.owner_instagram)}"></div>
         <div><label>Instagram URL</label><input data-cfg="site.owner_instagram_url" value="${escapeHtml(c.site.owner_instagram_url)}"></div>
+      </div>
+      <div class="row">
+        <div><label>Texto do botao de entrada</label><input data-cfg="site.portal_button" value="${escapeHtml(c.site.portal_button || 'Ver portfolio')}"></div>
+        <div><label>Frase da entrada</label><input data-cfg="site.portal_tag" value="${escapeHtml(c.site.portal_tag || '')}"></div>
+      </div>
+      <div class="row">
+        <div><label>Arquivo Rive do mascote (.riv)</label><input data-cfg="site.rive_file" value="${escapeHtml(c.site.rive_file || '')}" placeholder="assets/brand/bear.riv"></div>
+        <div><label>State machine Rive</label><input data-cfg="site.rive_state_machine" value="${escapeHtml(c.site.rive_state_machine || 'State Machine 1')}"></div>
+      </div>
+      <div class="row">
+        <div><label>Fundo</label><input data-cfg="site.theme.background" value="${escapeHtml(c.site.theme?.background || '#06101d')}"></div>
+        <div><label>Superficie</label><input data-cfg="site.theme.surface" value="${escapeHtml(c.site.theme?.surface || '#081b2e')}"></div>
+        <div><label>Azul principal</label><input data-cfg="site.theme.accent" value="${escapeHtml(c.site.theme?.accent || '#7dd3fc')}"></div>
+        <div><label>Azul secundario</label><input data-cfg="site.theme.accent_2" value="${escapeHtml(c.site.theme?.accent_2 || '#2f86ff')}"></div>
       </div>
       <label>Subtítulo</label>
       <textarea data-cfg="site.subtitle" rows="2">${escapeHtml(c.site.subtitle||'')}</textarea>

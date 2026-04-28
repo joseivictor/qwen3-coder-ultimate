@@ -7,7 +7,18 @@
     "whatsapp_digits": "5522981481742",
     "tagline": "Editor de video para conteudo de alta retencao",
     "subtitle": "3 anos de experiencia com Reels, YouTube, VSLs e conteudos comerciais.",
-    "hero_serif_word": "viral"
+    "hero_serif_word": "viral",
+    "portal_button": "Ver portfolio",
+    "portal_tag": "Edicao que transforma views em vendas",
+    "rive_file": "",
+    "rive_state_machine": "State Machine 1",
+    "theme": {
+      "background": "#06101d",
+      "surface": "#081b2e",
+      "accent": "#7dd3fc",
+      "accent_2": "#2f86ff",
+      "text": "#f4fbff"
+    }
   },
   "stats": [
     {

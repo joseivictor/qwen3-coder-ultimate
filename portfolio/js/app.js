@@ -49,6 +49,21 @@ async function loadAllData() {
   STATE.flyers  = flyers?.flyers   ?? [];
 }
 
+function applySiteSettings() {
+  const site = STATE.config?.site || {};
+  const theme = site.theme || {};
+  const root = document.documentElement;
+  if (theme.background) root.style.setProperty('--bg-0', theme.background);
+  if (theme.surface) root.style.setProperty('--bg-1', theme.surface);
+  if (theme.accent) root.style.setProperty('--cyan', theme.accent);
+  if (theme.accent_2) root.style.setProperty('--violet', theme.accent_2);
+  if (theme.text) root.style.setProperty('--ink-0', theme.text);
+  const portalTag = $('.portal-tag');
+  const portalBtn = $('#enterBtn');
+  if (portalTag && site.portal_tag) portalTag.textContent = site.portal_tag;
+  if (portalBtn && site.portal_button) portalBtn.textContent = site.portal_button;
+}
+
 /* ---------- WHATSAPP HELPERS ---------- */
 function waLink(message) {
   const num = STATE.config?.site?.whatsapp_digits || '5522981481742';
@@ -645,8 +660,8 @@ function setupBudget() {
   const plansHTML = monthlyRecommendationsHTML();
 
   root.innerHTML = `
-    <h2 class="hero-headline">Orcamento<br>de edicao.</h2>
-    <p class="hero-sub">Valores estimados para edicao de Reels, Shorts, YouTube, VSLs e cursos. O preco final pode variar conforme roteiro, material bruto e nivel de finalizacao.</p>
+    <h2 class="hero-headline">Monte sua<br>proposta.</h2>
+    <p class="hero-sub">Escolha formato, volume e nivel de edicao. Quando o projeto precisa de contexto, o site vira briefing direto para o WhatsApp.</p>
 
     <div class="fmt-toggle">${formatTabs}</div>
     ${longTypesHTML}
@@ -657,8 +672,9 @@ function setupBudget() {
       <p>${mood.note}</p>
     </div>
 
-    <div class="budget-wrap">
+    <div class="budget-wrap budget-redesign">
       <div class="budget-calc">
+        <div class="budget-step-label">01 - Escopo</div>
         <h3 id="budgetTitle">${mood.title}</h3>
         <div class="sub" id="budgetSub">${mood.sub}</div>
 
@@ -706,11 +722,12 @@ function setupBudget() {
         <div class="price-out" id="priceOut"></div>
       </div>
 
-      <div>
+      <aside class="budget-summary-panel">
+        <div class="budget-step-label">Resumo</div>
         <h3 class="section-title" style="margin-top:0;">Recomendacao mensal</h3>
         <p style="font-size:.88rem; color:var(--ink-2); margin-bottom:1.2rem;">So aparece plano quando o volume faz sentido. O desconto usa o valor real do formato e do estilo escolhido.</p>
         <div class="plans">${plansHTML}</div>
-      </div>
+      </aside>
     </div>
 
     <!-- Modal: pick reference from portfolio -->
@@ -1093,6 +1110,7 @@ function bearSay(text) {
 function bearHide() { $('.bear-bubble')?.classList.remove('show'); }
 
 function setupBear() {
+  setupRiveBear();
   let idle;
   const reset = () => {
     clearTimeout(idle);
@@ -1140,6 +1158,46 @@ function setupBear() {
   }, 6500);
 }
 
+function setupRiveBear() {
+  const cfg = STATE.config?.site || {};
+  const src = (cfg.rive_file || '').trim();
+  const bear = $('.bear-companion');
+  if (!src || !bear || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const canvas = document.createElement('canvas');
+  canvas.width = 160;
+  canvas.height = 160;
+  canvas.className = 'rive-bear-canvas';
+  bear.appendChild(canvas);
+  bear.classList.add('has-rive');
+  const boot = () => {
+    if (!window.rive?.Rive) return;
+    try {
+      new window.rive.Rive({
+        src,
+        canvas,
+        autoplay: true,
+        stateMachines: cfg.rive_state_machine || 'State Machine 1',
+        fit: window.rive.Fit.Contain,
+        alignment: window.rive.Alignment.Center
+      });
+    } catch (err) {
+      console.warn('[rive] mascote nao carregou', err);
+      bear.classList.remove('has-rive');
+      canvas.remove();
+    }
+  };
+  if (window.rive?.Rive) return boot();
+  const script = document.createElement('script');
+  script.src = 'https://unpkg.com/@rive-app/canvas@2.30.0/rive.js';
+  script.async = true;
+  script.onload = boot;
+  script.onerror = () => {
+    bear.classList.remove('has-rive');
+    canvas.remove();
+  };
+  document.head.appendChild(script);
+}
+
 /* ---------- HEADER CONTACT ---------- */
 function renderHeaderContact() {
   const cfg = STATE.config?.site;
@@ -1155,6 +1213,7 @@ function renderHeaderContact() {
 /* ---------- BOOT ---------- */
 async function boot() {
   await loadAllData();
+  applySiteSettings();
   setupPortal();
   setupTabs();
   renderHeaderContact();
