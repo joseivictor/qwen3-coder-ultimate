@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MJ Estima | Calcados selecionados</title>
-  <meta name="description" content="Calcados masculinos e femininos com presenca, conforto e acabamento premium. Escolha seu par na MJ Estima.">
-  <meta name="theme-color" content="#15100b">
-  <meta property="og:title" content="MJ Estima | Calcados selecionados">
-  <meta property="og:description" content="Uma vitrine premium para tenis, sapatos, mocassins, sandalias e papetes da MJ Estima.">
+  <title>MJ Estima | Calcados de presenca</title>
+  <meta name="description" content="Loja oficial MJ Estima. Calcados masculinos e femininos com luxo leve, conforto e presenca.">
+  <meta name="theme-color" content="#f4ecdf">
+  <meta property="og:title" content="MJ Estima | Calcados de presenca">
+  <meta property="og:description" content="Calcados selecionados com elegancia, conforto e acabamento de loja grande.">
   <meta property="og:image" content="https://bvwsyolgpsbvflhbqily.supabase.co/storage/v1/object/public/logos/d44a6db9-24ec-4462-9ef6-42b3b45d3bf6/5wr1JnM.webp">
   <link rel="icon" href="https://bvwsyolgpsbvflhbqily.supabase.co/storage/v1/object/public/logos/d44a6db9-24ec-4462-9ef6-42b3b45d3bf6/5tTgSO9.png">
   <link rel="preconnect" href="https://static.stoqui.com.br">
@@ -15,92 +15,126 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="grain" aria-hidden="true"></div>
-
   <header class="site-header">
-    <a class="brand" href="#top" aria-label="MJ Estima inicio">
+    <a class="brand" href="#inicio" aria-label="Inicio MJ Estima">
       <img src="https://bvwsyolgpsbvflhbqily.supabase.co/storage/v1/object/public/logos/d44a6db9-24ec-4462-9ef6-42b3b45d3bf6/5wr1JnM.webp" alt="MJ Estima">
       <span>MJ Estima</span>
     </a>
     <nav aria-label="Navegacao principal">
       <a href="#colecao">Colecao</a>
-      <a href="#curadoria">Curadoria</a>
-      <a href="#comprar">Comprar</a>
+      <a href="#atelier">Atelier</a>
+      <a href="#entrega">Entrega</a>
     </nav>
-    <a class="header-cta" href="#colecao">Ver calcados</a>
+    <button class="cart-trigger" type="button" data-open-cart>
+      Sacola <span id="cartCount">0</span>
+    </button>
   </header>
 
-  <main id="top">
+  <main id="inicio">
     <section class="hero">
       <div class="hero-copy">
-        <span class="eyebrow">Calcados com presenca</span>
-        <h1>Seu visual com pisada firme, conforto e acabamento de loja grande.</h1>
-        <p>Uma selecao MJ Estima para quem quer tenis, sapato, sandalia ou mocassim com cara de escolha certa: forte, bonito e pronto para sair.</p>
+        <span class="eyebrow">Calcados para chegar bem</span>
+        <h1>Luxo leve, alma de roça e conforto de todo dia.</h1>
+        <p>A MJ Estima veste o passo com sobriedade: couro visual, tons terrosos, linhas limpas e uma curadoria feita para parecer simples porque foi bem escolhida.</p>
         <div class="hero-actions">
-          <a class="button primary" href="#colecao">Explorar vitrine</a>
-          <a class="button ghost" href="https://estima-calcados.stoqui.shop/" target="_blank" rel="noreferrer">Loja original</a>
+          <a class="button dark" href="#colecao">Ver colecao</a>
+          <button class="button light" type="button" data-open-cart>Minha sacola</button>
         </div>
       </div>
 
-      <div class="hero-stage" aria-label="Produtos em destaque">
-        <article class="feature-card main">
-          <img src="https://static.stoqui.com.br/rs:fit:400:400/plain/product_images/d44a6db9-24ec-4462-9ef6-42b3b45d3bf6/R8h52CP.jpg@webp" alt="Tenis masculino preto Drake Pulse">
+      <div class="hero-product" aria-label="Produto em destaque">
+        <span class="hero-note">Destaque da semana</span>
+        <img src="https://static.stoqui.com.br/rs:fit:400:400/plain/product_images/d44a6db9-24ec-4462-9ef6-42b3b45d3bf6/tk0qZGE.jpg@webp" alt="Sapato casual masculino conhaque">
+        <div class="hero-product-footer">
           <div>
-            <span>Linha urbana</span>
-            <strong>Drake Pulse</strong>
+            <span>Sapato casual</span>
+            <strong>Conhaque Leave</strong>
           </div>
-        </article>
-        <article class="feature-card side top">
-          <img src="https://static.stoqui.com.br/rs:fit:400:400/plain/product_images/d44a6db9-24ec-4462-9ef6-42b3b45d3bf6/fuv-0Sa.webp@webp" alt="Sapato social conhaque">
-        </article>
-        <article class="feature-card side bottom">
-          <img src="https://static.stoqui.com.br/rs:fit:400:400/plain/product_images/d44a6db9-24ec-4462-9ef6-42b3b45d3bf6/YdMCRCZ.jpg@webp" alt="Tenis feminino neve">
-        </article>
+          <button type="button" data-featured-buy>Adicionar</button>
+        </div>
       </div>
     </section>
 
-    <section class="trust-strip" aria-label="Diferenciais">
-      <div><strong>26</strong><span>modelos ativos</span></div>
-      <div><strong>R$149+</strong><span>opcoes acessiveis</span></div>
-      <div><strong>Masculino e feminino</strong><span>colecao versatil</span></div>
-      <div><strong>Compra segura</strong><span>checkout na Stoqui</span></div>
+    <section class="signature-strip" aria-label="Diferenciais da loja">
+      <p>Curadoria enxuta</p>
+      <p>Tons nobres</p>
+      <p>Pedido direto</p>
+      <p>Atendimento humano</p>
     </section>
 
     <section id="colecao" class="collection">
       <div class="section-head">
-        <span class="eyebrow">Colecao atual</span>
-        <h2>Escolha pelo estilo, nao pelo improviso.</h2>
-        <p>Filtre por categoria, compare os modelos e abra a compra no produto real da loja.</p>
+        <span class="eyebrow">Colecao MJ</span>
+        <h2>Escolha pelo momento.</h2>
+        <p>Modelos para trabalho, cidade, encontros e descanso. Tudo acontece aqui: veja detalhes, escolha tamanho e monte sua sacola.</p>
       </div>
 
-      <div class="toolbar" id="comprar">
+      <div class="shopbar">
         <label class="search-box">
-          <span>Buscar</span>
-          <input id="searchInput" type="search" placeholder="tenis preto, conhaque, feminino...">
+          <span>Buscar modelo</span>
+          <input id="searchInput" type="search" placeholder="preto, conhaque, feminino...">
         </label>
-        <div id="filters" class="filters" aria-label="Filtros de categoria"></div>
+        <div id="filters" class="filters" aria-label="Filtros de produtos"></div>
       </div>
 
       <div id="productGrid" class="product-grid"></div>
     </section>
 
-    <section id="curadoria" class="editorial">
-      <div>
-        <span class="eyebrow">Curadoria MJ</span>
-        <h2>Visual limpo, produto no centro e decisao facil.</h2>
+    <section id="atelier" class="atelier">
+      <div class="atelier-image">
+        <img src="https://static.stoqui.com.br/rs:fit:400:400/plain/product_images/d44a6db9-24ec-4462-9ef6-42b3b45d3bf6/fuv-0Sa.webp@webp" alt="Sapato social conhaque">
       </div>
-      <p>O site foi pensado para passar confianca rapidamente: vitrine clara, imagens grandes, preco evidente e caminho direto para comprar. Sem poluicao, sem cara de catalogo improvisado.</p>
+      <div class="atelier-copy">
+        <span class="eyebrow">A sensacao certa</span>
+        <h2>Elegante sem gritar. Forte sem pesar.</h2>
+        <p>A direcao visual da Estima fica entre o campo e a alfaiataria: fundo claro, couro, sombra macia, espaco para respirar e produto com protagonismo. E assim que uma loja de calcados passa valor sem parecer barulhenta.</p>
+      </div>
+    </section>
+
+    <section id="entrega" class="service">
+      <article>
+        <span>01</span>
+        <h3>Escolha</h3>
+        <p>Abra o produto, confira o valor e selecione o tamanho.</p>
+      </article>
+      <article>
+        <span>02</span>
+        <h3>Sacola</h3>
+        <p>Monte o pedido completo sem sair do site.</p>
+      </article>
+      <article>
+        <span>03</span>
+        <h3>Atendimento</h3>
+        <p>Finalize com a mensagem pronta para combinar pagamento e entrega.</p>
+      </article>
     </section>
   </main>
 
-  <aside id="quickView" class="quick-view" aria-hidden="true">
-    <button class="close-view" type="button" aria-label="Fechar">×</button>
-    <div id="quickViewContent"></div>
+  <dialog id="productDialog" class="product-dialog">
+    <button class="close-dialog" type="button" data-close-product aria-label="Fechar">x</button>
+    <div id="productDialogContent"></div>
+  </dialog>
+
+  <aside id="cartDrawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-panel">
+      <div class="cart-head">
+        <div>
+          <span class="eyebrow">Pedido MJ</span>
+          <h2>Sacola</h2>
+        </div>
+        <button type="button" data-close-cart aria-label="Fechar sacola">x</button>
+      </div>
+      <div id="cartItems" class="cart-items"></div>
+      <div class="cart-summary">
+        <div><span>Subtotal</span><strong id="cartSubtotal">R$ 0,00</strong></div>
+        <a id="checkoutButton" class="button dark" href="#" target="_blank" rel="noreferrer">Finalizar pedido</a>
+      </div>
+    </div>
   </aside>
 
   <footer>
     <strong>MJ Estima</strong>
-    <span>Calcados selecionados para usar bem todos os dias.</span>
+    <span>Calcados de presenca, escolhidos com calma.</span>
   </footer>
 
   <script src="js/app.js"></script>
