@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+- Reduzido tamanho minimo do painel CEP para evitar falha quando o Premiere restaura o painel estreito.
+- Bump de versao do manifesto para forcar recarregamento do plugin no CEP.
+
 ## 0.1.0
 
 - Criada extensão CEP nova e separada.

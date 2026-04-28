@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ExtensionManifest Version="11.0"
   ExtensionBundleId="com.josevictor.legendasviralpro"
-  ExtensionBundleVersion="0.1.0"
+  ExtensionBundleVersion="0.1.2"
   ExtensionBundleName="Legendas Viral Pro"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ExtensionList>
-    <Extension Id="com.josevictor.legendasviralpro.panel" Version="0.1.0" />
+    <Extension Id="com.josevictor.legendasviralpro.panel" Version="0.1.2" />
   </ExtensionList>
   <ExecutionEnvironment>
     <HostList>
@@ -44,8 +44,8 @@
               <Width>420</Width>
             </Size>
             <MinSize>
-              <Height>520</Height>
-              <Width>360</Width>
+              <Height>420</Height>
+              <Width>280</Width>
             </MinSize>
           </Geometry>
         </UI>
