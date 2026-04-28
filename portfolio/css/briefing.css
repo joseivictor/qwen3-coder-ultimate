@@ -1,0 +1,366 @@
+.briefing-page {
+  min-height: 100vh;
+  background: #07111f;
+  color: var(--ink-1, #f5fbff);
+  overflow-x: hidden;
+}
+
+.briefing-shell {
+  width: min(1180px, calc(100% - 28px));
+  margin: 0 auto;
+  padding: 22px 0 64px;
+}
+
+.briefing-hero,
+.briefing-examples,
+.form-card,
+.briefing-actions {
+  border: 1px solid rgba(137, 203, 255, .18);
+  background:
+    linear-gradient(135deg, rgba(113, 190, 255, .12), rgba(255,255,255,.035) 42%, rgba(3, 9, 18, .66)),
+    rgba(5, 14, 27, .72);
+  box-shadow: 0 26px 80px rgba(0, 0, 0, .28);
+  backdrop-filter: blur(18px);
+}
+
+.briefing-hero {
+  min-height: 72svh;
+  display: grid;
+  align-content: space-between;
+  gap: 4rem;
+  padding: clamp(1rem, 3vw, 2rem);
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.briefing-brand {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: .72rem;
+  color: #eaf7ff;
+  font-weight: 900;
+}
+
+.briefing-brand img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  box-shadow: 0 0 28px rgba(101, 190, 255, .28);
+}
+
+.briefing-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  gap: clamp(1.4rem, 5vw, 5rem);
+  align-items: end;
+}
+
+.briefing-kicker {
+  display: inline-flex;
+  color: #8bd0ff;
+  font-size: .74rem;
+  font-weight: 900;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.briefing-hero h1 {
+  max-width: 10ch;
+  margin: .95rem 0 1.15rem;
+  color: #f7fbff;
+  font-size: clamp(3rem, 8vw, 8rem);
+  line-height: .86;
+  letter-spacing: -.06em;
+}
+
+.briefing-hero p,
+.briefing-examples p,
+.form-card-head p,
+.briefing-score p,
+.example-grid span {
+  color: rgba(226, 242, 255, .72);
+  line-height: 1.65;
+}
+
+.briefing-hero p {
+  max-width: 62ch;
+  font-size: clamp(1rem, 1.35vw, 1.18rem);
+}
+
+.briefing-score {
+  display: grid;
+  gap: .8rem;
+  padding: 1rem;
+  border: 1px solid rgba(137, 203, 255, .16);
+  border-radius: 22px;
+  background: rgba(2, 9, 18, .62);
+}
+
+.briefing-score strong {
+  color: #f7fbff;
+  font-size: clamp(2.6rem, 6vw, 5rem);
+  line-height: .9;
+  letter-spacing: -.06em;
+}
+
+.briefing-score span {
+  color: #8bd0ff;
+  font-weight: 800;
+}
+
+.briefing-progress {
+  height: 9px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255,255,255,.09);
+}
+
+.briefing-progress i {
+  display: block;
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #74c7ff, #2f82ff);
+  transition: width .2s ease;
+}
+
+.briefing-examples {
+  display: grid;
+  grid-template-columns: .72fr 1.28fr;
+  gap: 1rem;
+  margin: 18px 0;
+  padding: 1rem;
+  border-radius: 26px;
+}
+
+.briefing-examples h2,
+.form-card-head h2 {
+  margin: .35rem 0 .35rem;
+  color: #f7fbff;
+  font-size: clamp(1.45rem, 3vw, 2.5rem);
+  line-height: 1;
+  letter-spacing: -.04em;
+}
+
+.example-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .7rem;
+}
+
+.example-grid button {
+  min-height: 132px;
+  display: grid;
+  align-content: space-between;
+  gap: .8rem;
+  padding: .95rem;
+  border: 1px solid rgba(137, 203, 255, .16);
+  border-radius: 20px;
+  color: #f7fbff;
+  background: rgba(255,255,255,.055);
+  text-align: left;
+  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+
+.example-grid button:hover {
+  transform: translateY(-3px);
+  border-color: rgba(137, 203, 255, .4);
+  background: rgba(76, 163, 255, .14);
+}
+
+.example-grid strong {
+  font-size: 1.04rem;
+}
+
+.briefing-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.form-card {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1rem, 2.4vw, 1.4rem);
+  border-radius: 26px;
+}
+
+.form-card-head {
+  display: grid;
+  gap: .25rem;
+}
+
+.form-card-head span {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #07111f;
+  background: linear-gradient(135deg, #8bd0ff, #2f82ff);
+  font-weight: 950;
+}
+
+.field-grid {
+  display: grid;
+  gap: .85rem;
+}
+
+.field-grid.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.field-grid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.briefing-form label,
+.chip-field {
+  display: grid;
+  gap: .46rem;
+  min-width: 0;
+  color: rgba(235, 247, 255, .92);
+  font-size: .9rem;
+  font-weight: 800;
+}
+
+.briefing-form input,
+.briefing-form textarea {
+  width: 100%;
+  border: 1px solid rgba(137, 203, 255, .15);
+  border-radius: 18px;
+  outline: none;
+  padding: .92rem 1rem;
+  color: #f7fbff;
+  background: rgba(0, 9, 20, .54);
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.briefing-form textarea {
+  resize: vertical;
+}
+
+.briefing-form input:focus,
+.briefing-form textarea:focus {
+  border-color: rgba(137, 203, 255, .56);
+  box-shadow: 0 0 0 4px rgba(47, 130, 255, .12);
+}
+
+.briefing-form input::placeholder,
+.briefing-form textarea::placeholder {
+  color: rgba(216, 236, 255, .42);
+}
+
+.chip-field {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.chip-field legend {
+  margin-bottom: .55rem;
+  color: rgba(235, 247, 255, .92);
+}
+
+.chip-field {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+}
+
+.chip-field label {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .64rem .82rem;
+  border: 1px solid rgba(137, 203, 255, .16);
+  border-radius: 999px;
+  background: rgba(255,255,255,.055);
+  cursor: pointer;
+}
+
+.chip-field input {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  accent-color: #62bcff;
+}
+
+.briefing-actions {
+  position: sticky;
+  bottom: 12px;
+  z-index: 5;
+  display: flex;
+  justify-content: flex-end;
+  gap: .75rem;
+  padding: .8rem;
+  border-radius: 24px;
+}
+
+.primary-action,
+.secondary-action {
+  min-height: 48px;
+  border-radius: 999px;
+  padding: .85rem 1.1rem;
+  font-weight: 950;
+}
+
+.primary-action {
+  border: 0;
+  color: #06101d;
+  background: linear-gradient(135deg, #9bd8ff, #2f82ff);
+  box-shadow: 0 16px 40px rgba(47, 130, 255, .26);
+}
+
+.secondary-action {
+  border: 1px solid rgba(137, 203, 255, .18);
+  color: #eaf7ff;
+  background: rgba(255,255,255,.06);
+}
+
+@media (max-width: 860px) {
+  .briefing-hero-grid,
+  .briefing-examples,
+  .field-grid.two,
+  .field-grid.three {
+    grid-template-columns: 1fr;
+  }
+
+  .briefing-hero {
+    min-height: auto;
+    gap: 2.2rem;
+  }
+
+  .example-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .briefing-shell {
+    width: calc(100% - 18px);
+    padding-top: 9px;
+  }
+
+  .briefing-hero,
+  .briefing-examples,
+  .form-card {
+    border-radius: 22px;
+  }
+
+  .briefing-hero h1 {
+    font-size: clamp(3rem, 16vw, 5.2rem);
+  }
+
+  .briefing-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .primary-action,
+  .secondary-action {
+    width: 100%;
+  }
+}

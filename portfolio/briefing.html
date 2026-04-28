@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Briefing para Portfolio de Editor | Jose Victor</title>
+  <meta name="description" content="Formulario completo para coletar informacoes de editores e criar portfolios profissionais.">
+  <meta name="theme-color" content="#07111f">
+  <link rel="icon" href="assets/brand/jv-logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/briefing.css">
+</head>
+<body class="briefing-page">
+  <div class="shader-bg" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <main class="briefing-shell">
+    <header class="briefing-hero">
+      <a class="briefing-brand" href="/" aria-label="Voltar para o portfolio">
+        <img src="assets/brand/jv-logo.svg" alt="">
+        <span>JV Portfolio Builder</span>
+      </a>
+      <div class="briefing-hero-grid">
+        <div>
+          <span class="briefing-kicker">Briefing completo para editores</span>
+          <h1>Vou entender seu editor antes de criar o portfolio.</h1>
+          <p>Preencha com calma ou use um exemplo pronto. No final, tudo vira uma mensagem organizada no WhatsApp para eu montar um portfolio com posicionamento, provas, videos, oferta e visual certo.</p>
+        </div>
+        <aside class="briefing-score" aria-label="Resumo do preenchimento">
+          <strong id="progressNumber">0%</strong>
+          <span>do briefing preenchido</span>
+          <div class="briefing-progress"><i id="progressBar"></i></div>
+          <p id="progressHint">Comece pelo basico. O resto eu organizo com voce.</p>
+        </aside>
+      </div>
+    </header>
+
+    <section class="briefing-examples">
+      <div>
+        <span class="briefing-kicker">Editor ficou travado?</span>
+        <h2>Preencha com um exemplo e depois ajuste.</h2>
+      </div>
+      <div class="example-grid">
+        <button type="button" data-preset="reels">
+          <strong>Editor de Reels</strong>
+          <span>Cortes, unboxing, podcast, criativos e conteudo viral.</span>
+        </button>
+        <button type="button" data-preset="youtube">
+          <strong>YouTube / VSL</strong>
+          <span>Videos longos, aulas, direct response e narrativas.</span>
+        </button>
+        <button type="button" data-preset="motion">
+          <strong>Motion premium</strong>
+          <span>After Effects, motion style, identidade e apresentacoes.</span>
+        </button>
+      </div>
+    </section>
+
+    <form id="briefingForm" class="briefing-form">
+      <section class="form-card">
+        <div class="form-card-head">
+          <span>01</span>
+          <h2>Identidade do editor</h2>
+          <p>O basico para saber quem e a pessoa, como falar com ela e como apresentar a autoridade.</p>
+        </div>
+        <div class="field-grid two">
+          <label>Nome profissional
+            <input name="nome" required placeholder="Ex: Lucas Andrade">
+          </label>
+          <label>WhatsApp do editor
+            <input name="whatsapp" inputmode="tel" placeholder="Ex: 22 99999-9999">
+          </label>
+          <label>Instagram principal
+            <input name="instagram" placeholder="Ex: @lucasedits">
+          </label>
+          <label>Cidade / atendimento
+            <input name="cidade" placeholder="Ex: Atendo Brasil todo">
+          </label>
+        </div>
+      </section>
+
+      <section class="form-card">
+        <div class="form-card-head">
+          <span>02</span>
+          <h2>Posicionamento</h2>
+          <p>O site precisa vender uma percepcao clara: rapido, premium, estrategico, tecnico, criativo ou especialista.</p>
+        </div>
+        <div class="field-grid">
+          <label>Frase curta sobre voce
+            <textarea name="headline" rows="3" placeholder="Ex: Editor de videos curtos que transforma cortes em conteudo com ritmo, retencao e acabamento profissional."></textarea>
+          </label>
+          <label>Para quem voce edita?
+            <textarea name="publico" rows="3" placeholder="Ex: Infoprodutores, experts, marcas locais, podcasts, academias e criadores que querem postar com consistencia."></textarea>
+          </label>
+          <label>Seu maior diferencial
+            <textarea name="diferencial" rows="3" placeholder="Ex: Entendo storytelling, ritmo de redes sociais e entrego arquivo pronto para publicar com legenda que prende atencao."></textarea>
+          </label>
+        </div>
+      </section>
+
+      <section class="form-card">
+        <div class="form-card-head">
+          <span>03</span>
+          <h2>Servicos e estilo</h2>
+          <p>Marque tudo que o editor faz. Isso ajuda a organizar portfolio, filtros e orcamento.</p>
+        </div>
+        <fieldset class="chip-field">
+          <legend>Servicos principais</legend>
+          <label><input type="checkbox" name="servicos" value="Reels 9:16"> Reels 9:16</label>
+          <label><input type="checkbox" name="servicos" value="Cortes de live"> Cortes de live</label>
+          <label><input type="checkbox" name="servicos" value="Cortes de podcast"> Cortes de podcast</label>
+          <label><input type="checkbox" name="servicos" value="Unboxing"> Unboxing</label>
+          <label><input type="checkbox" name="servicos" value="YouTube 16:9"> YouTube 16:9</label>
+          <label><input type="checkbox" name="servicos" value="VSL"> VSL</label>
+          <label><input type="checkbox" name="servicos" value="Cursos"> Cursos</label>
+          <label><input type="checkbox" name="servicos" value="Motion design"> Motion design</label>
+          <label><input type="checkbox" name="servicos" value="Thumb/capa"> Thumb/capa</label>
+        </fieldset>
+        <div class="field-grid two">
+          <label>Nichos que voce atende
+            <input name="nichos" placeholder="Ex: negocios, fitness, beleza, educacao, podcasts">
+          </label>
+          <label>Programas que usa
+            <input name="ferramentas" placeholder="Ex: Premiere, After Effects, Photoshop, CapCut">
+          </label>
+        </div>
+        <label>Estilo visual que combina com voce
+          <textarea name="estilo" rows="3" placeholder="Ex: Minimalista, azul escuro, motion limpo, tipografia forte, vibe premium e dinamica."></textarea>
+        </label>
+      </section>
+
+      <section class="form-card">
+        <div class="form-card-head">
+          <span>04</span>
+          <h2>Provas e numeros</h2>
+          <p>Mesmo que nao tenha numeros exatos, coloque aproximacoes. Isso vira autoridade no site.</p>
+        </div>
+        <div class="field-grid three">
+          <label>Anos de experiencia
+            <input name="experiencia" placeholder="Ex: 3 anos">
+          </label>
+          <label>Videos editados
+            <input name="videosEditados" placeholder="Ex: +500 videos">
+          </label>
+          <label>Views geradas
+            <input name="views" placeholder="Ex: +2 milhoes">
+          </label>
+        </div>
+        <div class="field-grid two">
+          <label>Clientes / experts que confiam
+            <textarea name="clientes" rows="4" placeholder="Ex: Nome do expert, perfil, nicho, resultado ou tipo de trabalho."></textarea>
+          </label>
+          <label>Resultados reais
+            <textarea name="resultados" rows="4" placeholder="Ex: Video bateu 300k views, corte gerou leads, canal cresceu, campanha vendeu."></textarea>
+          </label>
+        </div>
+      </section>
+
+      <section class="form-card">
+        <div class="form-card-head">
+          <span>05</span>
+          <h2>Portfolio e referencias</h2>
+          <p>Links dos melhores trabalhos, separados por tipo. Pode colar Instagram, YouTube, Drive ou pasta.</p>
+        </div>
+        <div class="field-grid">
+          <label>Melhores videos 9:16
+            <textarea name="links916" rows="5" placeholder="Cole um link por linha: Reels, TikTok, Shorts, Drive..."></textarea>
+          </label>
+          <label>Melhores videos 16:9
+            <textarea name="links169" rows="4" placeholder="YouTube, VSL, aulas, lives, cursos..."></textarea>
+          </label>
+          <label>Sites, portfolios ou designers que voce gosta
+            <textarea name="referencias" rows="4" placeholder="Ex: portfolio minimalista azul, sites com motion, links de referencias, cores que gosta."></textarea>
+          </label>
+        </div>
+      </section>
+
+      <section class="form-card">
+        <div class="form-card-head">
+          <span>06</span>
+          <h2>Oferta e funcionamento</h2>
+          <p>Essa parte ajuda a transformar o portfolio em uma maquina de contato, nao so uma galeria bonita.</p>
+        </div>
+        <div class="field-grid two">
+          <label>Como voce cobra?
+            <textarea name="precos" rows="4" placeholder="Ex: Por video, pacote mensal, sob consulta para VSL/curso, desconto acima de 8 videos."></textarea>
+          </label>
+          <label>Processo de trabalho
+            <textarea name="processo" rows="4" placeholder="Ex: briefing, referencia, roteiro, primeira versao, revisao, entrega final."></textarea>
+          </label>
+          <label>O que o cliente precisa enviar?
+            <textarea name="materiais" rows="4" placeholder="Ex: bruto, legenda, identidade visual, referencia, prazo, objetivo do video."></textarea>
+          </label>
+          <label>Prazo medio
+            <input name="prazo" placeholder="Ex: 24h a 72h para cortes simples">
+          </label>
+        </div>
+      </section>
+
+      <section class="form-card">
+        <div class="form-card-head">
+          <span>07</span>
+          <h2>Preferencias do site</h2>
+          <p>O que precisa aparecer, o que nao pode aparecer e como o editor quer ser percebido.</p>
+        </div>
+        <div class="field-grid two">
+          <label>Cores que gosta
+            <input name="cores" placeholder="Ex: azul claro, preto, branco, prata">
+          </label>
+          <label>Dominio ou nome do site
+            <input name="dominio" placeholder="Ex: lucasedits.com.br ou lucasedits.vercel.app">
+          </label>
+          <label>O que nao pode ter
+            <textarea name="evitar" rows="4" placeholder="Ex: nao quero vermelho, nao quero site com cara de IA, nao quero frases exageradas."></textarea>
+          </label>
+          <label>Observacoes finais
+            <textarea name="observacoes" rows="4" placeholder="Tudo que nao coube acima."></textarea>
+          </label>
+        </div>
+      </section>
+
+      <div class="briefing-actions">
+        <button class="secondary-action" type="button" id="clearForm">Limpar</button>
+        <button class="primary-action" type="submit">Enviar briefing no WhatsApp</button>
+      </div>
+    </form>
+  </main>
+
+  <script src="js/briefing.js"></script>
+</body>
+</html>

@@ -265,6 +265,18 @@ a { color: inherit; text-decoration: none; }
   color: var(--ink-2);
   transition: color .25s, background .25s;
 }
+.briefing-tab-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .55rem 1.1rem;
+  border-radius: 999px;
+  font-size: .88rem;
+  font-weight: 700;
+  color: #07111f;
+  background: linear-gradient(135deg, #9bd8ff, #2f82ff);
+  white-space: nowrap;
+}
 .tabs button:hover { color: var(--ink-0); background: rgba(255,255,255,.04); }
 .tabs button.active {
   color: var(--bg-0);
@@ -2697,6 +2709,11 @@ body {
   }
   .tabs::-webkit-scrollbar { display: none; }
   .tabs button {
+    flex: 0 0 auto;
+    padding: .48rem .72rem;
+    font-size: .78rem;
+  }
+  .briefing-tab-link {
     flex: 0 0 auto;
     padding: .48rem .72rem;
     font-size: .78rem;
