@@ -41,7 +41,7 @@ const products = [
 
 const filters = ["Todos", "Masculino", "Feminino", "Tenis", "Sapato", "Conhaque", "Preto"];
 const formatter = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
-const WHATSAPP_PHONE = "";
+const WHATSAPP_PHONE = "5522997087361";
 
 let activeFilter = "Todos";
 let activeProduct = null;
@@ -365,6 +365,10 @@ function buildCheckoutUrl(subtotal) {
   return `whatsapp://send?${phonePart}text=${encodeURIComponent(message)}`;
 }
 
+function syncCompactHeader() {
+  document.body.classList.toggle("shop-compact", window.scrollY > 160);
+}
+
 function openCart() {
   cartDrawer.classList.add("open");
   cartDrawer.setAttribute("aria-hidden", "false");
@@ -395,7 +399,9 @@ document.addEventListener("keydown", event => {
 searchInput.addEventListener("input", renderProducts);
 sortSelect.addEventListener("change", renderProducts);
 orderNote.addEventListener("input", renderCart);
+window.addEventListener("scroll", syncCompactHeader, { passive: true });
 
 renderFilters();
 renderProducts();
 renderCart();
+syncCompactHeader();
