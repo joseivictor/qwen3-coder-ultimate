@@ -106,6 +106,19 @@
       }
     ],
     "monthly_suggestion_threshold": 15,
+    "monthly_min_videos": 8,
+    "monthly_discount_percent": 20,
+    "monthly_benefits": [
+      "Capinhas conforme o nivel do pacote",
+      "Organizacao mensal e prioridade na fila",
+      "Revisoes inclusas dentro do escopo"
+    ],
+    "coupon": {
+      "active": false,
+      "code": "JV20",
+      "percent": 0,
+      "label": "Cupom do portfolio"
+    },
     "style_multipliers": {
       "simples": 1,
       "medio": 1.25,
@@ -121,7 +134,7 @@
         "highlight": false,
         "features": [
           "12 reels editados",
-          "Capinha simples para cada video",
+          "Capinha conforme o pacote",
           "Revisao inclusa",
           "Organizacao por drive",
           "WhatsApp direto comigo"
@@ -151,7 +164,7 @@
         "highlight": false,
         "features": [
           "8 videos longos",
-          "Capinha simples inclusa",
+          "Capinha conforme o pacote",
           "Tratamento de audio",
           "Narrativa estruturada",
           "Cortes para Reels quando fizer sentido"

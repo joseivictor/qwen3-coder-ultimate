@@ -49,8 +49,9 @@ function staticBanner() {
   div.className = 'static-admin-banner';
   div.innerHTML = `
     <strong>Admin no Vercel em modo celular/rascunho.</strong>
-    <span>As edicoes aparecem neste navegador. Para publicar para todo mundo, precisa conectar Supabase, Vercel Blob ou GitHub.</span>
+    <span>As edicoes aparecem no painel e no preview com ?draft=1. Para publicar para todo mundo, precisa conectar Supabase, Vercel Blob ou GitHub.</span>
     <button class="chip" id="exportDraftBtn" type="button">Exportar backup</button>
+    <a class="chip" href="/?draft=1" target="_blank">Preview rascunho</a>
   `;
   $('#adminApp').prepend(div);
   $('#exportDraftBtn').addEventListener('click', exportDrafts);
@@ -330,6 +331,7 @@ function openVideoForm(v, idx) {
       <div>
         <label>Link do post no Instagram</label>
         <input id="f-igurl" value="${escapeHtml(v.instagram_url)}" placeholder="https://instagram.com/p/...">
+        <button class="chip" type="button" id="f-auto-video" style="margin-top:.45rem;width:100%;">Preencher pelo link</button>
       </div>
     </div>
 
@@ -410,6 +412,7 @@ function openVideoForm(v, idx) {
   // Upload zones
   setupUploadZone($('#f-vid-zone'), $('#f-vid-file'), 'video', (path) => $('#f-src').value = path);
   setupUploadZone($('#f-thumb-zone'), $('#f-thumb-file'), 'thumb', (path) => $('#f-thumb').value = path);
+  $('#f-auto-video').addEventListener('click', () => autoFillVideoFromLink());
 
   // Save
   $('#f-cancel').addEventListener('click', closeModal);
@@ -438,6 +441,29 @@ function openVideoForm(v, idx) {
     renderVideosTable();
     closeModal();
   });
+}
+
+function extractPostCode(url) {
+  const clean = String(url || '').split('?')[0];
+  const m = clean.match(/instagram\.com\/(?:reel|p)\/([^/]+)/i);
+  const y = clean.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([A-Za-z0-9_-]+)/i);
+  return m?.[1] || y?.[1] || '';
+}
+
+function autoFillVideoFromLink() {
+  const url = ($('#f-igurl')?.value || '').trim();
+  const code = extractPostCode(url);
+  if (!code) return toast('Cole um link valido do Instagram ou YouTube primeiro.', 'error');
+  const isYT = /youtu\.?be|youtube\.com/i.test(url);
+  const category = isYT ? 'youtube' : ($('#f-cats .style-chip.active')?.dataset.cat || 'reel');
+  const src = isYT ? '' : `assets/videos/ig/${code}.mp4`;
+  const thumb = isYT ? `assets/thumbs/youtube/${code}.jpg` : `assets/thumbs/ig/${code}.jpg`;
+
+  if (!$('#f-title').value.trim()) $('#f-title').value = isYT ? `Video YouTube ${code}` : `Reel ${code}`;
+  if (src && !$('#f-src').value.trim()) $('#f-src').value = src;
+  if (!$('#f-thumb').value.trim()) $('#f-thumb').value = thumb;
+  $$('#f-cats .style-chip').forEach(c => c.classList.toggle('active', c.dataset.cat === category));
+  toast('Preenchi codigo, caminho do video/capa e categoria. Ajuste o titulo e confira os arquivos.', 'success');
 }
 
 function listItem(text) {
@@ -718,7 +744,23 @@ function renderConfigEditor() {
     </div>
 
     <div class="group">
-      <h4>Planos mensais</h4>
+      <h4>Orcamento dinamico</h4>
+      <p class="sub" style="margin-top:0;">Controla a recomendacao mensal que aparece de acordo com quantidade, estilos e formato escolhidos pelo cliente.</p>
+      <div class="row">
+        <div><label>Videos minimos para mensal</label><input data-cfg="budget.monthly_min_videos" type="number" min="1" value="${c.budget.monthly_min_videos || 8}"></div>
+        <div><label>Desconto mensal (%)</label><input data-cfg="budget.monthly_discount_percent" type="number" min="0" max="90" value="${c.budget.monthly_discount_percent || 20}"></div>
+        <div><label>Cupom ativo?</label><select data-cfg="budget.coupon.active"><option value="false" ${!c.budget.coupon?.active?'selected':''}>Nao</option><option value="true" ${c.budget.coupon?.active?'selected':''}>Sim</option></select></div>
+        <div><label>Desconto cupom (%)</label><input data-cfg="budget.coupon.percent" type="number" min="0" max="90" value="${c.budget.coupon?.percent || 0}"></div>
+      </div>
+      <div class="row">
+        <div><label>Codigo do cupom</label><input data-cfg="budget.coupon.code" value="${escapeHtml(c.budget.coupon?.code || 'JV20')}"></div>
+        <div><label>Nome do cupom</label><input data-cfg="budget.coupon.label" value="${escapeHtml(c.budget.coupon?.label || 'Cupom do portfolio')}"></div>
+      </div>
+      <label>Beneficios do mensal (um por linha)</label>
+      <textarea rows="4" data-cfg-list="budget.monthly_benefits">${(c.budget.monthly_benefits || []).join('\n')}</textarea>
+      <hr style="border:0;border-top:1px solid rgba(255,255,255,.08);margin:1.2rem 0;">
+      <h4>Planos mensais antigos</h4>
+      <p class="sub" style="margin-top:0;">Mantidos como backup. O site usa a regra dinamica acima.</p>
       ${c.budget.monthly_plans.map((p,i) => `
         <div class="row" style="margin-bottom:.5rem;">
           <div><label>Nome</label><input data-cfg="budget.monthly_plans.${i}.name" value="${escapeHtml(p.name)}"></div>

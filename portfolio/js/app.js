@@ -20,8 +20,9 @@ const STATE = {
 /* ---------- DATA LOADERS ---------- */
 async function loadJSON(path) {
   try {
+    const useDraft = new URLSearchParams(location.search).get('draft') === '1';
     const localDraft = localStorage.getItem('jv_admin_' + path.split('/').pop().replace('.json', ''));
-    if (localDraft) return JSON.parse(localDraft);
+    if (useDraft && localDraft) return JSON.parse(localDraft);
     const r = await fetch(path + '?t=' + Date.now());
     if (!r.ok) throw new Error(r.status);
     return await r.json();
@@ -51,7 +52,7 @@ async function loadAllData() {
 /* ---------- WHATSAPP HELPERS ---------- */
 function waLink(message) {
   const num = STATE.config?.site?.whatsapp_digits || '5522981481742';
-  return `https://wa.me/${num}?text=${encodeURIComponent(message)}`;
+  return `whatsapp://send?phone=${num}&text=${encodeURIComponent(message)}`;
 }
 
 /* ---------- PORTAL ENTRY (lisinho — sem blur, sem burst pesado) ---------- */
@@ -530,10 +531,21 @@ function currentBudgetTotals() {
 
 function monthlyRecommendationsHTML() {
   const qty = STATE.budget.qty;
+  const budgetCfg = STATE.config?.budget || {};
+  const minMonthly = parseInt(budgetCfg.monthly_min_videos, 10) || 8;
+  const discount = Math.max(0, Math.min(90, parseFloat(budgetCfg.monthly_discount_percent) || 20));
+  const benefits = Array.isArray(budgetCfg.monthly_benefits) && budgetCfg.monthly_benefits.length
+    ? budgetCfg.monthly_benefits
+    : ['Capinhas conforme o nivel do pacote', 'Organizacao mensal e prioridade na fila', 'Revisoes inclusas dentro do escopo'];
+  const coupon = budgetCfg.coupon || {};
+  const couponActive = coupon.active && (parseFloat(coupon.percent) || 0) > 0;
+  const couponPercent = Math.max(0, Math.min(90, parseFloat(coupon.percent) || 0));
+  const couponCode = (coupon.code || 'CUPOM').trim();
   const canAutoMonthly = (STATE.budget.format === 'reel') || (STATE.budget.format === 'longform' && STATE.budget.longType === 'youtube');
   const totals = currentBudgetTotals();
   const avulso = totals.total;
-  const mensal = roundMoney(avulso * .8);
+  const mensalBase = roundMoney(avulso * (1 - discount / 100));
+  const mensal = couponActive ? roundMoney(mensalBase * (1 - couponPercent / 100)) : mensalBase;
   const summary = styleMixSummary();
 
   const consultation = `
@@ -553,7 +565,7 @@ function monthlyRecommendationsHTML() {
       <a class="plan-cta" href="${waLink('Ola Jose! Quero montar um plano sob consulta com varios tipos de video. Pode me ajudar?')}" target="_blank">Montar sob consulta</a>
     </div>`;
 
-  if (canAutoMonthly && qty >= 8 && avulso > 0) {
+  if (canAutoMonthly && qty >= minMonthly && avulso > 0) {
     const unitLabel = STATE.budget.format === 'reel' ? 'reels' : 'videos 16:9';
     return `
       <div class="plan-card highlight">
@@ -563,21 +575,19 @@ function monthlyRecommendationsHTML() {
           <span class="num">R$${formatNum(mensal)}</span>
           <span class="per">/mes - ${qty} ${unitLabel}</span>
         </div>
-        <div class="plan-saving">Avulso daria R$${formatNum(avulso)}. Mensal aplica 20% de desconto em cima do total atual.</div>
+        <div class="plan-saving">Avulso daria R$${formatNum(avulso)}. Mensal aplica ${discount}% de desconto em cima do total atual.${couponActive ? ` Cupom ${escapeHtml(couponCode)} aplica mais ${couponPercent}%.` : ''}</div>
         <ul>
           <li>${summary}</li>
-          <li>Capinha simples para cada video</li>
-          <li>Organizacao mensal e prioridade na fila</li>
-          <li>Revisoes inclusas dentro do escopo</li>
+          ${benefits.map(item => `<li>${escapeHtml(item)}</li>`).join('')}
         </ul>
-        <a class="plan-cta" href="${waLink(`Ola Jose! Quero fechar mensal recorrente com ${qty} ${unitLabel}: ${summary}. Avulso R$${formatNum(avulso)}, mensal com 20% off R$${formatNum(mensal)}.`)}" target="_blank">Quero esse mensal</a>
+        <a class="plan-cta" href="${waLink(`Ola Jose! Quero fechar mensal recorrente com ${qty} ${unitLabel}: ${summary}. Avulso R$${formatNum(avulso)}, mensal com ${discount}% off R$${formatNum(mensal)}.`)}" target="_blank">Quero esse mensal</a>
       </div>${consultation}`;
   }
 
   return `
     <div class="plan-card plan-waiting">
-      <div class="nm">Mensal a partir de 8 videos</div>
-      <div class="plan-saving">Quando chegar em 8 videos, aparece automaticamente 20% de desconto sobre o total atual.</div>
+      <div class="nm">Mensal a partir de ${minMonthly} videos</div>
+      <div class="plan-saving">Quando chegar em ${minMonthly} videos, aparece automaticamente ${discount}% de desconto sobre o total atual.</div>
       <ul>
         <li>Voce pode misturar estilos de edicao</li>
         <li>O valor acompanha a quantidade e dificuldade selecionadas</li>
@@ -748,16 +758,32 @@ function setupBudget() {
   }
 
   function readMixInputs(changedInput = null) {
+    const inputs = $$('.mix-input', root);
     const mix = {};
-    $$('.mix-input', root).forEach(input => {
+    inputs.forEach(input => {
       mix[input.dataset.mixStyle] = Math.max(0, parseInt(input.value, 10) || 0);
     });
-    const total = Object.values(mix).reduce((sum, n) => sum + n, 0);
-    if (total !== STATE.budget.qty && changedInput) {
-      const others = $$('.mix-input', root).filter(input => input !== changedInput);
-      const rest = others.reduce((sum, input) => sum + (parseInt(input.value, 10) || 0), 0);
-      changedInput.value = Math.max(0, STATE.budget.qty - rest);
-      mix[changedInput.dataset.mixStyle] = parseInt(changedInput.value, 10) || 0;
+    let total = Object.values(mix).reduce((sum, n) => sum + n, 0);
+    if (changedInput && total > STATE.budget.qty) {
+      let overflow = total - STATE.budget.qty;
+      const others = inputs.filter(input => input !== changedInput).reverse();
+      for (const input of others) {
+        const id = input.dataset.mixStyle;
+        const take = Math.min(mix[id], overflow);
+        mix[id] -= take;
+        input.value = mix[id];
+        overflow -= take;
+        if (overflow <= 0) break;
+      }
+      if (overflow > 0) {
+        const id = changedInput.dataset.mixStyle;
+        mix[id] = Math.max(0, mix[id] - overflow);
+        changedInput.value = mix[id];
+      }
+    } else if (changedInput && total < STATE.budget.qty) {
+      const id = changedInput.dataset.mixStyle;
+      mix[id] += STATE.budget.qty - total;
+      changedInput.value = mix[id];
     }
     STATE.budget.styleMix = mix;
     const main = Object.entries(mix).sort((a,b) => b[1] - a[1])[0];
@@ -900,6 +926,12 @@ function setupBudget() {
 function refreshPrice() {
   const cfg = STATE.config?.budget;
   if (!cfg || !cfg.formats) return;
+  const minMonthly = parseInt(cfg.monthly_min_videos, 10) || 8;
+  const discount = Math.max(0, Math.min(90, parseFloat(cfg.monthly_discount_percent) || 20));
+  const coupon = cfg.coupon || {};
+  const couponActive = coupon.active && (parseFloat(coupon.percent) || 0) > 0;
+  const couponPercent = Math.max(0, Math.min(90, parseFloat(coupon.percent) || 0));
+  const couponCode = (coupon.code || 'CUPOM').trim();
   const fmt = cfg.formats.find(f => f.id === STATE.budget.format) || cfg.formats[0];
   const qty = STATE.budget.qty;
 
@@ -913,6 +945,7 @@ function refreshPrice() {
   const tier = fmt.tiers.find(t => qty >= t.min && qty <= t.max) || fmt.tiers[fmt.tiers.length-1];
   const totals = currentBudgetTotals();
   const total = totals.total;
+  const couponTotal = couponActive ? roundMoney(total * (1 - couponPercent / 100)) : null;
 
   if (fmt.id === 'longform' && STATE.budget.longType === 'curso') {
     $('#priceOut').innerHTML = `
@@ -953,9 +986,10 @@ function refreshPrice() {
     <span class="price-tier-badge">${tier.label}</span>
     ${totals.lines.map(line => `<div class="row"><span>${line.qty} ${line.label} x R$${line.unit}</span><span class="v">R$${formatNum(line.total)}</span></div>`).join('')}
     <div class="row total"><span>Total estimado</span><span class="v">R$${formatNum(total)}</span></div>
-    ${qty >= 8 ? `
+    ${couponActive ? `<div class="coupon-row">Cupom ${escapeHtml(couponCode)}: ${couponPercent}% off fica R$${formatNum(couponTotal)}</div>` : ''}
+    ${qty >= minMonthly ? `
       <div class="monthly-cta">
-        Mensal recorrente com <strong>20% de desconto</strong>: R$${formatNum(roundMoney(total * .8))}/mes.
+        Mensal recorrente com <strong>${discount}% de desconto</strong>: R$${formatNum(roundMoney((couponTotal || total) * (1 - discount / 100)))}/mes.
       </div>` : ''}
     <a class="btn-cta btn-wa" id="bookCTA" style="display:flex;width:100%;margin-top:1rem;" href="${waLink(waMsg)}" target="_blank" rel="noopener">
       Mandar briefing pro WhatsApp
