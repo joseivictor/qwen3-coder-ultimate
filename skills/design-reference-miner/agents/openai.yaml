@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Reference Miner"
+  short_description: "Extrai e aplica referências premium de sites."
+  default_prompt: "Use este skill para coletar, atualizar e aplicar referências visuais/código público de sites como Awwwards, Dribbble, Dark Design, Omma, Moncy e portfólios 3D antes de criar uma interface."
