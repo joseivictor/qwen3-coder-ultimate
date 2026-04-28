@@ -676,7 +676,7 @@ function monthlyRecommendationsHTML() {
           ${benefits.map(item => `<li>${escapeHtml(item)}</li>`).join('')}
         </ul>
         <a class="plan-cta" href="${waLink(`Ola Jose! Quero fechar mensal recorrente com ${qty} ${unitLabel}. Quero aplicar a regra de ${discount}% de desconto mensal ${needsBriefing ? 'depois do briefing.' : `em cima do valor atual (${summary}).`}`)}" target="_blank">Quero esse mensal</a>
-      </div>${consultation}`;
+      </div>${needsBriefing ? '' : consultation}`;
   }
 
   return `
@@ -687,7 +687,7 @@ function monthlyRecommendationsHTML() {
         <li>Voce pode misturar estilos de edicao</li>
         <li>O valor acompanha a quantidade e dificuldade selecionadas</li>
       </ul>
-    </div>${consultation}`;
+    </div>${needsBriefing ? '' : consultation}`;
 }
 
 function setupBudget() {
@@ -781,7 +781,7 @@ function setupBudget() {
         <div class="style-picker">${stylesHTML}</div>
         <div class="style-mix-box">
           <div class="mix-head">
-            <strong>Distribuicao inteligente</strong>
+            <strong>Estilos do pacote</strong>
             <span id="mixTotalStatus"></span>
           </div>
           <div class="mix-presets">${presetHTML}</div>
