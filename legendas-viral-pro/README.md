@@ -36,8 +36,15 @@ Esta versão é uma base funcional limpa:
 - cacheia por projeto/sequência;
 - analisa e escolhe destaques;
 - lista modelos por 1 a 5 linhas;
+- reaproveita automaticamente a biblioteca de modelos do `Legendas Master 3.7`, quando instalada;
 - envia aplicação para Premiere/After;
 - no After Effects cria camadas de texto;
 - no Premiere importa `.mogrt` quando houver modelo válido e cria marcador de fallback quando não houver.
 
-Para uso final no Premiere, coloque seus `.mogrt` nas pastas de `templates/`.
+Para uso final no Premiere, ele usa primeiro os modelos encontrados em `templates/` e também lê a biblioteca antiga em:
+
+```text
+C:\Program Files (x86)\Common Files\Adobe\CEP\extensions\Legendas Master 3.7\templates
+```
+
+Assim o plugin novo fica leve no GitHub, mas mantém acesso às animações do plugin de referência no computador onde ele está instalado.

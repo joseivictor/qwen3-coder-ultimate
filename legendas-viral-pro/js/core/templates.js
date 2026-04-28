@@ -1,6 +1,8 @@
 (function (root) {
   const LVP = root.LVP || (root.LVP = {});
 
+  const LEGACY_LIBRARY_PATH = "C:\\Program Files (x86)\\Common Files\\Adobe\\CEP\\extensions\\Legendas Master 3.7\\templates";
+
   const FALLBACK = [1, 2, 3, 4, 5].flatMap(lineCount => ([
     {
       id: `viral-${lineCount}-default`,
@@ -12,9 +14,58 @@
     }
   ]));
 
-  function normalizeLineCount(folderName) {
-    const match = String(folderName || "").match(/([1-5])/);
-    return match ? Number(match[1]) : 1;
+  function normalizeLineCount(parts) {
+    const pathText = Array.isArray(parts) ? parts.join(" ") : String(parts || "");
+    if (/uma linha|1[-_\s]*linha|frases?/i.test(pathText)) return 1;
+    const match = pathText.match(/([1-5])\s*linha/i) || pathText.match(/\b([1-5])L\b/i);
+    return match ? Number(match[1]) : 2;
+  }
+
+  function templatePriority(file) {
+    if (/template\.cgt$/i.test(file)) return 0;
+    if (/\.mogrt$/i.test(file)) return 1;
+    if (/\.cgt$/i.test(file)) return 2;
+    if (/\.cga$/i.test(file)) return 3;
+    if (/\.aep$/i.test(file)) return 4;
+    return 9;
+  }
+
+  function scanTemplateRoot(fs, path, base, sourceLabel) {
+    if (!base || !fs.existsSync(base)) return [];
+    const result = [];
+
+    function walk(dir, parts) {
+      const entries = fs.readdirSync(dir, { withFileTypes: true });
+      const files = entries.filter(entry => entry.isFile()).map(entry => entry.name);
+      const models = files.filter(file => /\.(mogrt|cgt|cga|aep)$/i.test(file)).sort((a, b) => templatePriority(a) - templatePriority(b));
+      if (models.length) {
+        const thumb = files.find(file => /^thumb\.(jpg|jpeg|png|webp)$/i.test(file)) ||
+          files.find(file => /\.(jpg|jpeg|png|webp)$/i.test(file));
+        const preview = files.find(file => /\.(mp4|mov|webm)$/i.test(file));
+        const sfx = files.find(file => /\.(wav|mp3|aif|aiff)$/i.test(file));
+        const lineCount = normalizeLineCount(parts);
+        const category = parts.length > 1 ? parts.slice(0, -1).join(" / ") : sourceLabel;
+        const name = parts.length ? parts[parts.length - 1] : path.basename(dir);
+        result.push({
+          id: `${sourceLabel}-${lineCount}-${parts.join("-")}`.replace(/[^\w-]+/g, "_"),
+          name,
+          lineCount,
+          category,
+          source: sourceLabel,
+          file: path.join(dir, models[0]),
+          companion: models[1] ? path.join(dir, models[1]) : "",
+          thumb: thumb ? path.join(dir, thumb) : "",
+          preview: preview ? path.join(dir, preview) : "",
+          sfx: sfx ? path.join(dir, sfx) : ""
+        });
+      }
+      entries.filter(entry => entry.isDirectory()).forEach(entry => {
+        walk(path.join(dir, entry.name), parts.concat(entry.name));
+      });
+    }
+
+    walk(base, []);
+    return result;
   }
 
   function scanWithNode(extensionPath) {
@@ -22,33 +73,10 @@
     try {
       const fs = require("fs");
       const path = require("path");
-      const base = path.join(extensionPath, "templates");
-      if (!fs.existsSync(base)) return null;
-      const result = [];
-      fs.readdirSync(base, { withFileTypes: true }).forEach(lineDir => {
-        if (!lineDir.isDirectory()) return;
-        const lineCount = normalizeLineCount(lineDir.name);
-        const linePath = path.join(base, lineDir.name);
-        fs.readdirSync(linePath, { withFileTypes: true }).forEach(templateDir => {
-          if (!templateDir.isDirectory()) return;
-          const templatePath = path.join(linePath, templateDir.name);
-          const files = fs.readdirSync(templatePath);
-          const model = files.find(file => /\.(mogrt|cgt|cga|aep)$/i.test(file));
-          const thumb = files.find(file => /^thumb\.(jpg|jpeg|png|webp)$/i.test(file));
-          const sfx = files.find(file => /\.(wav|mp3|aif|aiff)$/i.test(file));
-          if (model) {
-            result.push({
-              id: `${lineCount}-${templateDir.name}`.replace(/[^\w-]+/g, "_"),
-              name: templateDir.name,
-              lineCount,
-              category: lineDir.name,
-              file: path.join(templatePath, model),
-              thumb: thumb ? path.join(templatePath, thumb) : "",
-              sfx: sfx ? path.join(templatePath, sfx) : ""
-            });
-          }
-        });
-      });
+      const localBase = path.join(extensionPath || "", "templates");
+      const result = []
+        .concat(scanTemplateRoot(fs, path, localBase, "Legendas Viral Pro"))
+        .concat(scanTemplateRoot(fs, path, LEGACY_LIBRARY_PATH, "Legendas Master 3.7"));
       return result.length ? result : null;
     } catch (error) {
       return null;
@@ -68,6 +96,6 @@
     }, {});
   }
 
-  LVP.Templates = { list, byLineCount, FALLBACK };
+  LVP.Templates = { list, byLineCount, FALLBACK, LEGACY_LIBRARY_PATH };
   if (typeof module !== "undefined") module.exports = LVP.Templates;
 })(typeof window !== "undefined" ? window : globalThis);

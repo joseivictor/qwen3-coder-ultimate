@@ -4,6 +4,7 @@ const path = require("path");
 const SRT = require("../js/core/srt");
 const LineBreaker = require("../js/core/lineBreaker");
 const ViralAnalyzer = require("../js/core/viralAnalyzer");
+const Templates = require("../js/core/templates");
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -83,11 +84,23 @@ function testViralAnalyzer() {
   assert(selected.every(item => item.templateLineCount >= 1 && item.templateLineCount <= 5), "Modelo fora de 1-5 linhas");
 }
 
+function testLegacyTemplates() {
+  const templates = Templates.list(path.resolve(__dirname, ".."));
+  assert(templates.length >= 50, "Biblioteca antiga deveria listar pelo menos 50 modelos");
+  assert(templates.some(template => template.source === "Legendas Master 3.7"), "Modelos do Legendas Master 3.7 nao foram encontrados");
+  assert(templates.some(template => template.lineCount === 1), "Faltam modelos de 1 linha");
+  assert(templates.some(template => template.lineCount === 2), "Faltam modelos de 2 linhas");
+  assert(templates.some(template => template.lineCount === 3), "Faltam modelos de 3 linhas");
+  assert(templates.some(template => template.lineCount === 4), "Faltam modelos de 4 linhas");
+  assert(templates.some(template => template.lineCount === 5), "Faltam modelos de 5 linhas");
+}
+
 function run() {
   testStandardSrt();
   testTranscriptSamples();
   testLineBreaker();
   testViralAnalyzer();
+  testLegacyTemplates();
   console.log("OK - testes core passaram");
 }
 

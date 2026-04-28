@@ -19,6 +19,8 @@ Foi usado CEP por compatibilidade com Premiere Pro e After Effects em versões m
 
 Quando há `.mogrt`, o hostscript tenta aplicar com `importMGT`.
 
+Quando há `.cgt` ou `.cga`, como na biblioteca do `Legendas Master 3.7`, o hostscript importa o item para o projeto e tenta inserir na sequência ativa pelo track de vídeo. Se houver SFX na pasta do modelo, ele tenta importar e aplicar no track de áudio.
+
 Quando não há modelo válido, cria marcadores com o texto processado. Esse fallback evita perda de timing e permite validar a análise antes de finalizar os modelos.
 
 ## After Effects
@@ -32,3 +34,5 @@ O plugin antigo é somente referência. Nada é editado dentro de:
 ```text
 C:\Program Files (x86)\Common Files\Adobe\CEP\extensions\Legendas Master 3.7
 ```
+
+O plugin novo pode ler a biblioteca de templates dessa pasta para usar as mesmas animações/SFX, mas não altera os arquivos originais.

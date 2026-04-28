@@ -94,12 +94,17 @@
   function renderTemplates() {
     renderTemplateTabs();
     const list = state.templates.filter(t => Number(t.lineCount) === state.activeLineCount);
-    $("templateGrid").innerHTML = list.map(template => (
+    $("templateGrid").innerHTML = list.map(template => {
+      const thumb = template.thumb ? `<span class="template-thumb" style="background-image:url('file:///${String(template.thumb).replace(/\\/g, "/")}')"></span>` : "";
+      const origin = template.source ? `${template.source}<br>` : "";
+      return (
       `<button type="button" class="template-card ${state.activeTemplateId === template.id ? "active" : ""}" data-template-id="${template.id}">
+        ${thumb}
         <strong>${template.name}</strong>
-        <small>${template.category || `${template.lineCount} linhas`}<br>${template.sfx ? "SFX: sim" : "SFX: nao"}</small>
+        <small>${origin}${template.category || `${template.lineCount} linhas`}<br>${template.sfx ? "SFX: sim" : "SFX: nao"}</small>
       </button>`
-    )).join("") || `<p>Nenhum modelo encontrado para ${state.activeLineCount} linhas. Adicione .mogrt/.cgt/.aep nesta pasta.</p>`;
+      );
+    }).join("") || `<p>Nenhum modelo encontrado para ${state.activeLineCount} linhas. Adicione .mogrt/.cgt/.aep nesta pasta.</p>`;
     document.querySelectorAll("[data-template-id]").forEach(button => {
       button.addEventListener("click", () => {
         state.activeTemplateId = button.dataset.templateId;

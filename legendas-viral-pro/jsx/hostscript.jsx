@@ -96,16 +96,118 @@ function LVP_markerFallback(seq, item, warnings) {
 
 function LVP_applyPremiereItem(seq, item, warnings) {
   var templateFile = item.template && item.template.file ? File(item.template.file) : null;
-  if (templateFile && templateFile.exists && seq.importMGT) {
+  if (!templateFile || !templateFile.exists) return LVP_markerFallback(seq, item, warnings);
+
+  var ext = String(templateFile.name).split(".").pop().toLowerCase();
+  if (ext === "mogrt" && seq.importMGT) {
     try {
       var ticks = LVP_secondsToTicks(item.start);
       seq.importMGT(templateFile.fsName, ticks, 0, 0);
+      LVP_applyPremiereSfx(seq, item, warnings);
       return true;
     } catch (err) {
       warnings.push("ImportMGT falhou no item " + item.id + ": " + err.message);
     }
   }
+
+  if (ext === "cgt" || ext === "cga") {
+    try {
+      var imported = LVP_importProjectItem(templateFile.fsName, warnings);
+      if (imported) {
+        var track = LVP_firstVideoTrack(seq);
+        if (track && track.overwriteClip) {
+          track.overwriteClip(imported, LVP_secondsToTicks(item.start));
+          LVP_applyPremiereSfx(seq, item, warnings);
+          return true;
+        }
+        warnings.push("Importei o modelo, mas nao achei trilha de video disponivel.");
+      }
+    } catch (legacyErr) {
+      warnings.push("Aplicacao de CGT/CGA falhou no item " + item.id + ": " + legacyErr.message);
+    }
+  }
+
   return LVP_markerFallback(seq, item, warnings);
+}
+
+function LVP_firstVideoTrack(seq) {
+  try {
+    if (!seq.videoTracks || seq.videoTracks.numTracks < 1) return null;
+    for (var i = seq.videoTracks.numTracks - 1; i >= 0; i--) {
+      var track = seq.videoTracks[i];
+      if (track) return track;
+    }
+  } catch (err) {}
+  return null;
+}
+
+function LVP_firstAudioTrack(seq) {
+  try {
+    if (!seq.audioTracks || seq.audioTracks.numTracks < 1) return null;
+    for (var i = 0; i < seq.audioTracks.numTracks; i++) {
+      var track = seq.audioTracks[i];
+      if (track) return track;
+    }
+  } catch (err) {}
+  return null;
+}
+
+function LVP_importProjectItem(filePath, warnings) {
+  var file = File(filePath);
+  if (!file.exists) return null;
+  var before = [];
+  LVP_collectProjectItems(app.project.rootItem, before);
+  app.project.importFiles([file.fsName], true, app.project.rootItem, false);
+  var after = [];
+  LVP_collectProjectItems(app.project.rootItem, after);
+  for (var i = 0; i < after.length; i++) {
+    if (!LVP_arrayContains(before, after[i])) return after[i];
+  }
+  var found = LVP_findProjectItemByName(app.project.rootItem, file.name);
+  if (!found) warnings.push("Arquivo importado, mas item nao encontrado no projeto: " + file.name);
+  return found;
+}
+
+function LVP_collectProjectItems(parent, list) {
+  if (!parent || !parent.children) return;
+  for (var i = 0; i < parent.children.numItems; i++) {
+    var child = parent.children[i];
+    list.push(child);
+    LVP_collectProjectItems(child, list);
+  }
+}
+
+function LVP_arrayContains(list, item) {
+  for (var i = 0; i < list.length; i++) if (list[i] === item) return true;
+  return false;
+}
+
+function LVP_findProjectItemByName(parent, name) {
+  if (!parent || !parent.children) return null;
+  for (var i = 0; i < parent.children.numItems; i++) {
+    var child = parent.children[i];
+    if (child && child.name === name) return child;
+    var nested = LVP_findProjectItemByName(child, name);
+    if (nested) return nested;
+  }
+  return null;
+}
+
+function LVP_applyPremiereSfx(seq, item, warnings) {
+  if (!item.sfx || !seq) return false;
+  try {
+    var audioFile = File(item.sfx);
+    if (!audioFile.exists) return false;
+    var imported = LVP_importProjectItem(audioFile.fsName, warnings);
+    var track = LVP_firstAudioTrack(seq);
+    if (imported && track && track.overwriteClip) {
+      track.overwriteClip(imported, LVP_secondsToTicks(item.start));
+      return true;
+    }
+  } catch (err) {
+    warnings.push("SFX falhou no item " + item.id + ": " + err.message);
+  }
+  return false;
 }
 
 function LVP_addAeTextLayer(comp, item, payload, warnings) {

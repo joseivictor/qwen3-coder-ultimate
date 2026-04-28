@@ -211,7 +211,7 @@ button.full { width: 100%; }
 }
 
 .template-card {
-  min-height: 96px;
+  min-height: 132px;
   display: grid;
   gap: 6px;
   align-content: space-between;
@@ -223,6 +223,15 @@ button.full { width: 100%; }
 .template-card.active { border-color: var(--brand-2); box-shadow: 0 0 0 2px rgba(34,211,238,.12); }
 .template-card strong { font-size: 12px; }
 .template-card small { color: var(--muted); line-height: 1.35; }
+.template-thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  background-size: cover;
+  background-position: center;
+  background-color: rgba(255,255,255,.08);
+}
 
 .caption-list {
   max-height: 360px;
