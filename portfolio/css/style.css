@@ -3329,3 +3329,32 @@ footer,
   border-color: color-mix(in srgb, var(--service-accent) 28%, transparent) !important;
   background: var(--service-soft) !important;
 }
+
+@media (max-width: 720px) {
+  input,
+  textarea,
+  select,
+  button {
+    font-size: 16px !important;
+  }
+  .quote-field,
+  .ref-actions input,
+  .bf-item input[type=text],
+  .mix-row input {
+    font-size: 16px !important;
+  }
+}
+
+#tab-orcamento {
+  background:
+    radial-gradient(circle at 18% 10%, color-mix(in srgb, var(--service-accent) 28%, transparent), transparent 34%),
+    radial-gradient(circle at 90% 18%, color-mix(in srgb, var(--service-accent-2) 22%, transparent), transparent 38%),
+    linear-gradient(180deg, color-mix(in srgb, var(--service-bg) 74%, #020916), #020916 78%) !important;
+  transition: background .35s ease;
+}
+#tab-orcamento .budget-redesign .budget-calc,
+#tab-orcamento .budget-summary-panel {
+  box-shadow:
+    0 24px 80px color-mix(in srgb, var(--service-accent) 18%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--service-accent) 12%, transparent) !important;
+}

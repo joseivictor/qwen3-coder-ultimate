@@ -500,6 +500,18 @@ function wireQuoteForm(mode) {
   });
 }
 
+function monthlyBriefingNoteHTML(mode) {
+  const cfg = STATE.config?.budget || {};
+  const minMonthly = parseInt(cfg.monthly_min_videos, 10) || 8;
+  const discount = Math.max(0, Math.min(90, parseFloat(cfg.monthly_discount_percent) || 20));
+  if ((STATE.budget.qty || 0) < minMonthly) return '';
+  const label = mode === 'vsl' ? 'VSL' : mode === 'curso' ? 'curso' : 'motion';
+  return `
+    <div class="monthly-cta">
+      Mensal recorrente tambem vale para ${label}: <strong>${discount}% de desconto</strong> apos fechar escopo e valor-base.
+    </div>`;
+}
+
 function roundMoney(n) {
   return Math.round(n / 10) * 10;
 }
@@ -619,7 +631,8 @@ function monthlyRecommendationsHTML() {
   const couponActive = coupon.active && (parseFloat(coupon.percent) || 0) > 0;
   const couponPercent = Math.max(0, Math.min(90, parseFloat(coupon.percent) || 0));
   const couponCode = (coupon.code || 'CUPOM').trim();
-  const canAutoMonthly = (STATE.budget.format === 'reel') || (STATE.budget.format === 'longform' && STATE.budget.longType === 'youtube');
+  const mode = budgetMode();
+  const needsBriefing = ['vsl', 'curso', 'motion'].includes(mode);
   const totals = currentBudgetTotals();
   const avulso = totals.total;
   const mensalBase = roundMoney(avulso * (1 - discount / 100));
@@ -643,22 +656,26 @@ function monthlyRecommendationsHTML() {
       <a class="plan-cta" href="${waLink('Ola Jose! Quero montar um plano sob consulta com varios tipos de video. Pode me ajudar?')}" target="_blank">Montar sob consulta</a>
     </div>`;
 
-  if (canAutoMonthly && qty >= minMonthly && avulso > 0) {
-    const unitLabel = STATE.budget.format === 'reel' ? 'reels' : 'videos 16:9';
+  if (qty >= minMonthly) {
+    const unitLabel = mode === 'reel' ? 'reels' : mode === 'youtube' ? 'videos YouTube' : mode === 'vsl' ? 'VSLs' : mode === 'curso' ? 'aulas/videos de curso' : 'pecas de motion';
+    const displayPrice = needsBriefing || avulso <= 0 ? 'Sob consulta' : `R$${formatNum(mensal)}`;
+    const savingText = needsBriefing
+      ? `A regra mensal aplica ${discount}% de desconto depois que o escopo e o valor-base forem fechados.`
+      : `Avulso daria R$${formatNum(avulso)}. Mensal aplica ${discount}% de desconto em cima do total atual.${couponActive ? ` Cupom ${escapeHtml(couponCode)} aplica mais ${couponPercent}%.` : ''}`;
     return `
       <div class="plan-card highlight">
         <span class="plan-badge">Recomendado</span>
         <div class="nm">Mensal recorrente</div>
         <div class="pr">
-          <span class="num">R$${formatNum(mensal)}</span>
+          <span class="num">${displayPrice}</span>
           <span class="per">/mes - ${qty} ${unitLabel}</span>
         </div>
-        <div class="plan-saving">Avulso daria R$${formatNum(avulso)}. Mensal aplica ${discount}% de desconto em cima do total atual.${couponActive ? ` Cupom ${escapeHtml(couponCode)} aplica mais ${couponPercent}%.` : ''}</div>
+        <div class="plan-saving">${savingText}</div>
         <ul>
-          <li>${summary}</li>
+          <li>${needsBriefing ? 'Escopo fechado por briefing antes do valor final' : summary}</li>
           ${benefits.map(item => `<li>${escapeHtml(item)}</li>`).join('')}
         </ul>
-        <a class="plan-cta" href="${waLink(`Ola Jose! Quero fechar mensal recorrente com ${qty} ${unitLabel}: ${summary}. Avulso R$${formatNum(avulso)}, mensal com ${discount}% off R$${formatNum(mensal)}.`)}" target="_blank">Quero esse mensal</a>
+        <a class="plan-cta" href="${waLink(`Ola Jose! Quero fechar mensal recorrente com ${qty} ${unitLabel}. Quero aplicar a regra de ${discount}% de desconto mensal ${needsBriefing ? 'depois do briefing.' : `em cima do valor atual (${summary}).`}`)}" target="_blank">Quero esse mensal</a>
       </div>${consultation}`;
   }
 
@@ -1086,6 +1103,7 @@ function refreshPrice() {
   if (fmt.id === 'motion') {
     $('#priceOut').innerHTML = `
       ${quoteFormHTML('motion', 'Motion design precisa de briefing visual.', 'Arte animada, UI style, vinheta, lettering, explainer e animacao de produto mudam completamente o escopo. Me mande estilo, assets e duracao.')}
+      ${monthlyBriefingNoteHTML('motion')}
     `;
     wireQuoteForm('motion');
     return;
@@ -1098,6 +1116,7 @@ function refreshPrice() {
   if (fmt.id === 'longform' && STATE.budget.longType === 'curso') {
     $('#priceOut').innerHTML = `
       ${quoteFormHTML('curso', 'Curso precisa de conversa de escopo.', 'Aqui o preco depende de horas gravadas, quantidade de aulas, modulos, audio, slides, tela, identidade, revisoes e formato de entrega.')}
+      ${monthlyBriefingNoteHTML('curso')}
     `;
     wireQuoteForm('curso');
     return;
@@ -1106,6 +1125,7 @@ function refreshPrice() {
   if (fmt.id === 'longform' && STATE.budget.longType === 'vsl') {
     $('#priceOut').innerHTML = `
       ${quoteFormHTML('vsl', 'VSL depende da oferta antes do preco.', 'VSL/direct response pode ser para lancamento, perpétuo, trafego pago ou venda direta. Preciso entender promessa, prova, roteiro, referencia e material bruto antes de precificar.')}
+      ${monthlyBriefingNoteHTML('vsl')}
     `;
     wireQuoteForm('vsl');
     return;
