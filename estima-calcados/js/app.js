@@ -56,6 +56,8 @@ const searchInput = document.querySelector("#searchInput");
 const sortSelect = document.querySelector("#sortSelect");
 const productDialog = document.querySelector("#productDialog");
 const productDialogContent = document.querySelector("#productDialogContent");
+const imageZoomDialog = document.querySelector("#imageZoomDialog");
+const imageZoom = document.querySelector("#imageZoom");
 const cartDrawer = document.querySelector("#cartDrawer");
 const cartItems = document.querySelector("#cartItems");
 const cartCount = document.querySelector("#cartCount");
@@ -221,9 +223,10 @@ function openProduct(id) {
 function renderProductDialog() {
   productDialogContent.innerHTML = `
     <div class="product-detail">
-      <div class="detail-media">
+      <button class="detail-media" type="button" data-zoom-product aria-label="Ver foto em tela cheia">
         <img src="${activeProduct.image}" alt="${activeProduct.name}">
-      </div>
+        <span>Ver em tela cheia</span>
+      </button>
       <div class="detail-copy">
         <span class="tag">${activeProduct.gender} / ${activeProduct.category}</span>
         <h2>${activeProduct.name}</h2>
@@ -265,11 +268,21 @@ function renderProductDialog() {
     });
   });
 
+  productDialogContent.querySelector("[data-zoom-product]").addEventListener("click", () => {
+    openImageZoom(activeProduct);
+  });
+
   productDialogContent.querySelector("[data-add-detail]").addEventListener("click", () => {
     addToCart(activeProduct, activeSize, activeQty);
     productDialog.close();
     openCart();
   });
+}
+
+function openImageZoom(product) {
+  imageZoom.src = product.image;
+  imageZoom.alt = product.name;
+  imageZoomDialog.showModal();
 }
 
 function addToCart(product, size, qty) {
@@ -419,9 +432,14 @@ function closeCart() {
 document.querySelectorAll("[data-open-cart]").forEach(button => button.addEventListener("click", openCart));
 document.querySelector("[data-close-cart]").addEventListener("click", closeCart);
 document.querySelector("[data-close-product]").addEventListener("click", () => productDialog.close());
+document.querySelector("[data-close-zoom]").addEventListener("click", () => imageZoomDialog.close());
 document.querySelector("[data-featured-buy]").addEventListener("click", () => {
   const featured = products.find(product => product.name === "Sapato Casual Masculino Conhaque Leave");
   openProduct(featured.id);
+});
+
+imageZoomDialog.addEventListener("click", event => {
+  if (event.target === imageZoomDialog) imageZoomDialog.close();
 });
 
 cartDrawer.addEventListener("click", event => {
