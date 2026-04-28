@@ -276,6 +276,56 @@
     // o app.js cuida do .exiting class — não precisamos de outra animação
   }
 
+  /* -------------------- AWARDS-STYLE REVEAL + PROGRESS -------------------- */
+  function setupEditorialSystem() {
+    const progress = document.querySelector('.soty-progress span');
+    const railStrong = document.querySelector('.studio-rail strong');
+    const tabButtons = Array.from(document.querySelectorAll('.tabs button'));
+
+    function updateProgress() {
+      if (progress) {
+        const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+        progress.style.transform = `scaleX(${Math.min(1, scrollY / max)})`;
+      }
+      if (railStrong) {
+        const active = document.querySelector('.tabs button.active')?.textContent?.trim() || 'Portfolio';
+        railStrong.textContent = active.toUpperCase();
+      }
+    }
+
+    addEventListener('scroll', updateProgress, { passive: true });
+    addEventListener('resize', updateProgress, { passive: true });
+    tabButtons.forEach(btn => btn.addEventListener('click', () => setTimeout(updateProgress, 80)));
+    updateProgress();
+
+    if (reduced) return;
+    const revealTargets = [
+      '.video-card',
+      '.profile-proof',
+      '.filter-chips',
+      '.longform-showcase',
+      '.budget-calc',
+      '.budget-summary-panel',
+      '.sobre-grid',
+      '.offer-card',
+      '.expert-tile'
+    ].join(',');
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: .12, rootMargin: '0px 0px -8% 0px' });
+
+    document.querySelectorAll(revealTargets).forEach((el, index) => {
+      el.classList.add('soty-reveal');
+      el.style.setProperty('--reveal-delay', `${Math.min(index % 8, 6) * 55}ms`);
+      io.observe(el);
+    });
+  }
+
   /* -------------------- KONAMI EASTER EGG -------------------- */
   const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
   let konamiIdx = 0;
@@ -635,6 +685,7 @@
   function bootEffects() {
     enhanceHero();
     enhancePortal();
+    setupEditorialSystem();
     renderStatsHero();
     setupQRTrigger();
     // Mantem o urso no cantinho: vivo, mas sem atravessar a UI nem resetar o sono.
