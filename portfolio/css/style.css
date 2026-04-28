@@ -3923,3 +3923,399 @@ footer {
 .video-card.horizontal-card > video {
   object-fit: cover !important;
 }
+
+/* Budget UX reset: menos vitrine, mais decisao. */
+#tab-orcamento {
+  --budget-line: rgba(191, 228, 255, .14);
+  --budget-ink: #f5fbff;
+  --budget-muted: #9db4ca;
+  --money-panel: rgba(3, 13, 25, .94);
+  --money-soft: rgba(142, 220, 255, .08);
+}
+#tab-orcamento[data-budget-style="simples"] {
+  --money-accent: #8edcff;
+  --money-accent-2: #4dbdff;
+  --money-panel: rgba(3, 17, 31, .96);
+  --money-soft: rgba(142, 220, 255, .09);
+}
+#tab-orcamento[data-budget-style="medio"] {
+  --money-accent: #9ebcff;
+  --money-accent-2: #5f8cff;
+  --money-panel: rgba(6, 14, 38, .96);
+  --money-soft: rgba(158, 188, 255, .09);
+}
+#tab-orcamento[data-budget-style="avancado"] {
+  --money-accent: #cdbdff;
+  --money-accent-2: #8068ff;
+  --money-panel: rgba(15, 12, 43, .96);
+  --money-soft: rgba(205, 189, 255, .10);
+}
+#tab-orcamento .budget-atmosphere,
+#tab-orcamento .budget-calc::after,
+#tab-orcamento .budget-summary-panel::after,
+#tab-orcamento .price-out::after {
+  display: none !important;
+}
+#tab-orcamento .budget-hero-clean {
+  max-width: 780px;
+  margin-top: clamp(1.5rem, 4vw, 3.2rem);
+}
+#tab-orcamento .budget-kicker {
+  display: inline-flex;
+  margin-bottom: .7rem;
+  color: var(--money-accent);
+  font-size: .78rem;
+  font-weight: 900;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+#tab-orcamento .budget-hero-clean .hero-headline {
+  max-width: 11ch !important;
+  margin: 0 0 1rem !important;
+  font-size: clamp(2.7rem, 6.8vw, 5.4rem) !important;
+  line-height: .86 !important;
+}
+#tab-orcamento .budget-hero-clean .hero-headline::after {
+  width: min(150px, 28vw);
+}
+#tab-orcamento .budget-hero-clean .hero-sub {
+  max-width: 62ch !important;
+  font-size: clamp(.98rem, 1.25vw, 1.08rem) !important;
+  line-height: 1.65 !important;
+}
+#tab-orcamento .fmt-toggle {
+  margin-top: 1.25rem !important;
+  padding: .42rem !important;
+  border: 1px solid var(--budget-line) !important;
+  background: rgba(2, 9, 18, .72) !important;
+  box-shadow: none !important;
+}
+#tab-orcamento .fmt-tab {
+  min-height: 58px;
+  padding: .68rem .82rem !important;
+  border-radius: 14px !important;
+}
+#tab-orcamento .fmt-tab.active {
+  background: linear-gradient(135deg, var(--money-accent), var(--money-accent-2)) !important;
+  color: #04111f !important;
+}
+#tab-orcamento .fmt-tab.active small,
+#tab-orcamento .fmt-tab.active .ic {
+  color: rgba(4, 17, 31, .72) !important;
+}
+#tab-orcamento .long-type-picker {
+  margin-top: .8rem !important;
+}
+#tab-orcamento .budget-redesign {
+  align-items: start;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px) !important;
+  gap: clamp(.9rem, 2vw, 1.35rem) !important;
+  margin-top: .9rem !important;
+}
+#tab-orcamento .budget-redesign .budget-calc,
+#tab-orcamento .budget-summary-panel,
+#tab-orcamento .price-out,
+#tab-orcamento .budget-more {
+  border: 1px solid var(--budget-line) !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.01)),
+    var(--money-panel) !important;
+  box-shadow: 0 18px 58px rgba(0,0,0,.2) !important;
+}
+#tab-orcamento .budget-redesign .budget-calc {
+  padding: clamp(1rem, 2vw, 1.45rem) !important;
+  border-radius: 18px !important;
+}
+#tab-orcamento .budget-summary-panel {
+  top: 92px;
+  border-radius: 18px !important;
+  padding: clamp(1rem, 1.8vw, 1.3rem) !important;
+}
+#tab-orcamento #budgetTitle {
+  margin: .25rem 0 .35rem !important;
+  font-size: clamp(1.35rem, 2.2vw, 1.9rem) !important;
+  letter-spacing: -.035em !important;
+  color: var(--budget-ink) !important;
+}
+#tab-orcamento #budgetSub,
+#tab-orcamento .budget-summary-panel p,
+#tab-orcamento .style-option .ds,
+#tab-orcamento .budget-more summary small {
+  color: var(--budget-muted) !important;
+}
+#tab-orcamento .qty-control {
+  margin: .9rem 0 .58rem !important;
+  padding: .72rem !important;
+  border: 1px solid rgba(191, 228, 255, .11);
+  border-radius: 16px;
+  background: rgba(255,255,255,.025);
+}
+#tab-orcamento .qty-display {
+  min-width: 112px;
+  padding: .35rem .7rem;
+  font-size: clamp(2rem, 4vw, 3rem) !important;
+  line-height: 1;
+}
+#tab-orcamento .qty-display small {
+  color: var(--budget-muted) !important;
+  font-size: .75rem !important;
+}
+#tab-orcamento .qty-btn {
+  width: 46px !important;
+  height: 46px !important;
+  border-radius: 12px !important;
+  background: rgba(255,255,255,.05) !important;
+  box-shadow: none !important;
+}
+#tab-orcamento .qty-slider {
+  margin-bottom: 1rem !important;
+}
+#tab-orcamento .mini-label {
+  margin: 1rem 0 .55rem !important;
+  color: var(--budget-ink) !important;
+  font-size: .78rem !important;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+#tab-orcamento .style-picker {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: .55rem !important;
+}
+#tab-orcamento .style-option {
+  min-height: 92px;
+  padding: .78rem !important;
+  border-radius: 14px !important;
+  border-color: rgba(191, 228, 255, .12) !important;
+  background: rgba(255,255,255,.025) !important;
+  box-shadow: none !important;
+}
+#tab-orcamento .style-option.active {
+  background: var(--money-soft) !important;
+  border-color: color-mix(in srgb, var(--money-accent) 70%, transparent) !important;
+}
+#tab-orcamento .style-dot {
+  display: block;
+  width: 10px;
+  height: 10px;
+  margin-bottom: .72rem;
+  border-radius: 999px;
+  box-shadow: 0 0 20px currentColor;
+}
+#tab-orcamento .style-option .nm {
+  color: var(--budget-ink) !important;
+  font-size: .96rem;
+  font-weight: 900;
+}
+#tab-orcamento .price-out {
+  margin-top: 1rem !important;
+  padding: clamp(1rem, 2vw, 1.35rem) !important;
+  border-radius: 16px !important;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--money-accent) 10%, transparent), transparent 48%),
+    rgba(1, 7, 14, .88) !important;
+}
+#tab-orcamento .price-tier-badge {
+  display: inline-flex;
+  margin-bottom: .55rem;
+  color: var(--money-accent);
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+#tab-orcamento .price-out .row {
+  padding: .45rem 0 !important;
+  border-bottom: 1px solid rgba(191, 228, 255, .07);
+  color: #cfe0ef !important;
+}
+#tab-orcamento .price-out .row.total {
+  margin-top: .55rem !important;
+  padding-top: .8rem !important;
+  border-top: 1px solid rgba(191, 228, 255, .18) !important;
+  border-bottom: 0;
+}
+#tab-orcamento .price-out .row.total .v {
+  font-size: clamp(1.8rem, 4vw, 2.6rem) !important;
+}
+#tab-orcamento .monthly-cta,
+#tab-orcamento .coupon-row {
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--money-accent) 24%, transparent);
+  background: var(--money-soft);
+  color: #d9efff !important;
+}
+#tab-orcamento .budget-more {
+  margin-top: .72rem;
+  border-radius: 16px !important;
+  overflow: clip;
+}
+#tab-orcamento .budget-more summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  min-height: 58px;
+  padding: .9rem 1rem;
+  cursor: pointer;
+  list-style: none;
+}
+#tab-orcamento .budget-more summary::-webkit-details-marker {
+  display: none;
+}
+#tab-orcamento .budget-more summary span {
+  color: var(--budget-ink);
+  font-weight: 900;
+}
+#tab-orcamento .budget-more summary::after {
+  content: "+";
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: rgba(255,255,255,.05);
+  color: var(--money-accent);
+  font-weight: 900;
+}
+#tab-orcamento .budget-more[open] summary::after {
+  content: "-";
+}
+#tab-orcamento .style-mix-box {
+  margin: 0 !important;
+  padding: 0 1rem 1rem !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+#tab-orcamento .budget-extra-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: .9rem;
+  padding: 0 1rem 1rem;
+}
+#tab-orcamento .ref-btn,
+#tab-orcamento .btn-wa,
+#tab-orcamento .plan-cta {
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, var(--money-accent), var(--money-accent-2)) !important;
+  color: #04111f !important;
+  box-shadow: none !important;
+}
+#tab-orcamento .ref-btn.alt {
+  background: rgba(255,255,255,.055) !important;
+  color: #d8ecff !important;
+}
+#tab-orcamento .plans {
+  display: grid;
+  gap: .72rem;
+}
+#tab-orcamento .plan-card {
+  border-radius: 15px !important;
+  background: rgba(255,255,255,.025) !important;
+  box-shadow: none !important;
+}
+#tab-orcamento .plan-card.highlight {
+  border-color: color-mix(in srgb, var(--money-accent) 55%, transparent) !important;
+  background: var(--money-soft) !important;
+}
+#tab-orcamento .plan-card ul {
+  margin-top: .8rem;
+}
+#tab-orcamento .plan-card ul li {
+  color: #b8ccde !important;
+}
+#tab-orcamento .quote-form {
+  display: grid;
+  gap: .7rem;
+}
+#tab-orcamento .quote-form input,
+#tab-orcamento .quote-form textarea,
+#tab-orcamento #bfDeadline,
+#tab-orcamento #refInput {
+  min-height: 46px;
+  border-radius: 12px !important;
+  border: 1px solid rgba(191, 228, 255, .13) !important;
+  background: rgba(255,255,255,.035) !important;
+  color: #f5fbff !important;
+}
+
+@media (max-width: 980px) {
+  #tab-orcamento .budget-redesign {
+    grid-template-columns: 1fr !important;
+  }
+  #tab-orcamento .budget-summary-panel {
+    position: static !important;
+  }
+}
+
+@media (max-width: 680px) {
+  #tab-orcamento .budget-hero-clean .hero-headline {
+    font-size: clamp(2.25rem, 11.5vw, 3.35rem) !important;
+  }
+  #tab-orcamento .budget-hero-clean {
+    margin-top: 1rem;
+  }
+  #tab-orcamento .budget-kicker {
+    margin-bottom: .48rem;
+    font-size: .7rem;
+  }
+  #tab-orcamento .budget-hero-clean .hero-sub {
+    font-size: .96rem !important;
+    line-height: 1.45 !important;
+  }
+  #tab-orcamento .style-picker,
+  #tab-orcamento .budget-extra-grid {
+    grid-template-columns: 1fr !important;
+  }
+  #tab-orcamento .fmt-toggle {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: .35rem !important;
+    padding: .34rem !important;
+  }
+  #tab-orcamento .fmt-tab {
+    display: grid !important;
+    place-items: center;
+    gap: .18rem !important;
+    min-height: 72px;
+    padding: .55rem .35rem !important;
+    text-align: center;
+  }
+  #tab-orcamento .fmt-tab .ic {
+    font-size: 1.22rem !important;
+    line-height: 1;
+  }
+  #tab-orcamento .fmt-tab .lb strong {
+    display: block;
+    font-size: .9rem !important;
+    line-height: 1.05;
+  }
+  #tab-orcamento .fmt-tab .lb small {
+    display: none !important;
+  }
+  #tab-orcamento .style-option {
+    min-height: 0;
+  }
+  #tab-orcamento .style-option .ds {
+    font-size: .78rem !important;
+  }
+  #tab-orcamento .budget-more summary {
+    align-items: flex-start;
+    flex-direction: column;
+    position: relative;
+    padding-right: 3.2rem;
+  }
+  #tab-orcamento .budget-more summary::after {
+    position: absolute;
+    right: .85rem;
+    top: .82rem;
+  }
+  #tab-orcamento .price-out .row {
+    align-items: flex-start;
+    display: grid;
+    gap: .22rem;
+  }
+  #tab-orcamento .price-out .row .v {
+    justify-self: start;
+  }
+}

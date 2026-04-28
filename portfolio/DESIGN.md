@@ -27,6 +27,13 @@ Premium editor portfolio with a cinematic studio feel: deep navy canvas, crisp b
 - Avoid cursor gimmicks, confetti, excessive glows and multi-color mood shifts.
 - Mobile gets calmer motion and stable spacing.
 
+## Budget UX
+
+- The budget screen is a decision tool, not another portfolio hero.
+- Show format, quantity, style and price before advanced details.
+- Keep mixed-style distribution, references and briefing behind progressive disclosure.
+- The negotiation area must feel calm enough for the client to think.
+
 ## What Not To Do
 
 - Do not use red/green/purple product moods in the portfolio UI.

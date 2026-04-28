@@ -711,7 +711,8 @@ function setupBudget() {
 
   const stylesHTML = STATE.config.edit_levels.map(l => `
     <button class="style-option ${STATE.budget.style===l.id?'active':''}" data-style="${l.id}">
-      <div class="nm" style="color:${l.color}">${l.label}</div>
+      <span class="style-dot" style="background:${l.color}"></span>
+      <div class="nm">${l.label}</div>
       <div class="ds">${l.description}</div>
     </button>`).join('');
 
@@ -753,8 +754,11 @@ function setupBudget() {
   const plansHTML = monthlyRecommendationsHTML();
 
   root.innerHTML = `
-    <h2 class="hero-headline">Monte sua<br>proposta.</h2>
-    <p class="hero-sub">Escolha formato, volume e nivel de edicao. Quando o projeto precisa de contexto, o site vira briefing direto para o WhatsApp.</p>
+    <div class="budget-hero-clean">
+      <span class="budget-kicker">Orcamento rapido</span>
+      <h2 class="hero-headline">Monte sua<br>proposta.</h2>
+      <p class="hero-sub">Escolha o formato, o volume e o nivel de edicao. O valor aparece limpo; projetos sob consulta viram briefing direto para o WhatsApp.</p>
+    </div>
 
     <div class="fmt-toggle">${formatTabs}</div>
     ${longTypesHTML}
@@ -780,46 +784,63 @@ function setupBudget() {
 
         <h4 class="mini-label">Estilo de edição</h4>
         <div class="style-picker">${stylesHTML}</div>
-        <div class="style-mix-box">
+        <div class="price-out" id="priceOut"></div>
+
+        <details class="budget-more">
+          <summary>
+            <span>Distribuicao inteligente</span>
+            <small>Use quando o pacote mistura estilos.</small>
+          </summary>
+          <div class="style-mix-box">
           <div class="mix-head">
             <strong>Estilos do pacote</strong>
             <span id="mixTotalStatus"></span>
           </div>
           <div class="mix-presets">${presetHTML}</div>
           <div class="mix-grid">${mixHTML}</div>
-        </div>
+          </div>
+        </details>
 
-        <h4 class="mini-label">Referências <span class="opt">(opcional, mas ajuda)</span></h4>
-        <div id="refList" class="ref-list"></div>
-        <div class="ref-actions">
-          <input type="url" id="refInput" placeholder="cola um link do Instagram aqui">
-          <button class="ref-btn" id="addRefURL" type="button">+ Adicionar link</button>
-          <button class="ref-btn alt" id="pickFromPort" type="button">📁 Do meu portfólio</button>
-        </div>
-
-        <h4 class="mini-label">Briefing rápido</h4>
-        <div class="briefing-grid">
-          <div class="bf-item">
-            <span class="bf-q">Vídeo já gravado?</span>
-            <div class="bf-pills">
-              <button class="bf-pill" data-rec="yes" type="button">Sim, tá pronto</button>
-              <button class="bf-pill" data-rec="partial" type="button">Algumas cenas</button>
-              <button class="bf-pill" data-rec="no" type="button">Ainda não</button>
+        <details class="budget-more">
+          <summary>
+            <span>Referencias e briefing</span>
+            <small>Opcional, mas deixa a resposta mais precisa.</small>
+          </summary>
+          <div class="budget-extra-grid">
+            <div>
+              <h4 class="mini-label">Referencias</h4>
+              <div id="refList" class="ref-list"></div>
+              <div class="ref-actions">
+                <input type="url" id="refInput" placeholder="cola um link do Instagram aqui">
+                <button class="ref-btn" id="addRefURL" type="button">Adicionar link</button>
+                <button class="ref-btn alt" id="pickFromPort" type="button">Do portfolio</button>
+              </div>
+            </div>
+            <div>
+              <h4 class="mini-label">Briefing rapido</h4>
+              <div class="briefing-grid">
+                <div class="bf-item">
+                  <span class="bf-q">Video ja gravado?</span>
+                  <div class="bf-pills">
+                    <button class="bf-pill" data-rec="yes" type="button">Sim, pronto</button>
+                    <button class="bf-pill" data-rec="partial" type="button">Algumas cenas</button>
+                    <button class="bf-pill" data-rec="no" type="button">Ainda nao</button>
+                  </div>
+                </div>
+                <div class="bf-item">
+                  <span class="bf-q">Quando precisa pronto?</span>
+                  <input type="text" id="bfDeadline" placeholder="Ex: sexta, 15/06 ou sem pressa">
+                </div>
+              </div>
             </div>
           </div>
-          <div class="bf-item">
-            <span class="bf-q">Quando precisa pronto?</span>
-            <input type="text" id="bfDeadline" placeholder="Ex: 'até sexta', '15/06', 'sem pressa'">
-          </div>
-        </div>
-
-        <div class="price-out" id="priceOut"></div>
+        </details>
       </div>
 
       <aside class="budget-summary-panel">
-        <div class="budget-step-label">Resumo</div>
-        <h3 class="section-title" style="margin-top:0;">Recomendacao mensal</h3>
-        <p style="font-size:.88rem; color:var(--ink-2); margin-bottom:1.2rem;">So aparece plano quando o volume faz sentido. O desconto usa o valor real do formato e do estilo escolhido.</p>
+        <div class="budget-step-label">Melhor caminho</div>
+        <h3 class="section-title" style="margin-top:0;">Plano ou avulso?</h3>
+        <p style="font-size:.88rem; color:var(--ink-2); margin-bottom:1.2rem;">A recomendacao muda conforme formato, quantidade e estilo. Mensal so aparece quando existe desconto real.</p>
         <div class="plans">${plansHTML}</div>
       </aside>
     </div>
@@ -904,6 +925,7 @@ function setupBudget() {
     STATE.budget.styleMix = mix;
     const main = Object.entries(mix).sort((a,b) => b[1] - a[1])[0];
     if (main?.[0]) STATE.budget.style = main[0];
+    root.dataset.budgetStyle = STATE.budget.style || 'medio';
     $$('.style-option', root).forEach(x => x.classList.toggle('active', x.dataset.style === STATE.budget.style));
     updateMixStatus();
     refreshPrice();
