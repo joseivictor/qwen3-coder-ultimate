@@ -299,6 +299,21 @@ function updateCartQty(key, amount) {
   persistCart();
 }
 
+function updateCartSize(key, size) {
+  const current = cart.find(item => item.key === key);
+  if (!current || current.size === size) return;
+  const newKey = `${current.id}-${size}`;
+  const sameProduct = cart.find(item => item.key === newKey);
+  if (sameProduct) {
+    sameProduct.qty += current.qty;
+    cart = cart.filter(item => item.key !== key);
+  } else {
+    current.key = newKey;
+    current.size = size;
+  }
+  persistCart();
+}
+
 function persistCart() {
   localStorage.setItem("mj-estima-cart", JSON.stringify(cart));
   renderCart();
@@ -324,16 +339,34 @@ function renderCart() {
         <h3>${item.name}</h3>
         <p>Tam. ${item.size} / ${item.qty} un. / ${formatter.format(item.price * item.qty)}</p>
       </div>
+      <div class="cart-size-edit">
+        <span>Tamanho</span>
+        <div class="cart-size-grid">
+          ${(products.find(product => product.id === item.id)?.sizes || []).map(size => `
+            <button class="${item.size === size ? "active" : ""}" type="button" data-cart-size="${item.key}:${size}">
+              ${size}
+            </button>
+          `).join("")}
+        </div>
+      </div>
       <div class="cart-line-actions">
         <div class="cart-qty" aria-label="Quantidade de ${item.name}">
           <button type="button" data-cart-qty="${item.key}:-1">-</button>
           <span>${item.qty}</span>
           <button type="button" data-cart-qty="${item.key}:1">+</button>
         </div>
+        <button class="edit-line" type="button" data-edit-product="${item.id}">Editar produto</button>
         <button class="remove-line" type="button" data-remove="${item.key}" aria-label="Remover ${item.name}">x</button>
       </div>
     </article>
   `).join("");
+
+  cartItems.querySelectorAll("[data-cart-size]").forEach(button => {
+    button.addEventListener("click", () => {
+      const [key, size] = button.dataset.cartSize.split(":");
+      updateCartSize(key, Number(size));
+    });
+  });
 
   cartItems.querySelectorAll("[data-cart-qty]").forEach(button => {
     button.addEventListener("click", () => {
@@ -344,6 +377,10 @@ function renderCart() {
 
   cartItems.querySelectorAll("[data-remove]").forEach(button => {
     button.addEventListener("click", () => removeFromCart(button.dataset.remove));
+  });
+
+  cartItems.querySelectorAll("[data-edit-product]").forEach(button => {
+    button.addEventListener("click", () => openProduct(Number(button.dataset.editProduct)));
   });
 
   checkoutButton.textContent = "Finalizar pedido";
@@ -384,8 +421,7 @@ document.querySelector("[data-close-cart]").addEventListener("click", closeCart)
 document.querySelector("[data-close-product]").addEventListener("click", () => productDialog.close());
 document.querySelector("[data-featured-buy]").addEventListener("click", () => {
   const featured = products.find(product => product.name === "Sapato Casual Masculino Conhaque Leave");
-  addToCart(featured, 40, 1);
-  openCart();
+  openProduct(featured.id);
 });
 
 cartDrawer.addEventListener("click", event => {
