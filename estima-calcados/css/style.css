@@ -28,13 +28,41 @@ body {
   font-family: "Segoe UI", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.42), rgba(0,0,0,.06) 18%, rgba(255,194,71,.06) 48%, rgba(0,0,0,.28)),
+    repeating-linear-gradient(90deg,
+      rgba(255,248,234,.035) 0 1px,
+      transparent 1px 8px,
+      rgba(0,0,0,.12) 8px 10px,
+      transparent 10px 34px
+    ),
+    repeating-linear-gradient(0deg,
+      rgba(255,194,71,.045) 0 2px,
+      transparent 2px 74px,
+      rgba(0,0,0,.32) 74px 78px,
+      transparent 78px 158px
+    ),
+    linear-gradient(110deg, #080705 0%, #17100a 26%, #261708 52%, #100c08 78%, #050506 100%);
+  opacity: .86;
+}
+
 body::after {
   content: "";
   position: fixed;
   inset: 0;
+  z-index: 0;
   pointer-events: none;
-  opacity: .16;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+  opacity: .22;
+  background:
+    radial-gradient(ellipse at 22% 20%, rgba(240,163,19,.14), transparent 22rem),
+    radial-gradient(ellipse at 78% 8%, rgba(255,194,71,.12), transparent 24rem),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.24'/%3E%3C/svg%3E");
   mix-blend-mode: screen;
 }
 
