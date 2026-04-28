@@ -6,26 +6,27 @@
 (() => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const fine    = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const studioCalm = true;
 
   /* -------------------- BLOB BACKGROUND (SVG) -------------------- */
   const blobSVG = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
       <defs>
         <radialGradient id="g1" cx="30%" cy="20%">
-          <stop offset="0%"  stop-color="#7c3aed" stop-opacity=".95"/>
-          <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+          <stop offset="0%"  stop-color="#0f7bff" stop-opacity=".62"/>
+          <stop offset="100%" stop-color="#0f7bff" stop-opacity="0"/>
         </radialGradient>
         <radialGradient id="g2" cx="80%" cy="30%">
-          <stop offset="0%"  stop-color="#ff3d00" stop-opacity=".85"/>
-          <stop offset="100%" stop-color="#ff3d00" stop-opacity="0"/>
+          <stop offset="0%"  stop-color="#8fd3ff" stop-opacity=".42"/>
+          <stop offset="100%" stop-color="#8fd3ff" stop-opacity="0"/>
         </radialGradient>
         <radialGradient id="g3" cx="50%" cy="80%">
-          <stop offset="0%"  stop-color="#06b6d4" stop-opacity=".75"/>
-          <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
+          <stop offset="0%"  stop-color="#2d64ff" stop-opacity=".36"/>
+          <stop offset="100%" stop-color="#2d64ff" stop-opacity="0"/>
         </radialGradient>
         <radialGradient id="g4" cx="20%" cy="65%">
-          <stop offset="0%"  stop-color="#d4a574" stop-opacity=".55"/>
-          <stop offset="100%" stop-color="#d4a574" stop-opacity="0"/>
+          <stop offset="0%"  stop-color="#d7e8ff" stop-opacity=".18"/>
+          <stop offset="100%" stop-color="#d7e8ff" stop-opacity="0"/>
         </radialGradient>
         <filter id="warp" x="-20%" y="-20%" width="140%" height="140%">
           <feTurbulence type="fractalNoise" baseFrequency="0.005 0.012" numOctaves="2" seed="3">
@@ -60,7 +61,7 @@
   }
 
   /* -------------------- PARTICLES (fireflies) -------------------- */
-  if (!reduced) {
+  if (!studioCalm && !reduced) {
     const pwrap = document.createElement('div');
     pwrap.className = 'particles';
     pwrap.setAttribute('aria-hidden','true');
@@ -82,7 +83,7 @@
   }
 
   /* -------------------- MAGNETIC CURSOR -------------------- */
-  if (fine && !reduced) {
+  if (!studioCalm && fine && !reduced) {
     document.body.classList.add('has-cursor');
     const cur = document.createElement('div');
     cur.className = 'mag-cursor';
@@ -105,7 +106,7 @@
   }
 
   /* -------------------- 3D TILT on .tilt-target / .video-card -------------------- */
-  if (fine && !reduced) {
+  if (!studioCalm && fine && !reduced) {
     document.addEventListener('mousemove', (e) => {
       const card = e.target.closest('.video-card, .plan-card, .stat-card, .offer-card');
       if (!card) return;
@@ -266,7 +267,7 @@
     const portal = document.getElementById('portal');
     const enter  = document.getElementById('enterBtn');
     if (!portal || !enter) return;
-    enter.classList.add('hot');
+    enter.classList.remove('hot');
     // parallax leve no nome
     const name = portal.querySelector('.portal-name');
     if (name) name.setAttribute('data-parallax', '8');
