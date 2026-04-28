@@ -1,6 +1,6 @@
 {
   "name": "legendas-viral-pro",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "private": true,
   "description": "Plugin CEP para Premiere Pro/After Effects com Destaque Automatico Viral.",
   "scripts": {

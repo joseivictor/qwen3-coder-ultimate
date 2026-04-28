@@ -15,16 +15,49 @@
 
   const $ = (id) => document.getElementById(id);
   const log = LVP.Logger;
+  const HOST_TIMEOUT_MS = 9000;
+
+  function persistLog(level, message, data) {
+    try {
+      if (typeof require === "undefined") return;
+      const fs = require("fs");
+      const path = require("path");
+      const base = state.extensionPath || ".";
+      const dir = path.join(base, "logs");
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+      fs.appendFileSync(
+        path.join(dir, "runtime.log"),
+        `[${new Date().toISOString()}] ${level.toUpperCase()} ${message}${data ? " " + JSON.stringify(data) : ""}\n`,
+        "utf8"
+      );
+    } catch (_) {}
+  }
 
   function setLog() {
     $("logOutput").textContent = log.text();
+  }
+
+  function writeLog(level, message, data) {
+    const fn = log[level] || log.info;
+    fn(message, data);
+    persistLog(level, message, data);
+    setLog();
   }
 
   function callHost(functionName, payload) {
     return new Promise(resolve => {
       const raw = payload === undefined ? "" : JSON.stringify(JSON.stringify(payload));
       const script = payload === undefined ? `${functionName}();` : `${functionName}(${raw});`;
+      let done = false;
+      const timer = setTimeout(() => {
+        if (done) return;
+        done = true;
+        resolve({ ok: false, error: `Host nao respondeu em ${HOST_TIMEOUT_MS / 1000}s`, timeout: true, functionName });
+      }, HOST_TIMEOUT_MS);
       cs.evalScript(script, result => {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
         try { resolve(JSON.parse(result)); }
         catch (_) { resolve({ ok: false, error: result || "Resposta host invalida" }); }
       });
@@ -43,11 +76,10 @@
       if (ctx && ctx.ok) {
         state.projectId = ctx.projectId || state.projectId;
         state.sequenceId = ctx.sequenceId || state.sequenceId;
-        log.info("Contexto host carregado", ctx);
+        writeLog("info", "Contexto host carregado", ctx);
       } else {
-        log.warn("Host offline ou sem contexto", ctx);
+        writeLog("warn", "Host offline ou sem contexto", ctx);
       }
-      setLog();
     });
   }
 
@@ -119,6 +151,7 @@
     if (!state.activeTemplateId && state.templates[0]) state.activeTemplateId = state.templates[0].id;
     renderTemplateSelectors();
     renderTemplates();
+    writeLog("info", "Modelos carregados", { count: state.templates.length, extensionPath: state.extensionPath || "(vazio)" });
   }
 
   function parseSrtText(text, sourceName) {
@@ -129,9 +162,8 @@
     const payload = { sourceName: sourceName || "texto_colado", original: text, captions, processed: captions };
     LVP.Cache.save(state.projectId, state.sequenceId, payload);
     $("srtStatus").textContent = captions.length ? `${captions.length} legendas importadas` : "Nada encontrado";
-    log.info("SRT processado", { sourceName, captions: captions.length });
+    writeLog("info", "SRT processado", { sourceName, captions: captions.length });
     renderCaptions();
-    setLog();
   }
 
   function renderCaptions() {
@@ -161,8 +193,7 @@
 
   function runViralAnalysis() {
     if (!state.captions.length) {
-      log.warn("Importe um SRT antes de analisar");
-      setLog();
+      writeLog("warn", "Importe um SRT antes de analisar");
       return [];
     }
     const selectedIds = $("applyScope").value === "selected" ? Array.from(state.selectedCaptionIds) : null;
@@ -181,9 +212,8 @@
       processed: state.processed,
       original: $("srtRawInput").value || ""
     });
-    log.info("Destaque viral analisado", { count });
+    writeLog("info", "Destaque viral analisado", { count });
     renderCaptions();
-    setLog();
     return state.processed.filter(c => c.selectedForViral);
   }
 
@@ -220,21 +250,25 @@
 
   function applyItems(items, mode) {
     if (!items.length) {
-      log.warn("Nenhum item para aplicar");
-      setLog();
+      writeLog("warn", "Nenhum item para aplicar");
       return;
     }
     const payload = buildApplyPayload(items, mode);
-    log.info("Enviando lote para host", { mode, items: payload.items.length });
-    setLog();
+    writeLog("info", "Clique recebido: enviando lote para host", { mode, items: payload.items.length });
+    $("hostStatus").textContent = "Aplicando...";
     callHost("LVP_applyCaptionTemplateBatch", payload).then(result => {
-      if (result && result.ok) log.info("Host concluiu aplicacao", result);
-      else log.error("Falha na aplicacao host", result);
-      setLog();
+      $("hostStatus").textContent = state.host === "BROWSER" ? "Preview local" : state.host;
+      if (result && result.ok) writeLog("info", "Host concluiu aplicacao", result);
+      else writeLog("error", "Falha na aplicacao host", result);
     });
   }
 
   function bindEvents() {
+    document.addEventListener("click", event => {
+      const target = event.target && event.target.closest ? event.target.closest("button, .file-button") : null;
+      if (target) writeLog("info", "Clique no painel", { id: target.id || "", label: (target.textContent || "").trim().slice(0, 60) });
+    }, true);
+
     $("srtFileInput").addEventListener("change", event => {
       const file = event.target.files[0];
       if (!file) return;
@@ -249,23 +283,21 @@
     $("loadCacheBtn").addEventListener("click", () => {
       const cached = LVP.Cache.load(state.projectId, state.sequenceId);
       if (!cached) {
-        log.warn("Sem cache para projeto/sequencia atual");
+        writeLog("warn", "Sem cache para projeto/sequencia atual");
       } else {
         state.captions = cached.captions || [];
         state.processed = cached.processed || state.captions;
         $("srtStatus").textContent = `${state.captions.length} legendas recuperadas`;
-        log.info("Cache recuperado", { captions: state.captions.length });
+        writeLog("info", "Cache recuperado", { captions: state.captions.length });
         renderCaptions();
       }
-      setLog();
     });
     $("clearCacheBtn").addEventListener("click", () => {
       LVP.Cache.clear(state.projectId, state.sequenceId);
       state.captions = [];
       state.processed = [];
       renderCaptions();
-      log.info("Cache limpo");
-      setLog();
+      writeLog("info", "Cache limpo");
     });
     $("analyzeBtn").addEventListener("click", runViralAnalysis);
     $("applyViralBtn").addEventListener("click", () => applyItems(runViralAnalysis(), "viral-auto"));
@@ -299,11 +331,23 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    initHost();
-    loadTemplates();
-    bindEvents();
-    renderCaptions();
-    log.info("Legendas Viral Pro iniciado");
-    setLog();
+    try {
+      window.addEventListener("error", event => {
+        writeLog("error", "Erro JavaScript no painel", { message: event.message, source: event.filename, line: event.lineno });
+      });
+      window.addEventListener("unhandledrejection", event => {
+        writeLog("error", "Promise rejeitada no painel", { reason: String(event.reason && event.reason.message ? event.reason.message : event.reason) });
+      });
+      initHost();
+      loadTemplates();
+      bindEvents();
+      renderCaptions();
+      writeLog("info", "Legendas Viral Pro iniciado");
+    } catch (error) {
+      try {
+        log.error("Falha fatal no boot do painel", { message: error.message, stack: error.stack });
+        setLog();
+      } catch (_) {}
+    }
   });
 })();

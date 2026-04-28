@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.3
+
+- Adicionado log de clique no proprio painel para diagnosticar quando o CEP parece morto.
+- Adicionado timeout em chamadas `evalScript` para o painel nao ficar aguardando o Premiere em silencio.
+- Adicionado arquivo `logs/runtime.log` quando Node esta disponivel no CEP.
+- Adicionado capturador de erro JavaScript fatal no boot do painel.
+
 ## 0.1.2
 
 - Reduzido tamanho minimo do painel CEP para evitar falha quando o Premiere restaura o painel estreito.
