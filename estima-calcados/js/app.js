@@ -41,16 +41,19 @@ const products = [
 
 const filters = ["Todos", "Masculino", "Feminino", "Tenis", "Sapato", "Conhaque", "Preto"];
 const formatter = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+const WHATSAPP_PHONE = "";
 
 let activeFilter = "Todos";
 let activeProduct = null;
 let activeSize = null;
 let activeQty = 1;
 let cart = JSON.parse(localStorage.getItem("mj-estima-cart") || "[]");
+const cardSelections = {};
 
 const grid = document.querySelector("#productGrid");
 const filtersWrap = document.querySelector("#filters");
 const searchInput = document.querySelector("#searchInput");
+const sortSelect = document.querySelector("#sortSelect");
 const productDialog = document.querySelector("#productDialog");
 const productDialogContent = document.querySelector("#productDialogContent");
 const cartDrawer = document.querySelector("#cartDrawer");
@@ -58,6 +61,7 @@ const cartItems = document.querySelector("#cartItems");
 const cartCount = document.querySelector("#cartCount");
 const cartSubtotal = document.querySelector("#cartSubtotal");
 const checkoutButton = document.querySelector("#checkoutButton");
+const orderNote = document.querySelector("#orderNote");
 
 function getCategory(name) {
   const text = normalize(name);
@@ -97,6 +101,26 @@ function matches(product) {
   return byQuery && byFilter;
 }
 
+function getCardSelection(product) {
+  if (!cardSelections[product.id]) {
+    cardSelections[product.id] = {
+      size: product.sizes[Math.floor(product.sizes.length / 2)],
+      qty: 1
+    };
+  }
+  return cardSelections[product.id];
+}
+
+function sortProducts(list) {
+  const mode = sortSelect.value;
+  return [...list].sort((a, b) => {
+    if (mode === "low") return a.price - b.price;
+    if (mode === "high") return b.price - a.price;
+    if (mode === "az") return a.name.localeCompare(b.name, "pt-BR");
+    return a.id - b.id;
+  });
+}
+
 function renderFilters() {
   filtersWrap.innerHTML = filters.map(filter => `
     <button class="filter ${activeFilter === filter ? "active" : ""}" type="button" data-filter="${filter}">
@@ -114,26 +138,43 @@ function renderFilters() {
 }
 
 function renderProducts() {
-  const list = products.filter(matches);
-  grid.innerHTML = list.map(product => `
-    <article class="product-card">
-      <button class="product-media" type="button" data-open-product="${product.id}" aria-label="Ver ${product.name}">
-        <img src="${product.image}" alt="${product.name}" loading="lazy">
-      </button>
-      <div class="product-info">
-        <span class="tag">${product.gender} / ${product.tone}</span>
-        <h3>${product.name}</h3>
-        <div class="price-row">
-          <strong class="price">${formatter.format(product.price)}</strong>
-          <span class="installment">pedido direto</span>
+  const list = sortProducts(products.filter(matches));
+  grid.innerHTML = list.map(product => {
+    const choice = getCardSelection(product);
+    return `
+      <article class="product-card">
+        <button class="product-media" type="button" data-open-product="${product.id}" aria-label="Ver ${product.name}">
+          <img src="${product.image}" alt="${product.name}" loading="lazy">
+        </button>
+        <div class="product-info">
+          <span class="tag">${product.gender} / ${product.tone}</span>
+          <h3>${product.name}</h3>
+          <div class="price-row">
+            <strong class="price">${formatter.format(product.price)}</strong>
+            <span class="installment">pedido direto</span>
+          </div>
+          <div class="card-choice">
+            <div class="mini-sizes" aria-label="Tamanhos de ${product.name}">
+              ${product.sizes.map(size => `
+                <button class="mini-size ${choice.size === size ? "active" : ""}" type="button" data-card-size="${product.id}:${size}">
+                  ${size}
+                </button>
+              `).join("")}
+            </div>
+            <div class="mini-bottom">
+              <div class="mini-qty" aria-label="Quantidade">
+                <button type="button" data-card-qty="${product.id}:-1">-</button>
+                <span>${choice.qty}</span>
+                <button type="button" data-card-qty="${product.id}:1">+</button>
+              </div>
+              <button class="buy-link" type="button" data-add-fast="${product.id}">Adicionar a sacola</button>
+            </div>
+            <button class="card-open" type="button" data-open-product="${product.id}">Ver detalhes e tamanhos</button>
+          </div>
         </div>
-        <div class="card-actions">
-          <button class="buy-link" type="button" data-add-fast="${product.id}">Adicionar</button>
-          <button class="quick-button" type="button" data-open-product="${product.id}" aria-label="Detalhes de ${product.name}">+</button>
-        </div>
-      </div>
-    </article>
-  `).join("");
+      </article>
+    `;
+  }).join("");
 
   grid.querySelectorAll("[data-open-product]").forEach(button => {
     button.addEventListener("click", () => openProduct(Number(button.dataset.openProduct)));
@@ -142,9 +183,28 @@ function renderProducts() {
   grid.querySelectorAll("[data-add-fast]").forEach(button => {
     button.addEventListener("click", () => {
       const product = products.find(item => item.id === Number(button.dataset.addFast));
-      const defaultSize = product.sizes[Math.floor(product.sizes.length / 2)];
-      addToCart(product, defaultSize, 1);
+      const choice = getCardSelection(product);
+      addToCart(product, choice.size, choice.qty);
       openCart();
+    });
+  });
+
+  grid.querySelectorAll("[data-card-size]").forEach(button => {
+    button.addEventListener("click", () => {
+      const [id, size] = button.dataset.cardSize.split(":").map(Number);
+      const product = products.find(item => item.id === id);
+      getCardSelection(product).size = size;
+      renderProducts();
+    });
+  });
+
+  grid.querySelectorAll("[data-card-qty]").forEach(button => {
+    button.addEventListener("click", () => {
+      const [id, amount] = button.dataset.cardQty.split(":").map(Number);
+      const product = products.find(item => item.id === id);
+      const choice = getCardSelection(product);
+      choice.qty = Math.max(1, choice.qty + amount);
+      renderProducts();
     });
   });
 }
@@ -228,6 +288,17 @@ function removeFromCart(key) {
   persistCart();
 }
 
+function updateCartQty(key, amount) {
+  const current = cart.find(item => item.key === key);
+  if (!current) return;
+  current.qty += amount;
+  if (current.qty <= 0) {
+    removeFromCart(key);
+    return;
+  }
+  persistCart();
+}
+
 function persistCart() {
   localStorage.setItem("mj-estima-cart", JSON.stringify(cart));
   renderCart();
@@ -253,9 +324,23 @@ function renderCart() {
         <h3>${item.name}</h3>
         <p>Tam. ${item.size} / ${item.qty} un. / ${formatter.format(item.price * item.qty)}</p>
       </div>
-      <button type="button" data-remove="${item.key}" aria-label="Remover ${item.name}">x</button>
+      <div class="cart-line-actions">
+        <div class="cart-qty" aria-label="Quantidade de ${item.name}">
+          <button type="button" data-cart-qty="${item.key}:-1">-</button>
+          <span>${item.qty}</span>
+          <button type="button" data-cart-qty="${item.key}:1">+</button>
+        </div>
+        <button class="remove-line" type="button" data-remove="${item.key}" aria-label="Remover ${item.name}">x</button>
+      </div>
     </article>
   `).join("");
+
+  cartItems.querySelectorAll("[data-cart-qty]").forEach(button => {
+    button.addEventListener("click", () => {
+      const [key, amount] = button.dataset.cartQty.split(":");
+      updateCartQty(key, Number(amount));
+    });
+  });
 
   cartItems.querySelectorAll("[data-remove]").forEach(button => {
     button.addEventListener("click", () => removeFromCart(button.dataset.remove));
@@ -267,14 +352,17 @@ function renderCart() {
 
 function buildCheckoutUrl(subtotal) {
   const lines = cart.map(item => `- ${item.qty}x ${item.name} tam. ${item.size} (${formatter.format(item.price * item.qty)})`);
+  const note = orderNote.value.trim();
   const message = [
     "Ola, MJ Estima. Quero finalizar este pedido:",
     ...lines,
     `Subtotal: ${formatter.format(subtotal)}`,
+    note ? `Observacao: ${note}` : "",
     "",
     "Pode me passar pagamento e entrega?"
-  ].join("\n");
-  return `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+  ].filter(Boolean).join("\n");
+  const phonePart = WHATSAPP_PHONE ? `phone=${WHATSAPP_PHONE}&` : "";
+  return `whatsapp://send?${phonePart}text=${encodeURIComponent(message)}`;
 }
 
 function openCart() {
@@ -305,6 +393,8 @@ document.addEventListener("keydown", event => {
 });
 
 searchInput.addEventListener("input", renderProducts);
+sortSelect.addEventListener("change", renderProducts);
+orderNote.addEventListener("input", renderCart);
 
 renderFilters();
 renderProducts();

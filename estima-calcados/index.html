@@ -74,6 +74,15 @@
           <span>Buscar modelo</span>
           <input id="searchInput" type="search" placeholder="preto, conhaque, feminino...">
         </label>
+        <label class="sort-box">
+          <span>Ordenar</span>
+          <select id="sortSelect">
+            <option value="featured">Destaques</option>
+            <option value="low">Menor preco</option>
+            <option value="high">Maior preco</option>
+            <option value="az">Nome A-Z</option>
+          </select>
+        </label>
         <div id="filters" class="filters" aria-label="Filtros de produtos"></div>
       </div>
 
@@ -126,6 +135,10 @@
       </div>
       <div id="cartItems" class="cart-items"></div>
       <div class="cart-summary">
+        <label class="order-note">
+          <span>Observacao</span>
+          <textarea id="orderNote" rows="3" placeholder="Ex: quero confirmar disponibilidade, entrega para tal bairro..."></textarea>
+        </label>
         <div><span>Subtotal</span><strong id="cartSubtotal">R$ 0,00</strong></div>
         <a id="checkoutButton" class="button dark" href="#" target="_blank" rel="noreferrer">Finalizar pedido</a>
       </div>
