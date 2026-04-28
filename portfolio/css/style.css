@@ -505,6 +505,44 @@ a { color: inherit; text-decoration: none; }
 }
 .empty-state strong { color: var(--ink-0); }
 
+.longform-showcase {
+  margin: 2rem 0 2.4rem;
+  padding: clamp(1rem, 2vw, 1.35rem);
+  border: 1px solid rgba(197,230,255,.13);
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 88% 0%, rgba(96,165,250,.16), transparent 36%),
+    rgba(3, 12, 24, .66);
+}
+.showcase-head {
+  display: grid;
+  gap: .25rem;
+  margin-bottom: 1rem;
+}
+.showcase-head span {
+  color: #7dd3fc;
+  font-size: .72rem;
+  font-weight: 950;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+.showcase-head h3 {
+  font-size: clamp(1.35rem, 2vw, 1.85rem);
+  line-height: 1.05;
+}
+.showcase-head p {
+  max-width: 58ch;
+  color: var(--ink-2);
+  font-size: .92rem;
+  line-height: 1.5;
+}
+.longform-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.longform-grid .video-card.horizontal-card {
+  border-radius: 18px;
+}
+
 .featured-promos {
   margin: 1rem 0 1.4rem;
   padding: .85rem;
@@ -2700,7 +2738,8 @@ body {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: .75rem !important;
   }
-  #youtubeGrid.video-grid {
+  #youtubeGrid.video-grid,
+  .longform-grid {
     grid-template-columns: 1fr !important;
   }
   .video-card { border-radius: 16px; }

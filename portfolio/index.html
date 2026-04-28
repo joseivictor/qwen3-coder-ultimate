@@ -40,8 +40,7 @@
   <header class="app-header">
     <div class="logo">JV.</div>
     <nav class="tabs">
-      <button data-tab="portfolio" class="active">9:16</button>
-      <button data-tab="youtube">16:9</button>
+      <button data-tab="portfolio" class="active">Portfólio</button>
       <button data-tab="orcamento">Orçamento</button>
       <button data-tab="sobre">Sobre</button>
     </nav>
@@ -52,7 +51,7 @@
 
   <!-- TAB: Portfolio -->
   <section id="tab-portfolio" class="tab active">
-    <h2 class="hero-headline">Vídeos<br>9:16.</h2>
+    <h2 class="hero-headline">Vídeos<br>editados.</h2>
     <p class="hero-sub">Editor de video com 3 anos de experiencia, +1.000 videos editados e +10 milhoes de visualizacoes geradas. Adobe Premiere, After Effects e fluxo profissional para conteudo de alta retencao.</p>
 
     <div class="profile-proof">
@@ -66,6 +65,15 @@
 
     <div id="filterChips" class="filter-chips"></div>
     <div id="videoGrid" class="video-grid"></div>
+
+    <section class="longform-showcase">
+      <div class="showcase-head">
+        <span>16:9</span>
+        <h3>Videos longos</h3>
+        <p>YouTube, aulas abertas e conteudos horizontais com narrativa, ritmo e acabamento profissional.</p>
+      </div>
+      <div id="youtubeGrid" class="video-grid longform-grid"></div>
+    </section>
 
     <h3 class="section-title">Outros trabalhos</h3>
     <div style="display:grid; gap:2rem;">
@@ -82,13 +90,6 @@
         <div class="video-grid" id="flyers-grid"></div>
       </div>
     </div>
-  </section>
-
-  <!-- TAB: YouTube / longform -->
-  <section id="tab-youtube" class="tab">
-    <h2 class="hero-headline">Vídeos<br>16:9.</h2>
-    <p class="hero-sub">YouTube, VSLs, aulas, cursos e conteudos horizontais com narrativa, ritmo e acabamento profissional.</p>
-    <div id="youtubeGrid" class="video-grid"></div>
   </section>
 
   <!-- TAB: Orcamento (renderizada via JS) -->
