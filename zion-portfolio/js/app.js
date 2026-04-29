@@ -36,10 +36,10 @@ const progress = document.querySelector(".progress span");
 const modal = document.querySelector("#videoModal");
 const modalVideo = document.querySelector("#modalVideo");
 const modalClose = document.querySelector("#modalClose");
+const prevVideos = document.querySelector("#prevVideos");
+const nextVideos = document.querySelector("#nextVideos");
 let activeCategory = "todos";
-let visibleWindowStart = 0;
-let visibleWindowTimer = null;
-const visibleWindowSize = 6;
+let carouselTimer = null;
 
 function renderFilters() {
   if (!filterBar) return;
@@ -57,7 +57,6 @@ function renderFilters() {
 
 function renderVideos() {
   const list = activeCategory === "todos" ? videos : videos.filter(video => video.category === activeCategory);
-  visibleWindowStart = normalizeVisibleStart(visibleWindowStart, list.length);
   videoGrid.innerHTML = list.map(video => `
     <article class="video-card" data-video="${video.id}" tabindex="0" role="button" aria-label="Assistir ${video.title}">
       <img src="${video.thumb}" alt="${video.title}" loading="lazy">
@@ -83,34 +82,8 @@ function renderVideos() {
       setTimeout(() => card.classList.add("show"), Math.min(index, 8) * 55);
     });
   });
-  updateVisibleVideos(list.length);
-  restartVisibleRotation(list.length);
-}
-
-function normalizeVisibleStart(start, total) {
-  if (total <= visibleWindowSize) return 0;
-  return start % total;
-}
-
-function visibleIndexes(total) {
-  const count = Math.min(visibleWindowSize, total);
-  return Array.from({ length: count }, (_, index) => (visibleWindowStart + index) % total);
-}
-
-function updateVisibleVideos(total) {
-  const visible = new Set(visibleIndexes(total));
-  videoGrid.querySelectorAll(".video-card").forEach((card, index) => {
-    card.classList.toggle("is-visible", visible.has(index));
-  });
-}
-
-function restartVisibleRotation(total) {
-  if (visibleWindowTimer) clearInterval(visibleWindowTimer);
-  if (total <= visibleWindowSize) return;
-  visibleWindowTimer = setInterval(() => {
-    visibleWindowStart = (visibleWindowStart + visibleWindowSize) % total;
-    updateVisibleVideos(total);
-  }, 5200);
+  videoGrid.scrollTo({ left: 0 });
+  restartCarousel();
 }
 
 function categoryLabel(id) {
@@ -141,6 +114,21 @@ function updateProgress() {
   progress.style.transform = `scaleX(${Math.min(1, scrollY / max)})`;
 }
 
+function scrollPortfolio(direction = 1) {
+  if (!videoGrid) return;
+  const card = videoGrid.querySelector(".video-card");
+  if (!card) return;
+  const step = card.getBoundingClientRect().width + 16;
+  const max = videoGrid.scrollWidth - videoGrid.clientWidth;
+  const next = videoGrid.scrollLeft + step * direction;
+  videoGrid.scrollTo({ left: next > max - 8 ? 0 : Math.max(0, next), behavior: "smooth" });
+}
+
+function restartCarousel() {
+  if (carouselTimer) clearInterval(carouselTimer);
+  carouselTimer = setInterval(() => scrollPortfolio(1), 4200);
+}
+
 modalClose.addEventListener("click", closeVideo);
 modal.addEventListener("click", event => {
   if (event.target === modal) closeVideo();
@@ -154,11 +142,24 @@ addEventListener("resize", updateProgress, { passive: true });
 document.querySelectorAll("[data-service]").forEach(button => {
   button.addEventListener("click", () => {
     activeCategory = button.dataset.service || "todos";
-    visibleWindowStart = 0;
     document.querySelectorAll("[data-service]").forEach(item => item.classList.toggle("active", item === button));
     renderVideos();
     document.querySelector("#portfolio")?.scrollIntoView({ behavior: "smooth", block: "start" });
   });
+});
+
+prevVideos?.addEventListener("click", () => {
+  scrollPortfolio(-1);
+  restartCarousel();
+});
+nextVideos?.addEventListener("click", () => {
+  scrollPortfolio(1);
+  restartCarousel();
+});
+
+document.querySelectorAll("video[autoplay]").forEach(video => {
+  video.muted = true;
+  video.play().catch(() => {});
 });
 
 renderFilters();
