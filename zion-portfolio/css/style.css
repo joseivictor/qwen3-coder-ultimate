@@ -85,28 +85,28 @@ button { font: inherit; cursor: pointer; }
   font-weight: 900;
   font-size: clamp(2rem, 4vw, 4rem);
   filter: blur(.2px);
+  opacity: .48;
   box-shadow: 0 22px 80px rgba(0,0,0,.55);
   animation: floatGalaxy 7.5s ease-in-out infinite;
   will-change: transform;
 }
 .icon-instagram {
-  left: -1rem;
-  top: 25rem;
+  left: -3.2rem;
+  top: 31rem;
   color: #fff;
   background: linear-gradient(135deg, #ff7ab6, #7d4dff);
-  opacity: .7;
 }
 .icon-youtube {
-  right: 6vw;
-  top: 15rem;
+  right: 5vw;
+  top: 18rem;
   color: #fff;
   background: linear-gradient(135deg, #2f6dff, #7c37ff);
   animation-duration: 8.8s;
   animation-delay: -1.6s;
 }
 .icon-reels {
-  left: 55%;
-  top: 14rem;
+  left: 58%;
+  top: 12.5rem;
   color: #fff;
   background: linear-gradient(135deg, #56d7ff, #0f84ff);
   animation-duration: 9.6s;
@@ -226,7 +226,7 @@ h1, h2, h3, p { margin: 0; }
   min-height: 140px;
   margin: -1rem auto 5rem;
   display: grid;
-  grid-template-columns: 1.2fr repeat(5, 1fr);
+  grid-template-columns: 1.05fr repeat(3, 1fr);
   gap: 1rem;
   align-items: center;
 }
@@ -238,10 +238,10 @@ h1, h2, h3, p { margin: 0; }
 .edited-mark b { color: var(--purple); }
 .brand-person {
   display: grid;
-  grid-template-rows: auto auto;
-  gap: .65rem;
+  grid-template-rows: auto auto auto auto;
+  gap: .35rem;
   place-items: center;
-  min-height: 104px;
+  min-height: 132px;
   padding: .8rem .55rem;
   border: 1px solid rgba(255,255,255,.1);
   border-radius: 12px;
@@ -261,6 +261,13 @@ h1, h2, h3, p { margin: 0; }
   border: 2px solid rgba(255,255,255,.68);
   box-shadow: 0 12px 32px rgba(0,0,0,.34);
 }
+.brand-person strong {
+  max-width: 100%;
+  color: #f5f2fb;
+  font-size: .9rem;
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+}
 .brand-person span {
   max-width: 100%;
   min-height: auto;
@@ -268,6 +275,11 @@ h1, h2, h3, p { margin: 0; }
   font-size: .72rem;
   line-height: 1.2;
   overflow-wrap: anywhere;
+}
+.brand-person small {
+  color: #b6afc4;
+  font-size: .67rem;
+  font-weight: 800;
 }
 .brand-person.soft { opacity: .62; }
 
@@ -306,8 +318,11 @@ h1, h2, h3, p { margin: 0; }
   min-height: 300px;
   padding: 1rem;
   background:
-    linear-gradient(135deg, rgba(176,68,255,.18), rgba(29,28,32,.98) 42%),
+    radial-gradient(circle at 78% 18%, rgba(176,68,255,.26), transparent 16rem),
+    linear-gradient(135deg, rgba(176,68,255,.24), rgba(29,28,32,.98) 42%),
     #1d1c20;
+  border-color: rgba(176,68,255,.38);
+  box-shadow: 0 0 0 1px rgba(176,68,255,.15), 0 26px 80px rgba(0,0,0,.42);
 }
 .proof-grid img {
   width: 76px;
@@ -329,8 +344,8 @@ h1, h2, h3, p { margin: 0; }
   margin-bottom: .7rem;
   padding: .42rem .7rem;
   border-radius: 999px;
-  background: rgba(176,68,255,.16);
-  color: #d8b1ff;
+  background: #c084ff;
+  color: #170b20;
   font-size: .72rem;
   font-weight: 900;
   letter-spacing: .08em;
@@ -418,15 +433,19 @@ h1, h2, h3, p { margin: 0; }
 
 .marquee {
   width: 100vw;
-  margin: 0 0 5rem;
+  min-height: clamp(150px, 18vw, 230px);
+  margin: 0 0 4rem;
   overflow: hidden;
-  transform: rotate(5deg);
+  display: grid;
+  align-items: center;
 }
 .marquee div {
+  --marquee-rotate: 5deg;
   display: flex;
   gap: 2rem;
   width: max-content;
   animation: marquee 18s linear infinite;
+  transform: rotate(var(--marquee-rotate));
 }
 .marquee span {
   font-size: clamp(3rem, 6vw, 6rem);
@@ -435,12 +454,13 @@ h1, h2, h3, p { margin: 0; }
   letter-spacing: -.05em;
 }
 .marquee .blurred {
-  margin-top: 1rem;
+  margin-top: -5rem;
   filter: blur(8px);
-  opacity: .5;
+  opacity: .44;
   animation-direction: reverse;
+  --marquee-rotate: -4deg;
 }
-@keyframes marquee { to { transform: translateX(-50%); } }
+@keyframes marquee { to { transform: translateX(-50%) rotate(var(--marquee-rotate)); } }
 
 .portfolio {
   width: min(1120px, calc(100vw - 2rem));
@@ -525,7 +545,7 @@ h1, h2, h3, p { margin: 0; }
   display: grid;
   grid-template-columns: minmax(260px, 420px) 1fr;
   gap: 3rem;
-  align-items: end;
+  align-items: center;
 }
 .about-media video {
   width: 100%;
@@ -799,7 +819,20 @@ h1, h2, h3, p { margin: 0; }
     font-size: .62rem;
   }
   .moon-floor { top: 35rem; }
-  .float-icon { opacity: .42; }
+  .float-icon { opacity: .22; }
+  .icon-instagram {
+    left: -4rem;
+    top: 29rem;
+  }
+  .icon-youtube {
+    right: -2.6rem;
+    top: 18.5rem;
+  }
+  .icon-reels {
+    left: auto;
+    right: -1.8rem;
+    top: 10.3rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
