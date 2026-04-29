@@ -682,35 +682,16 @@ h1, h2, h3, p { margin: 0; }
   gap: 3rem;
   align-items: center;
   padding: 1.3rem;
-  border: 1px solid rgba(255,255,255,.08);
+  border: 1px solid rgba(192,132,255,.64);
+  box-shadow: 0 0 0 1px rgba(176,68,255,.08), 0 24px 80px rgba(0,0,0,.24);
 }
 .about::before,
 .case::before {
-  content: "";
-  position: absolute;
-  inset: -.65rem;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(circle, rgba(220,236,255,.92) 0 1.35px, transparent 1.55px) left top / 13px 13px repeat-x,
-    radial-gradient(circle, rgba(220,236,255,.92) 0 1.35px, transparent 1.55px) left bottom / 13px 13px repeat-x,
-    radial-gradient(circle, rgba(220,236,255,.92) 0 1.35px, transparent 1.55px) left top / 13px 13px repeat-y,
-    radial-gradient(circle, rgba(220,236,255,.92) 0 1.35px, transparent 1.55px) right top / 13px 13px repeat-y;
-  opacity: .78;
+  content: none;
 }
 .about::after,
 .case::after {
-  content: "";
-  position: absolute;
-  inset: -.82rem;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(circle, #dcecff 0 3px, transparent 3.4px) left top / 100% 100% no-repeat,
-    radial-gradient(circle, #dcecff 0 3px, transparent 3.4px) right top / 100% 100% no-repeat,
-    radial-gradient(circle, #dcecff 0 3px, transparent 3.4px) left bottom / 100% 100% no-repeat,
-    radial-gradient(circle, #dcecff 0 3px, transparent 3.4px) right bottom / 100% 100% no-repeat;
-  opacity: .85;
+  content: none;
 }
 .about-media video {
   width: 100%;
@@ -842,7 +823,8 @@ h1, h2, h3, p { margin: 0; }
   grid-template-columns: 1fr 1fr;
   gap: 1.2rem;
   align-items: center;
-  border: 1px solid rgba(255,255,255,.08);
+  border: 1px solid rgba(192,132,255,.58);
+  box-shadow: 0 0 0 1px rgba(176,68,255,.08), 0 24px 80px rgba(0,0,0,.22);
 }
 .case img {
   width: 100%;
@@ -911,16 +893,7 @@ h1, h2, h3, p { margin: 0; }
   animation: nodeFloat 6.8s ease-in-out infinite;
 }
 .profile-node::after {
-  content: "";
-  position: absolute;
-  inset: -.35rem;
-  background:
-    radial-gradient(circle, rgba(220,236,255,.38) 0 1.1px, transparent 1.3px) left top / 11px 11px repeat-x,
-    radial-gradient(circle, rgba(220,236,255,.38) 0 1.1px, transparent 1.3px) left bottom / 11px 11px repeat-x,
-    radial-gradient(circle, rgba(220,236,255,.38) 0 1.1px, transparent 1.3px) left top / 11px 11px repeat-y,
-    radial-gradient(circle, rgba(220,236,255,.38) 0 1.1px, transparent 1.3px) right top / 11px 11px repeat-y;
-  border-radius: 18px;
-  pointer-events: none;
+  content: none;
 }
 .profile-node small {
   padding: .32rem .55rem;
