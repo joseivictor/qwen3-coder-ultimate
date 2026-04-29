@@ -42,6 +42,8 @@ const heroVideo = document.querySelector(".hero-visual video");
 const audioToggle = document.querySelector(".audio-toggle");
 let activeCategory = "todos";
 let carouselTimer = null;
+let carouselSegment = 0;
+let isLoopAdjusting = false;
 
 if ("scrollRestoration" in history) {
   history.scrollRestoration = "manual";
@@ -82,7 +84,8 @@ function renderFilters() {
 
 function renderVideos() {
   const list = activeCategory === "todos" ? videos : videos.filter(video => video.category === activeCategory);
-  videoGrid.innerHTML = list.map(video => `
+  const loopList = [...list, ...list, ...list];
+  videoGrid.innerHTML = loopList.map(video => `
     <article class="video-card" data-video="${video.id}" tabindex="0" role="button" aria-label="Assistir ${video.title}">
       <img src="${video.thumb}" alt="${video.title}" loading="lazy">
       <div class="video-info">
@@ -107,7 +110,10 @@ function renderVideos() {
       setTimeout(() => card.classList.add("show"), Math.min(index, 8) * 55);
     });
   });
-  videoGrid.scrollTo({ left: 0 });
+  requestAnimationFrame(() => {
+    carouselSegment = videoGrid.scrollWidth / 3;
+    videoGrid.scrollTo({ left: carouselSegment, behavior: "auto" });
+  });
   restartCarousel();
 }
 
@@ -144,9 +150,17 @@ function scrollPortfolio(direction = 1) {
   const card = videoGrid.querySelector(".video-card");
   if (!card) return;
   const step = card.getBoundingClientRect().width + 16;
-  const max = videoGrid.scrollWidth - videoGrid.clientWidth;
-  const next = videoGrid.scrollLeft + step * direction;
-  videoGrid.scrollTo({ left: next > max - 8 ? 0 : Math.max(0, next), behavior: "smooth" });
+  videoGrid.scrollBy({ left: step * direction, behavior: "smooth" });
+}
+
+function normalizeCarouselLoop() {
+  if (!videoGrid || !carouselSegment || isLoopAdjusting) return;
+  const left = videoGrid.scrollLeft;
+  if (left < carouselSegment * 0.35 || left > carouselSegment * 1.65) {
+    isLoopAdjusting = true;
+    videoGrid.scrollTo({ left: left < carouselSegment ? left + carouselSegment : left - carouselSegment, behavior: "auto" });
+    requestAnimationFrame(() => { isLoopAdjusting = false; });
+  }
 }
 
 function restartCarousel() {
@@ -181,6 +195,7 @@ nextVideos?.addEventListener("click", () => {
   scrollPortfolio(1);
   restartCarousel();
 });
+videoGrid?.addEventListener("scroll", normalizeCarouselLoop, { passive: true });
 
 audioToggle?.addEventListener("click", () => {
   if (!heroVideo) return;

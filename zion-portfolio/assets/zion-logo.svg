@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Zion Lucas">
+  <rect width="512" height="512" rx="108" fill="#05040b"/>
+  <circle cx="256" cy="256" r="190" fill="none" stroke="#b044ff" stroke-width="18" opacity=".9"/>
+  <circle cx="256" cy="256" r="142" fill="none" stroke="#c084ff" stroke-width="2" opacity=".45"/>
+  <path d="M151 178h210l-142 156h147v44H145v-35l143-157H151z" fill="#f7f3ff"/>
+  <path d="M330 128h54v54h-54z" fill="#b044ff"/>
+  <path d="M128 330h48v48h-48z" fill="#c084ff"/>
+</svg>
