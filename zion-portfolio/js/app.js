@@ -39,6 +39,7 @@ const modalClose = document.querySelector("#modalClose");
 let activeCategory = "todos";
 
 function renderFilters() {
+  if (!filterBar) return;
   filterBar.innerHTML = categories.map(cat => (
     `<button type="button" data-filter="${cat.id}" class="${cat.id === activeCategory ? "active" : ""}">${cat.label}</button>`
   )).join("");
@@ -103,6 +104,7 @@ function closeVideo() {
 }
 
 function updateProgress() {
+  if (!progress) return;
   const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
   progress.style.transform = `scaleX(${Math.min(1, scrollY / max)})`;
 }
@@ -116,6 +118,15 @@ document.addEventListener("keydown", event => {
 });
 addEventListener("scroll", updateProgress, { passive: true });
 addEventListener("resize", updateProgress, { passive: true });
+
+document.querySelectorAll("[data-service]").forEach(button => {
+  button.addEventListener("click", () => {
+    activeCategory = button.dataset.service || "todos";
+    document.querySelectorAll("[data-service]").forEach(item => item.classList.toggle("active", item === button));
+    renderVideos();
+    document.querySelector("#portfolio")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+});
 
 renderFilters();
 renderVideos();
