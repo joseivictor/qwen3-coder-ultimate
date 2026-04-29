@@ -38,8 +38,33 @@ const modalVideo = document.querySelector("#modalVideo");
 const modalClose = document.querySelector("#modalClose");
 const prevVideos = document.querySelector("#prevVideos");
 const nextVideos = document.querySelector("#nextVideos");
+const heroVideo = document.querySelector(".hero-visual video");
+const audioToggle = document.querySelector(".audio-toggle");
 let activeCategory = "todos";
 let carouselTimer = null;
+
+if ("scrollRestoration" in history) {
+  history.scrollRestoration = "manual";
+}
+let initialScrollLocked = true;
+function forceTop() {
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+}
+forceTop();
+document.addEventListener("DOMContentLoaded", forceTop);
+window.addEventListener("load", () => {
+  forceTop();
+  setTimeout(forceTop, 80);
+  setTimeout(() => {
+    forceTop();
+    initialScrollLocked = false;
+  }, 320);
+});
+window.addEventListener("hashchange", () => {
+  if (initialScrollLocked) forceTop();
+});
 
 function renderFilters() {
   if (!filterBar) return;
@@ -155,6 +180,16 @@ prevVideos?.addEventListener("click", () => {
 nextVideos?.addEventListener("click", () => {
   scrollPortfolio(1);
   restartCarousel();
+});
+
+audioToggle?.addEventListener("click", () => {
+  if (!heroVideo) return;
+  const shouldEnable = heroVideo.muted;
+  heroVideo.muted = !shouldEnable;
+  heroVideo.volume = shouldEnable ? 1 : 0;
+  audioToggle.classList.toggle("is-on", shouldEnable);
+  audioToggle.textContent = shouldEnable ? "Audio ligado" : "Ouvir audio";
+  heroVideo.play().catch(() => {});
 });
 
 document.querySelectorAll("video[autoplay]").forEach(video => {
