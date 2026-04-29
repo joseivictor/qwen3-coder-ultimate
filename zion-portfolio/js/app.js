@@ -37,6 +37,9 @@ const modal = document.querySelector("#videoModal");
 const modalVideo = document.querySelector("#modalVideo");
 const modalClose = document.querySelector("#modalClose");
 let activeCategory = "todos";
+let visibleWindowStart = 0;
+let visibleWindowTimer = null;
+const visibleWindowSize = 6;
 
 function renderFilters() {
   if (!filterBar) return;
@@ -54,6 +57,7 @@ function renderFilters() {
 
 function renderVideos() {
   const list = activeCategory === "todos" ? videos : videos.filter(video => video.category === activeCategory);
+  visibleWindowStart = normalizeVisibleStart(visibleWindowStart, list.length);
   videoGrid.innerHTML = list.map(video => `
     <article class="video-card" data-video="${video.id}" tabindex="0" role="button" aria-label="Assistir ${video.title}">
       <img src="${video.thumb}" alt="${video.title}" loading="lazy">
@@ -79,6 +83,34 @@ function renderVideos() {
       setTimeout(() => card.classList.add("show"), Math.min(index, 8) * 55);
     });
   });
+  updateVisibleVideos(list.length);
+  restartVisibleRotation(list.length);
+}
+
+function normalizeVisibleStart(start, total) {
+  if (total <= visibleWindowSize) return 0;
+  return start % total;
+}
+
+function visibleIndexes(total) {
+  const count = Math.min(visibleWindowSize, total);
+  return Array.from({ length: count }, (_, index) => (visibleWindowStart + index) % total);
+}
+
+function updateVisibleVideos(total) {
+  const visible = new Set(visibleIndexes(total));
+  videoGrid.querySelectorAll(".video-card").forEach((card, index) => {
+    card.classList.toggle("is-visible", visible.has(index));
+  });
+}
+
+function restartVisibleRotation(total) {
+  if (visibleWindowTimer) clearInterval(visibleWindowTimer);
+  if (total <= visibleWindowSize) return;
+  visibleWindowTimer = setInterval(() => {
+    visibleWindowStart = (visibleWindowStart + visibleWindowSize) % total;
+    updateVisibleVideos(total);
+  }, 5200);
 }
 
 function categoryLabel(id) {
@@ -122,6 +154,7 @@ addEventListener("resize", updateProgress, { passive: true });
 document.querySelectorAll("[data-service]").forEach(button => {
   button.addEventListener("click", () => {
     activeCategory = button.dataset.service || "todos";
+    visibleWindowStart = 0;
     document.querySelectorAll("[data-service]").forEach(item => item.classList.toggle("active", item === button));
     renderVideos();
     document.querySelector("#portfolio")?.scrollIntoView({ behavior: "smooth", block: "start" });
