@@ -10,12 +10,12 @@ const categories = [
 
 const categoryCycle = ["negocios", "podcast", "live", "negocios", "fitness", "beleza", "educacao"];
 const titleMap = {
-  negocios: "Corte de autoridade",
-  podcast: "Corte de podcast",
-  live: "Corte de live",
-  fitness: "Conteudo fitness",
-  beleza: "Conteudo beleza",
-  educacao: "Corte educativo"
+  negocios: "Corte",
+  podcast: "Corte",
+  live: "Corte",
+  fitness: "Corte",
+  beleza: "Corte",
+  educacao: "Corte"
 };
 
 const videos = Array.from({ length: 23 }, (_, index) => {
