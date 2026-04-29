@@ -10,7 +10,7 @@ with sync_playwright() as p:
     page = browser.new_page(viewport={"width": 1440, "height": 900})
     errors = []
     page.on("pageerror", lambda exc: errors.append(str(exc)))
-    page.goto(URL, wait_until="networkidle")
+    page.goto(URL, wait_until="domcontentloaded")
     assert "Zion Lucas" in page.title()
     assert page.locator(".video-card").count() == 23
     page.screenshot(path=str(ROOT / "screenshot-desktop.png"), full_page=False)
@@ -21,7 +21,7 @@ with sync_playwright() as p:
     page.locator("#modalClose").click()
 
     mobile = browser.new_page(viewport={"width": 390, "height": 844}, is_mobile=True)
-    mobile.goto(URL, wait_until="networkidle")
+    mobile.goto(URL, wait_until="domcontentloaded")
     assert mobile.locator(".video-card").count() == 23
     mobile.screenshot(path=str(ROOT / "screenshot-mobile.png"), full_page=False)
 
