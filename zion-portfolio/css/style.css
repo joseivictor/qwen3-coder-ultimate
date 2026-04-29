@@ -608,37 +608,32 @@ h1, h2, h3, p { margin: 0; }
 .marquee {
   width: 100%;
   max-width: 100%;
-  min-height: clamp(230px, 22vw, 330px);
-  margin: -1.1rem 0 3.2rem;
+  min-height: clamp(150px, 15vw, 210px);
+  margin: .5rem 0 4.5rem;
   overflow: hidden;
   display: grid;
-  align-items: start;
-  padding-top: clamp(2.4rem, 5vw, 4.7rem);
+  align-items: center;
 }
 .marquee div {
-  --marquee-rotate: 6.5deg;
+  --marquee-rotate: 2.2deg;
   display: flex;
-  gap: clamp(2rem, 4vw, 3.6rem);
+  gap: 2rem;
   width: max-content;
-  animation: marquee 15s linear infinite;
+  animation: marquee 24s linear infinite;
   transform: rotate(var(--marquee-rotate));
-  will-change: transform;
 }
 .marquee span {
-  color: #f7f5fb;
-  font-size: clamp(3.5rem, 6.2vw, 6.5rem);
+  font-size: clamp(3rem, 6vw, 6rem);
   line-height: 1;
   font-weight: 900;
-  letter-spacing: -.055em;
-  white-space: nowrap;
+  letter-spacing: -.05em;
 }
 .marquee .blurred {
-  margin-top: clamp(.15rem, 1vw, .7rem);
-  filter: blur(9px);
-  opacity: .3;
+  margin-top: -3.8rem;
+  filter: blur(7px);
+  opacity: .26;
   animation-direction: reverse;
-  animation-duration: 15s;
-  --marquee-rotate: -5.5deg;
+  --marquee-rotate: -1.6deg;
 }
 @keyframes marquee {
   from { transform: translateX(0) rotate(var(--marquee-rotate)); }
