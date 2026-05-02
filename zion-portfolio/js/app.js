@@ -1,11 +1,11 @@
 const categories = [
   { id: "todos", label: "Todos" },
-  { id: "negocios", label: "Negocios" },
+  { id: "negocios", label: "Negócios" },
   { id: "podcast", label: "Podcast" },
   { id: "live", label: "Live" },
   { id: "fitness", label: "Fitness" },
   { id: "beleza", label: "Beleza" },
-  { id: "educacao", label: "Educacao" }
+  { id: "educacao", label: "Educação" }
 ];
 
 const categoryCycle = ["negocios", "podcast", "live", "negocios", "fitness", "beleza", "educacao"];
